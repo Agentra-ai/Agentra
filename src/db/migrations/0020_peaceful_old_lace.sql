@@ -1,0 +1,1 @@
+ALTER TABLE "app_file" ADD COLUMN "is_active" boolean DEFAULT true NOT NULL;

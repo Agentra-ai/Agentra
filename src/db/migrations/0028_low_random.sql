@@ -1,0 +1,1 @@
+ALTER TABLE "vectors_db_data" ADD COLUMN "content" text NOT NULL;

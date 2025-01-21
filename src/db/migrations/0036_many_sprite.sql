@@ -1,0 +1,1 @@
+ALTER TABLE "app_documents" ADD COLUMN "is_docshub" boolean DEFAULT false NOT NULL;

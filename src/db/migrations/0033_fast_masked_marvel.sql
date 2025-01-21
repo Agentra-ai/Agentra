@@ -1,0 +1,1 @@
+ALTER TABLE "vectors_db_data" ADD COLUMN "is_active" boolean DEFAULT true NOT NULL;

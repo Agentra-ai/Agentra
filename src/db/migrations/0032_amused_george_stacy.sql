@@ -1,0 +1,1 @@
+ALTER TABLE "vectors_db_data" DROP COLUMN IF EXISTS "status";

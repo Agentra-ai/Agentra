@@ -1,0 +1,56 @@
+import React from "react"
+import Modal from "@/components/modal"
+import { TextArea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
+import { MatchVectorResponse } from "@/app/services/vectors/vector-service"
+import { FaFileLines } from "react-icons/fa6"
+
+interface ShowVectorModalProps {
+  selectedResult: MatchVectorResponse | null
+  onClose: () => void
+  getFileNameByFileKey: (fileKey: string) => string
+}
+
+const ShowVectorModal: React.FC<ShowVectorModalProps> = ({
+  selectedResult,
+  onClose,
+  getFileNameByFileKey
+}) => {
+  const isOpen = !!selectedResult
+
+  return (
+    <Modal isShow={isOpen} onClose={onClose}>
+      <div className="flex flex-col gap-3 p-2 mx-auto">
+        {/* Header */}
+        <div className="border-b border-gray-200 pb-4">
+          <h2 className="flex  items-center gap-2 mt-2 text-sm text-gray-600">
+            <FaFileLines className="h-4 w-4" fill="#1155ff" />
+            {getFileNameByFileKey(selectedResult?.metadata?.file_key || "")}
+          </h2>
+        </div>
+
+        {/* Content */}
+        <div className="space-y-2">
+          <TextArea
+            value={selectedResult?.metadata?.text || ""}
+            placeholder="Content not available"
+            className="h-[300px] w-[600px] text-sm whitespace-pre-wrap break-words rounded-lg bg-gray-50 p-4 text-black"
+            disabled
+          />
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-end">
+          <Button
+            onClick={onClose}
+            className="px-6 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors"
+          >
+            Close
+          </Button>
+        </div>
+      </div>
+    </Modal>
+  )
+}
+
+export default ShowVectorModal

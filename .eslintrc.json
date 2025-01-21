@@ -1,0 +1,51 @@
+/** @type {import("eslint").Linter.Config} */
+{
+  "env": {
+    "browser": true,
+    "es2020": true,
+    "node": true
+  },
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "project": true,
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "tailwindcss",
+    "react-refresh"
+  ],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended-type-checked",
+    "plugin:tailwindcss/recommended",
+    "prettier",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/consistent-type-imports": [
+      "warn",
+      {
+        "prefer": "type-imports",
+        "fixStyle": "inline-type-imports"
+      }
+    ],
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "@next/next/no-img-element": "off",
+    "react-refresh/only-export-components": "warn"
+  },
+  "settings": {
+    "next": {
+      "rootDir": ["./"]
+    },
+    "tailwindcss": {
+      "callees": ["cn", "cva"],
+      "config": "./tailwind.config.ts",
+      "classRegex": "^(class(Name)?|tw)$"
+    }
+  }
+}
