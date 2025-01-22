@@ -4,7 +4,7 @@ import crypto from "crypto"
 
 import { unstable_noStore as noStore } from "next/cache"
 import { getUserByEmail, getUserByResetPasswordToken } from "@/actions/user"
-import { signIn } from "@/auth"
+import { signIn } from "@/main-auth"
 import bcryptjs from "bcryptjs"
 import { eq } from "drizzle-orm"
 import { AuthError } from "next-auth"

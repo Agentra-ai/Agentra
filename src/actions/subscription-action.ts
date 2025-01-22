@@ -6,7 +6,7 @@ import crypto from "node:crypto"
 
 import { revalidatePath } from "next/cache"
 import { notFound } from "next/navigation"
-import { signOut } from "@/auth"
+import { signOut } from "@/main-auth"
 import {
   cancelSubscription,
   createCheckout,

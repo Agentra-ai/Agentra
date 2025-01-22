@@ -24,9 +24,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@/services/*": ["./src/services/*"],
-      "contentlayer/generated": ["./.contentlayer/generated"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.mjs", "next-env.d.ts", ".next/types/**/*.ts", ".contentlayer/generated"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.mjs", "next-env.d.ts", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

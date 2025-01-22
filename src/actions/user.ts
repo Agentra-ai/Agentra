@@ -10,6 +10,7 @@ import {
   psGetUserByResetPasswordToken,
 } from "@/db/prepared/statements"
 import { users, type User } from "@/db/schema"
+import { eq } from 'drizzle-orm'
 import {
   getUserByEmailSchema,
   getUserByEmailVerificationTokenSchema,
@@ -20,6 +21,7 @@ import {
   type GetUserByIdInput,
   type GetUserByResetPasswordTokenInput,
 } from "@/validations/user"
+import auth from "@/main-auth"
 
 export async function getUserById(
   rawInput: GetUserByIdInput
@@ -39,13 +41,24 @@ export async function getUserById(
 
 export async function getUserDetails(): Promise<User | null> {
   try {
-    const user = await db.query.users.findMany()
-    // console.log("getUsrFetsils", user)
-    return user[0] || null
+    // Get the session
+    const session = await auth();
+
+    // Check if the session exists and has a user
+    if (!session?.user?.email) {
+      return null;
+    }
+    
+    // Fetch the user from the database using the email from the session
+    const [user] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, session.user.email));
+
+    return user || null;
   } catch (error) {
-    console.error(error)
-    throw new Error("Error getting user details")
-    // throw new Error("Error getting user details by email")
+    console.error('Error getting user details:', error);
+    throw new Error('Error getting user details');
   }
 }
 
