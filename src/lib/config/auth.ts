@@ -22,8 +22,8 @@ export default {
       allowDangerousEmailAccountLinking: true,
     }),
     GitHubProvider({
-      clientId: env.GITHUB_ID,
-      clientSecret: env.GITHUB_SECRET,
+      clientId: env.APP_GITHUB_ID,
+      clientSecret: env.APP_GITHUB_SECRET,
       allowDangerousEmailAccountLinking: true,
     }),
     CredentialsProvider({
