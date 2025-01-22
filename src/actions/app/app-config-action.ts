@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
 
-import { db } from "@/lib/db"
+import { db } from "@/db/db"
 import { AppConfig, appConfigs } from "@/db/schema"
 
 export const getAppConfigDetails = async (appId: string) => {

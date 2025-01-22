@@ -2,7 +2,7 @@ import { PineconeRecord } from "@pinecone-database/pinecone"
 import { eq } from "drizzle-orm"
 import { v4 as uuidv4 } from "uuid"
 
-import { db } from "@/lib/db"
+import { db } from "@/db/db"
 import { DocumentStatus, VectorsDBData } from "@/db/schema"
 
 import { getEmbeddings } from "@/hooks/api-action/embedding"

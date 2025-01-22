@@ -7,7 +7,7 @@ import { getUserByEmail } from "@/actions/user"
 import { eq } from "drizzle-orm"
 
 import { env } from "@/env.mjs"
-import { db } from "@/lib/db"
+import { db } from "@/db/db"
 import { resend } from "@/lib/config/email"
 import { users } from "@/db/schema"
 import {

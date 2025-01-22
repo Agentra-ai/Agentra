@@ -2,7 +2,7 @@
 import { redirect } from "next/navigation"
 import { getUserSubscriptions } from "@/actions/subscription-action"
 
-import { db } from "@/lib/db"
+import { db } from "@/db/db"
 import { pricingPlans, TypePricingPlan } from "@/db/schema"
 
 import { InfoMessage, NoPlans, Plan } from "./plan"

@@ -5,7 +5,7 @@ import NextAuth from "next-auth"
 
 import { env } from "@/env.mjs"
 import authConfig from "@/lib/config/auth"
-import { db } from "@/lib/db"
+import { db } from "@/db/db"
 
 import {
   createWorkspace,

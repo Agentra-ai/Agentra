@@ -4,7 +4,7 @@ import { getUserSubscriptions } from "@/actions/subscription-action"
 import { Button } from "@lemonsqueezy/wedges"
 import { eq } from "drizzle-orm"
 
-import { db } from "@/lib/db"
+import { db } from "@/db/db"
 import { pricingPlans, type SubscriptionStatusType } from "@/db/schema"
 
 import { isValidSubscription } from "@/lib/utils"

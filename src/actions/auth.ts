@@ -11,7 +11,7 @@ import { AuthError } from "next-auth"
 import { v4 as uuidv4 } from "uuid"
 
 import { env } from "@/env.mjs"
-import { db } from "@/lib/db"
+import { db } from "@/db/db"
 import { resend } from "@/lib/config/email"
 import { psLinkOAuthAccount } from "@/db/prepared/statements"
 import { users } from "@/db/schema"
