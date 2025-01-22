@@ -11,6 +11,7 @@ import {
   serial,
   text,
   timestamp,
+  unique,
   uuid,
 } from "drizzle-orm/pg-core"
 
@@ -306,7 +307,7 @@ const conversations = pgTable("conversations", {
   name: text("name"),
   modal: text("ai_modal").default(AiModalsEnum.GPT_4O_MINI),
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow(),  
+  updatedAt: timestamp("updated_at").defaultNow(),
 })
 
 const messages = pgTable("messages", {
@@ -484,6 +485,108 @@ const subscriptions = pgTable("subscription", {
 export type SubscriptionStatusType =
   Subscription["data"]["attributes"]["status"]
 
+// Workflow Table
+const workflow = pgTable(
+  "workflow",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    workspaceId: uuid("workspace_id").notNull(),
+    name: text("name").notNull(),
+    description: text("description"),
+    definition: text("definition").notNull(),
+    executionPlan: text("execution_plan"),
+    creditsCost: integer("credits_cost").default(0),
+    cron: text("cron"),
+    status: text("status").notNull(), // DRAFT | PUBLISHED
+    lastRunAt: timestamp("last_run_at"),
+    lastRunId: text("last_run_id"),
+    lastRunStatus: text("last_run_status"),
+    nextRunAt: timestamp("next_run_at"),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").defaultNow(),
+  },
+  (table) => ({
+    uniqueNameWorkspaceId: unique("unique_name_workspace_id").on(table.name, table.workspaceId), // Unique constraint
+  })
+);
+
+// WorkflowExecution Table
+const workflowExecution = pgTable("workflow_execution", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  workflowId: uuid("workflow_id")
+    .notNull()
+    .references(() => workflow.id, { onDelete: "cascade" }),
+  workspaceId: uuid("workspace_id").notNull(),
+  trigger: text("trigger").notNull(),
+  status: text("status").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  definition: text("definition").default("{}"),
+  creditsConsumed: integer("credits_consumed").default(0),
+})
+
+// ExecutionPhase Table
+const executionPhase = pgTable("execution_phase", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  workspaceId: uuid("workspace_id").notNull(),
+  status: text("status").notNull(),
+  number: integer("number").notNull(),
+  node: text("node").notNull(),
+  name: text("name").notNull(),
+  startedAt: timestamp("started_at"),
+  completedAt: timestamp("completed_at"),
+  inputs: text("inputs"),
+  outputs: text("outputs"),
+  creditsConsumed: integer("credits_consumed"),
+  workflowExecutionId: uuid("workflow_execution_id")
+    .notNull()
+    .references(() => workflowExecution.id, { onDelete: "cascade" }),
+})
+
+// ExecutionLog Table
+const executionLog = pgTable("execution_log", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  logLevel: text("log_level").notNull(),
+  message: text("message").notNull(),
+  timestamp: timestamp("timestamp").defaultNow(),
+  executionPhaseId: uuid("execution_phase_id")
+    .notNull()
+    .references(() => executionPhase.id, { onDelete: "cascade" }),
+})
+
+// WorkspaceBalance Table
+const workspaceBalance = pgTable("workspace_balance", {
+  workspaceId: uuid("workspace_id").primaryKey(),
+  credits: integer("credits").default(0),
+})
+
+
+const credential = pgTable(
+  "credential",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    workspaceId: text("user_id").notNull(),
+    name: text("name").notNull(),
+    value: text("value").notNull(),
+    createdAt: timestamp("created_at").defaultNow(),
+  },
+  (table) => ({
+    uniqueworkspaceIdName: unique("unique_user_id_name").on(table.workspaceId, table.name),
+  })
+);
+
+// UserPurchase Table
+// export const userPurchase = pgTable('user_purchase', {
+//   id: text('id').primaryKey().default('cuid()'),
+//   userId: text('user_id').notNull(),
+//   stripeId: text('stripe_id').notNull(),
+//   description: text('description').notNull(),
+//   amount: integer('amount').notNull(),
+//   currency: text('currency').notNull(),
+//   date: timestamp('date').defaultNow(),
+// });
+
 export {
   monitoring,
   workspaces,
@@ -503,6 +606,12 @@ export {
   pricingPlans,
   subscriptions,
   webhookEvents,
+  workflow,
+  workflowExecution,
+  executionPhase,
+  executionLog,
+  workspaceBalance,
+  credential
 }
 
 //Auth tables
@@ -537,6 +646,12 @@ export type ToolType = typeof tools.$inferSelect
 export type BoardType = typeof boards.$inferSelect
 export type LogType = typeof logs.$inferSelect
 export type MonitoringType = typeof monitoring.$inferSelect
+
+//Workflow tables
+export type TypeWorkflow = typeof workflow.$inferSelect
+export type TypeWorkflowExecution = typeof workflowExecution.$inferSelect
+export type TypeExecutionPhase = typeof executionPhase.$inferSelect
+export type TypeExecutionLog = typeof executionLog.$inferSelect
 
 //payments
 export type TypeSubscription = typeof subscriptions.$inferSelect
