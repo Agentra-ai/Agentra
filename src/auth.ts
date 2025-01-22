@@ -15,6 +15,7 @@ import {
 const nextAuth = NextAuth({
   adapter: DrizzleAdapter(db),
   debug: env.NODE_ENV === "development",
+  trustHost: process.env.AUTH_TRUST_HOST ? true : false,
   pages: {
     signIn: "/signin",
     signOut: "/signout",
