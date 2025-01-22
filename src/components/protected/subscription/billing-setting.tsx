@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { getUserSubscriptions } from "@/actions/subscription-action"
 
-import { db } from "@/config/db"
+import { db } from "@/lib/db"
 import {
   pricingPlans,
   TypeSubscription,

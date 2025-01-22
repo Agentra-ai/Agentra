@@ -23,8 +23,8 @@ import {
 import { eq, max } from "drizzle-orm"
 
 import { env } from "@/env.mjs"
-import { db } from "@/config/db"
-import { configureLemonSqueezy } from "@/config/lemonsqueezy"
+import { db } from "@/lib/db"
+import { configureLemonSqueezy } from "@/lib/config/lemonsqueezy"
 import {
   pricingPlans,
   subscriptions,

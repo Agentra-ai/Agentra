@@ -8,8 +8,8 @@ import GoogleProvider from "next-auth/providers/google"
 import ResendProvider from "next-auth/providers/resend"
 
 import { env } from "@/env.mjs"
-import { resend } from "@/config/email"
-import { siteConfig } from "@/config/site"
+import { resend } from "@/lib/config/email"
+import { siteConfig } from "@/lib/config/site"
 import { signInWithPasswordSchema } from "@/validations/auth"
 
 import { MagicLinkEmail } from "@/components/emails/magic-link-email"

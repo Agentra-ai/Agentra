@@ -11,7 +11,7 @@ import {
 } from "@react-email/components"
 
 import { env } from "@/env.mjs"
-import { siteConfig } from "@/config/site"
+import { siteConfig } from "@/lib/config/site"
 
 interface EmailVerificationEmailProps {
   email: string

@@ -1,6 +1,6 @@
 import Balancer from "react-wrap-balancer"
 
-import { testimonials } from "@/data/testimonials"
+import { testimonials } from "@/store/data/testimonials"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {

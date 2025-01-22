@@ -39,7 +39,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY, 
     NODE_ENV: process.env.NODE_ENV,
     PINACONE_API_KEY: process.env.PINACONE_API_KEY,
     DATABASE_URL: process.env.DATABASE_URL,

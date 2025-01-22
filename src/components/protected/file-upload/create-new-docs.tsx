@@ -1,6 +1,6 @@
 import { getUserDetails } from "@/actions/user"
 
-import { db } from "@/config/db"
+import { db } from "@/lib/db"
 import {
   AppDocuments,
   Appfile,

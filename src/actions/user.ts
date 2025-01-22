@@ -2,7 +2,7 @@
 
 import { unstable_noStore as noStore } from "next/cache"
 
-import { db } from "@/config/db"
+import { db } from "@/lib/db"
 import {
   psGetUserByEmail,
   psGetUserByEmailVerificationToken,

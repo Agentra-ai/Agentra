@@ -17,10 +17,11 @@ export const fontOutfit = Outfit({
   variable: "--font-outfit",
 })
 
-export const fontHeading = localFont({
-  src: "../../public/fonts/cal-sans-semi-bold.woff2",
-  variable: "--font-heading",
+export const fontHeading = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
 })
+
 
 export const fontAnek = Anek_Latin({
   subsets: ["latin"],

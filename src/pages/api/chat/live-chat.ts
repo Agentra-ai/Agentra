@@ -5,7 +5,7 @@ import { eq } from "drizzle-orm"
 import { v4 as uuidv4 } from "uuid"
 import { ZodError } from "zod"
 
-import { db } from "@/config/db"
+import { db } from "@/lib/db"
 import {
   messages as _messages,
   AiModalsEnum,

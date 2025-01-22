@@ -15,8 +15,8 @@ import {
   fontInter,
   fontOutfit,
   fontUrbanist,
-} from "@/config/fonts"
-import { siteConfig } from "@/config/site"
+} from "@/lib/config/fonts"
+import { siteConfig } from "@/lib/config/site"
 
 import { ThemeProvider } from "@/providers/theme-provider"
 import SWRProviders from "@/lib/swr-provider"

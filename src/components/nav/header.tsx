@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 import { getUserByEmail, getUserDetails } from "@/actions/user"
 import { IoIosArrowDropright } from "react-icons/io"
 
-import { siteConfig } from "@/config/site"
+import { siteConfig } from "@/lib/config/site"
 
 import auth from "@/lib/auth"
 import { cn } from "@/lib/utils"

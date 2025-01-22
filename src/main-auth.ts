@@ -4,8 +4,8 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import NextAuth from "next-auth"
 
 import { env } from "@/env.mjs"
-import authConfig from "@/config/auth"
-import { db } from "@/config/db"
+import authConfig from "@/lib/config/auth"
+import { db } from "@/lib/db"
 
 import {
   createWorkspace,

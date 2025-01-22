@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 import { getUserDetails } from "@/actions/user"
 
 import { env } from "@/env.mjs"
-import { DEFAULT_SIGNIN_REDIRECT } from "@/config/defaults"
+import { DEFAULT_SIGNIN_REDIRECT } from "@/lib/config/defaults"
 
 import auth from "@/lib/auth"
 

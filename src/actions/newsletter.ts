@@ -3,8 +3,8 @@
 import { unstable_noStore as noStore } from "next/cache"
 
 import { env } from "@/env.mjs"
-import { db } from "@/config/db"
-import { resend } from "@/config/email"
+import { db } from "@/lib/db"
+import { resend } from "@/lib/config/email"
 import { psGetNewsletterSubscriberByEmail } from "@/db/prepared/statements"
 import { newsletterSubscribers } from "@/db/schema"
 import {

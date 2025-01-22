@@ -6,7 +6,7 @@ import { signInWithPassword } from "@/actions/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 
-import { DEFAULT_SIGNIN_REDIRECT } from "@/config/defaults"
+import { DEFAULT_SIGNIN_REDIRECT } from "@/lib/config/defaults"
 import {
   signInWithPasswordSchema,
   type SignInWithPasswordFormInput,

@@ -3,7 +3,7 @@ import { getAppConversations } from "@/actions/app/logs-action";
 import { getChatMessagesByConvId } from "@/actions/chat/chat-action";
 import { ZodError } from "zod";
 
-import { db } from "@/config/db";
+import { db } from "@/lib/db";
 import { conversations, ConversationType } from "@/db/schema";
 
 import { DatabaseError, ValidationError } from "@/lib/errors/errors";
