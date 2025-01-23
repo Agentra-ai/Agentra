@@ -8,8 +8,8 @@ import GoogleProvider from "next-auth/providers/google"
 import ResendProvider from "next-auth/providers/resend"
 
 import { env } from "@/env.mjs"
-import { resend } from "@/lib/config/email"
-import { siteConfig } from "@/lib/config/site"
+import { resend } from "@/config/email"
+import { siteConfig } from "@/config/site"
 import { signInWithPasswordSchema } from "@/validations/auth"
 
 import { MagicLinkEmail } from "@/components/emails/magic-link-email"
@@ -22,8 +22,8 @@ export default {
       allowDangerousEmailAccountLinking: true,
     }),
     GitHubProvider({
-      clientId: env.APP_GITHUB_ID,
-      clientSecret: env.APP_GITHUB_SECRET,
+      clientId: env.GITHUB_ID,
+      clientSecret: env.GITHUB_SECRET,
       allowDangerousEmailAccountLinking: true,
     }),
     CredentialsProvider({

@@ -10,7 +10,7 @@ import {
   Text,
 } from "@react-email/components"
 
-import { siteConfig } from "@/lib/config/site"
+import { siteConfig } from "@/config/site"
 
 import { absoluteUrl } from "@/lib/utils"
 

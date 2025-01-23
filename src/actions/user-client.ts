@@ -1,7 +1,8 @@
 "use client"
 
-import auth from "@/main-auth"
 import { useAuthStore } from "@/store/useAuthStore"
+
+import auth from "@/lib/auth"
 
 const getAuthDetails = async () => {
   try {

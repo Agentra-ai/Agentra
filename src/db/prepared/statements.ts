@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm"
 
-import { db } from "@/db/db"
+import { db } from "@/config/db"
 import { newsletterSubscribers, users } from "@/db/schema"
 
 export const psGetUserById = db

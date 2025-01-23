@@ -4,8 +4,8 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import NextAuth from "next-auth"
 
 import { env } from "@/env.mjs"
-import authConfig from "@/lib/config/auth"
-import { db } from "@/db/db"
+import authConfig from "@/config/auth"
+import { db } from "@/config/db"
 
 import {
   createWorkspace,
@@ -15,7 +15,6 @@ import {
 const nextAuth = NextAuth({
   adapter: DrizzleAdapter(db),
   debug: env.NODE_ENV === "development",
-  trustHost: process.env.AUTH_TRUST_HOST ? true : false,
   pages: {
     signIn: "/signin",
     signOut: "/signout",

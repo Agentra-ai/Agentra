@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import { techStack } from "@/store/data/tech-stack"
+import { techStack } from "@/data/tech-stack"
 
 import { Icons } from "@/components/icons"
 

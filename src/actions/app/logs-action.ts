@@ -1,5 +1,5 @@
 import { desc, eq, sql } from "drizzle-orm";
-import { db } from "@/db/db";
+import { db } from "@/config/db";
 import { conversations } from "@/db/schema";
 
 export const getAppConversations = async (

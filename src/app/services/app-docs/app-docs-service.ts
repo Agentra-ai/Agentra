@@ -3,7 +3,8 @@ import useSWR, { mutate } from "swr"
 import useSWRMutation from "swr/mutation"
 
 import { AppDocumentType, AppFileType } from "@/db/schema"
-import axiosInstance from "@/config/axios-instance"
+
+import { axiosInstance } from "../fetcher"
 
 export function useAppDocs() {
   const { data, error, isValidating } = useSWR<{ data: AppDocumentType[] }>(

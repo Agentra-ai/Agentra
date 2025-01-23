@@ -5,7 +5,7 @@ import { Message, streamObject, streamText } from "ai"
 import { v4 as uuidv4 } from "uuid"
 import { z } from "zod"
 
-import { db } from "@/db/db"
+import { db } from "@/config/db"
 import { messages as _messages, AiModalsEnum } from "@/db/schema"
 
 import { getContext } from "@/hooks/api-action/get-match-embedding"

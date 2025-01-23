@@ -2,7 +2,7 @@
 
 import { signOut } from "next-auth/react"
 
-import { DEFAULT_SIGNOUT_REDIRECT } from "@/lib/config/defaults"
+import { DEFAULT_SIGNOUT_REDIRECT } from "@/config/defaults"
 
 import { Button } from "@/components/ui/button"
 import { Icons } from "@/components/icons"

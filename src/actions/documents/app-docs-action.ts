@@ -1,7 +1,7 @@
 import { revalidatePath } from "next/cache"
 import { and, eq } from "drizzle-orm"
 
-import { db } from "@/db/db"
+import { db } from "@/config/db"
 import { AppDocuments, AppDocumentType, Appfile } from "@/db/schema"
 
 import { getUserDetails } from "../user"

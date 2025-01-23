@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Balancer from "react-wrap-balancer"
 
-import { siteConfig } from "@/lib/config/site"
+import { siteConfig } from "@/config/site"
 
 import { cn } from "@/lib/utils"
 

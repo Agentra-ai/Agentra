@@ -1,4 +1,4 @@
-import { signIn } from "@/main-auth"
+import { signIn } from "@/auth"
 
 export const AppConstantRoutes = {
   paths: {

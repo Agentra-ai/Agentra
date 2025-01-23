@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { auth } from "@/main-auth"
+import { auth } from "@/auth"
 import { CitrusIcon, HomeIcon, SettingsIcon } from "lucide-react"
 
 import { SidebarNav } from "./sidebar-nav"
