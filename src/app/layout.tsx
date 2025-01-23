@@ -66,17 +66,17 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     siteName: siteConfig.name,
   },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.name,
-    description: siteConfig.description,
-    images: [siteConfig.links.openGraphImage],
-    creator: siteConfig.author,
-  },
+  // twitter: {
+  //   card: "summary_large_image",
+  //   title: siteConfig.name,
+  //   description: siteConfig.description,
+  //   images: [siteConfig.links.openGraphImage],
+  //   creator: siteConfig.author,
+  // },
   icons: {
     icon: "/agentra-logo.png",
   },
-  // manifest: siteConfig.links.manifestFile,
+  manifest: siteConfig.links.manifestFile,
 }
 
 interface RootLayoutProps {
