@@ -3,7 +3,7 @@
 import { ReactNode } from "react"
 import { SWRConfig } from "swr"
 
-import fetcher from "@/config/axios-instance"
+import fetcher from "@/app/services/fetcher"
 
 export default function SWRProviders({ children }: { children: ReactNode }) {
   return (

@@ -2,7 +2,8 @@ import useSWR, { mutate } from "swr"
 import useSWRMutation from "swr/mutation"
 
 import { App } from "@/db/schema" // Ensure this matches your actual type definition.
-import axiosInstance from "@/config/axios-instance"
+
+import { axiosInstance } from "@/app/services/fetcher"
 
 export function useWorkspaceApps() {
   const { data, error, isValidating } = useSWR<{ data: App[] }>(

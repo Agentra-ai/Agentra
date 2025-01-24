@@ -1,6 +1,6 @@
 import { type FrequentlyAskedQuestion } from "@/types"
 
-import { siteConfig } from "@/lib/config/site"
+import { siteConfig } from "@/config/site"
 
 export const frequentlyAskedQuestions: FrequentlyAskedQuestion[] = [
   {

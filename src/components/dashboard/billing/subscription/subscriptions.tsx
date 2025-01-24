@@ -1,6 +1,6 @@
 import { getUserSubscriptions } from "@/actions/subscription-action"
 
-import { db } from "@/db/db"
+import { db } from "@/config/db"
 import {
   pricingPlans,
   TypeSubscription,

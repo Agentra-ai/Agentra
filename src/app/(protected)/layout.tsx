@@ -5,7 +5,7 @@ import { Inter } from "next/font/google"
 import { redirect } from "next/navigation"
 import { getUserDetails } from "@/actions/user"
 
-import { DEFAULT_UNAUTHENTICATED_REDIRECT } from "@/lib/config/defaults"
+import { DEFAULT_UNAUTHENTICATED_REDIRECT } from "@/config/defaults"
 
 import auth from "@/lib/auth"
 

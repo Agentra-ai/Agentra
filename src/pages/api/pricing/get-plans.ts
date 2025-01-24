@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next"
 
-import { db } from "@/db/db"
+import { db } from "@/config/db"
 import { pricingPlans } from "@/db/schema"
 
 export default async function handler(

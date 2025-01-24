@@ -7,8 +7,8 @@ import { getUserByEmail } from "@/actions/user"
 import { eq } from "drizzle-orm"
 
 import { env } from "@/env.mjs"
-import { db } from "@/db/db"
-import { resend } from "@/lib/config/email"
+import { db } from "@/config/db"
+import { resend } from "@/config/email"
 import { users } from "@/db/schema"
 import {
   checkIfEmailVerifiedSchema,

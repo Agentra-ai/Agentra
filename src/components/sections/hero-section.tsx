@@ -5,7 +5,7 @@ import { Anek_Latin } from "next/font/google"
 import Link from "next/link"
 import Balancer from "react-wrap-balancer"
 
-import { siteConfig } from "@/lib/config/site"
+import { siteConfig } from "@/config/site"
 
 import { cn, getGitHubStars } from "@/lib/utils"
 

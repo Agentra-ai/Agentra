@@ -2,26 +2,22 @@ import { type NavItem, type NavItemFooter } from "@/types"
 
 const links = {
   github:
-    "https://github.com/pjborowiecki/SAASY-LAND-Next-14-Starters-With-Authentication-And-Database-Implemented",
-  twitter: "https://twitter.com/pjborowiecki",
-  linkedin: "https://www.linkedin.com/in/pjborowiecki",
-  discord: "",
-  authorsWebsite: "https://pjborowiecki.com",
-  authorsGitHub: "https://github.com/pjborowiecki",
-  openGraphImage: "https://saasyland.com/images/opengraph-image.png",
-  manifestFile: "https://saasyland.com/site.webmanifest",
+    "https://github.com/Agentra-ai/Agentra",
+  linkedin: "https://www.linkedin.com/company/agentra-ai",
+  authorsGitHub: "https://github.com/divyeshradadiya",
+  manifestFile: "https://floxify.ai/",
+  authorsWebsite : 'divyesh',
 }
 
 export const siteConfig = {
-  name: "Agentra",
+  name: "Floxify",
   description:
-    "An open-source starter for Next.js 14 full-stack projects with advanced authentication and several database configurations. The aim of this project is to provide a solid foundation for faster building and launching SaaS products, marketing sites, blogs, and more.",
+    "Floxify is a workflow automation tool that helps you automate your business processes and workflows with AI agents.",
   links,
-  url: "https://saasyland.com",
-  ogImage: links.openGraphImage,
-  author: "pjborowiecki",
-  hostingRegion: "fra1",
-  keywords: ["SaaS", "Next.js", "Template"],
+  url: "https://floxify.ai",
+  author: "divyeshradadiya",
+  hostingRegion: "",
+  keywords: ["AI", "Agents", "orkflow", "automation"],
   navItems: [
     {
       title: "About",

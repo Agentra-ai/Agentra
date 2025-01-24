@@ -6,7 +6,7 @@ import crypto from "node:crypto"
 
 import { revalidatePath } from "next/cache"
 import { notFound } from "next/navigation"
-import { signOut } from "@/main-auth"
+import { signOut } from "@/auth"
 import {
   cancelSubscription,
   createCheckout,
@@ -23,8 +23,8 @@ import {
 import { eq, max } from "drizzle-orm"
 
 import { env } from "@/env.mjs"
-import { db } from "@/db/db"
-import { configureLemonSqueezy } from "@/lib/config/lemonsqueezy"
+import { db } from "@/config/db"
+import { configureLemonSqueezy } from "@/config/lemonsqueezy"
 import {
   pricingPlans,
   subscriptions,

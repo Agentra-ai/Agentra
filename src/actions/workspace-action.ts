@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm"
 import { v4 as uuidv4 } from "uuid"
 
-import { db } from "@/db/db"
+import { db } from "@/config/db"
 
 import { users, workspaces, workspaceUsers } from "./../db/schema/index"
 import { getUserDetails } from "./user"

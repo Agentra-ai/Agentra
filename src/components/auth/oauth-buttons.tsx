@@ -4,7 +4,7 @@ import * as React from "react"
 import { useAuthStore } from "@/store/useAuthStore"
 import { signIn, useSession } from "next-auth/react"
 
-import { DEFAULT_SIGNIN_REDIRECT } from "@/lib/config/defaults"
+import { DEFAULT_SIGNIN_REDIRECT } from "@/config/defaults"
 
 import { useToast } from "@/hooks/use-toast"
 

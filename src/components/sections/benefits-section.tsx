@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Balancer from "react-wrap-balancer"
 
-import { siteConfig } from "@/lib/config/site"
+import { siteConfig } from "@/config/site"
 
 import {
   Card,

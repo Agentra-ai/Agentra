@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm"
 
-import { db } from "@/db/db"
+import { db } from "@/config/db"
 import { AppCustomization, appCustomizations } from "@/db/schema"
 
 export const getAppCustomization = async (appId: string) => {

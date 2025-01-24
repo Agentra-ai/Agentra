@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-
 import Modal from "@/components/modal"
 
 interface EmbeddingAppModalProps {
@@ -16,7 +15,7 @@ export const EmbeddingAppModal: React.FC<EmbeddingAppModalProps> = ({
   const options = [
     {
       title: "Option 1",
-      iframeCode: `<iframe src="https://your-app-link-1.com" style="width: 100%; height: 100%; min-height: 700px;" frameborder="0" allow="microphone"></iframe>`,
+      iframeCode: `<iframe src="https://your-app-link-1.com" style="width: 100%; height: 100%; min-height: 700px;" frameBorder="0" allow="microphone"></iframe>`,
     },
     {
       title: "Option 2",

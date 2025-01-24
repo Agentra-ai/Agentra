@@ -4,7 +4,7 @@ import { getUserDetails } from "@/actions/user"
 import { eq } from "drizzle-orm"
 import { v4 as uuidv4 } from "uuid"
 
-import { db } from "@/db/db"
+import { db } from "@/config/db"
 import { appConfigs, appCustomizations, apps, conversations } from "@/db/schema"
 
 import { actionClient } from "@/lib/safe-action"

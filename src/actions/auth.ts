@@ -4,15 +4,15 @@ import crypto from "crypto"
 
 import { unstable_noStore as noStore } from "next/cache"
 import { getUserByEmail, getUserByResetPasswordToken } from "@/actions/user"
-import { signIn } from "@/main-auth"
+import { signIn } from "@/auth"
 import bcryptjs from "bcryptjs"
 import { eq } from "drizzle-orm"
 import { AuthError } from "next-auth"
 import { v4 as uuidv4 } from "uuid"
 
 import { env } from "@/env.mjs"
-import { db } from "@/db/db"
-import { resend } from "@/lib/config/email"
+import { db } from "@/config/db"
+import { resend } from "@/config/email"
 import { psLinkOAuthAccount } from "@/db/prepared/statements"
 import { users } from "@/db/schema"
 import {

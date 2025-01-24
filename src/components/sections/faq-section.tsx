@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Balancer from "react-wrap-balancer"
 
-import { frequentlyAskedQuestions } from "@/store/data/frequently-asked-questions"
+import { frequentlyAskedQuestions } from "@/data/frequently-asked-questions"
 
 import {
   Accordion,
