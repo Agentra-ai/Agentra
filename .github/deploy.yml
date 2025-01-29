@@ -1,0 +1,51 @@
+name: CI/CD Pipeline for Floxify app
+
+on:
+  push:
+    branches:
+      - main  # Trigger workflow on push/merge 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Check out the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. Set up Node.js (Match with EC2 version)
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 22.13.0  
+
+    # 3. Install dependencies
+    - name: Install dependencies
+      run: npm install
+
+    # 4. Build the Next.js app
+    - name: Build Floxify app
+      run: npm run build
+
+    # 5. Deploy to EC2
+    - name: Deploy to EC2
+      env:
+        HOST: ${{ secrets.EC2_HOST }}
+        USER: ${{ secrets.EC2_USER }}
+        PRIVATE_KEY: ${{ secrets.EC2_KEY }}
+        APP_DIR: /home/ubuntu/Agentra
+      run: |
+        echo "$PRIVATE_KEY" > ssh_key
+        chmod 600 ssh_key
+        ssh -o StrictHostKeyChecking=no -i ssh_key $USER@$HOST << EOF
+          cd $APP_DIR
+          git pull origin main
+          npm install --omit=dev
+          npm run build
+          pm2 restart Agentra
+        EOF
+        rm -f ssh_key
+
+
+
