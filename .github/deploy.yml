@@ -3,11 +3,12 @@ name: CI/CD Pipeline for Floxify app
 on:
   push:
     branches:
-      - main  # Trigger workflow on push/merge 
+      - main  # Trigger workflow on push/merge
+  workflow_dispatch: 
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     # 1. Check out the repository
