@@ -15,7 +15,7 @@ const openai = new OpenAI()
 // const openai = new OpenAIApi(config)
 
 export async function getEmbeddings(text: string, selectedModel?: string) {
-  console.log("text for embedding", text)
+  // console.log("text for embedding", text)
   const textPlace = text.replace(/\n/g, " ")
   const modal = selectedModel
     ? selectedModel
@@ -28,9 +28,9 @@ export async function getEmbeddings(text: string, selectedModel?: string) {
         dimensions: 1536,
       }),
     })
-    console.log("response from openai embeddings api", response)
+    // console.log("response from openai embeddings api", response)
     const result = await response.data[0]?.embedding
-    console.log("result from openai embeddings api", result)
+    // console.log("result from openai embeddings api", result)
     return result as number[]
   } catch (error) {
     console.log("error calling openai embeddings api", error)

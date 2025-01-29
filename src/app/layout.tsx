@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   //   creator: siteConfig.author,
   // },
   icons: {
-    icon: "/agentra-logo.png",
+    icon: "/floxify-logo.png",
   },
   manifest: siteConfig.links.manifestFile,
 }

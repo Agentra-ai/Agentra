@@ -9,11 +9,7 @@ import { Message } from "ai"
 import { useChat } from "ai/react"
 import Cookies from "js-cookie"
 import { BsArrowRepeat, BsFillSendFill } from "react-icons/bs"
-import {
-  RiChatSmile3Fill,
-  RiSendPlane2Fill,
-  RiSendPlaneFill,
-} from "react-icons/ri"
+import { RiSendPlaneFill } from "react-icons/ri"
 import useSWR from "swr"
 import { v4 } from "uuid"
 import { useShallow } from "zustand/react/shallow"
@@ -168,7 +164,6 @@ const ConfigChat = () => {
     appConfigDetails,
     handleSubmit,
   ])
-
   const handleRefresh = useCallback(async () => {
     try {
       const newConfig = {
@@ -214,7 +209,7 @@ const ConfigChat = () => {
 
   return (
     <>
-      <ModalSelect />
+      {/* <ModalSelect /> */}
       <div className="flex h-full w-full flex-col items-center justify-between rounded-[8px]">
         <div
           className={`flex h-[calc(100vh-100px)] w-full flex-col bg-[#f1f3f7] gap-2 ${
@@ -226,7 +221,7 @@ const ConfigChat = () => {
             <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center z-10">
               <Button onClick={handleRefresh} variant="whiteblue">
                 <BsArrowRepeat size={20} />
-                <span className="font-semibold">Press to refresh</span>
+                <span className="font-semibold">Press to refresh</span> 
               </Button>
             </div>
           )}

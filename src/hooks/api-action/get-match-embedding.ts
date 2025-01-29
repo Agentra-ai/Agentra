@@ -33,7 +33,7 @@ export async function getMatchesFromEmbeddings(
     .filter((file) => file.isActive)
     .map((file) => file.fileKey)
 
-  console.log("activeFileKeys", activeFileKeys)
+  // console.log("activeFileKeys", activeFileKeys)
 
   const queryResult = await namespace.query({
     topK: topKvalue || 3,
@@ -60,7 +60,7 @@ export async function getContext(
     topKvalue
   )
 
-  console.log("matches", matches)
+  // console.log("matches", matches)
 
   // if(matches.length === 0) {
   //   return "no document found"}
