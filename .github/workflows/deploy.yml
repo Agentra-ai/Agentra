@@ -4,18 +4,18 @@ on:
   push:
     branches:
       - main  # Trigger workflow on push/merge
-  workflow_dispatch: 
+  workflow_dispatch:  
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: self-hosted 
 
     steps:
     # 1. Check out the repository
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # 2. Set up Node.js (Match with EC2 version)
+    # 2. Set up Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
@@ -25,17 +25,13 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    # 4. Build the Next.js app
-    - name: Build Floxify app
-      run: npm run build
-
-    # 5. Deploy to EC2
+    # 4. Deploy to EC2 with Environment Variables
     - name: Deploy to EC2
       env:
         HOST: ${{ secrets.EC2_HOST }}
         USER: ${{ secrets.EC2_USER }}
         PRIVATE_KEY: ${{ secrets.EC2_KEY }}
-        APP_DIR: /home/ubuntu/Agentra
+        APP_DIR: /Agentra
       run: |
         echo "$PRIVATE_KEY" > ssh_key
         chmod 600 ssh_key
@@ -43,10 +39,37 @@ jobs:
           cd $APP_DIR
           git pull origin main
           npm install --omit=dev
+
+          echo "Setting up environment variables..."
+          export APP_GITHUB_ID="${{ secrets.APP_GITHUB_ID }}"
+          export APP_GITHUB_SECRET="${{ secrets.APP_GITHUB_SECRET }}"
+          export AUTH_SECRET="${{ secrets.AUTH_SECRET }}"
+          export AUTH_TRUST_HOST="${{ secrets.AUTH_TRUST_HOST }}"
+          export DATABASE_URL="${{ secrets.DATABASE_URL }}"
+          export GOOGLE_ID="${{ secrets.GOOGLE_ID }}"
+          export GOOGLE_SECRET="${{ secrets.GOOGLE_SECRET }}"
+          export LEMONSQUEEZY_API_KEY="${{ secrets.LEMONSQUEEZY_API_KEY }}"
+          export LEMONSQUEEZY_STORE_ID="${{ secrets.LEMONSQUEEZY_STORE_ID }}"
+          export LEMONSQUEEZY_WEBHOOK_SECRET="${{ secrets.LEMONSQUEEZY_WEBHOOK_SECRET }}"
+          export NEXT_PUBLIC_APP_URL="${{ secrets.NEXT_PUBLIC_APP_URL }}"
+          export NEXT_PUBLIC_S3_ACCESS_KEY_ID="${{ secrets.NEXT_PUBLIC_S3_ACCESS_KEY_ID }}"
+          export NEXT_PUBLIC_S3_BUCKET_NAME="${{ secrets.NEXT_PUBLIC_S3_BUCKET_NAME }}"
+          export NEXT_PUBLIC_S3_SECRET_ACCESS_KEY="${{ secrets.NEXT_PUBLIC_S3_SECRET_ACCESS_KEY }}"
+          export NEXT_PUBLIC_STRIPE_PUBLISH_KEY="${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISH_KEY }}"
+          export NODE_ENV="${{ secrets.NODE_ENV }}"
+          export OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}"
+          export PINACONE_API_KEY="${{ secrets.PINACONE_API_KEY }}"
+          export PINECONE_ENVIRONMENT="${{ secrets.PINECONE_ENVIRONMENT }}"
+          export RESEND_API_KEY="${{ secrets.RESEND_API_KEY }}"
+          export RESEND_EMAIL_FROM="${{ secrets.RESEND_EMAIL_FROM }}"
+          export RESEND_EMAIL_TO="${{ secrets.RESEND_EMAIL_TO }}"
+          export RESEND_HOST="${{ secrets.RESEND_HOST }}"
+          export RESEND_PORT="${{ secrets.RESEND_PORT }}"
+          export RESEND_USERNAME="${{ secrets.RESEND_USERNAME }}"
+          export STRIPE_SECRET="${{ secrets.STRIPE_SECRET }}"
+          export WEBHOOK_URL="${{ secrets.WEBHOOK_URL }}"
+
           npm run build
           pm2 restart Agentra
         EOF
         rm -f ssh_key
-
-
-
