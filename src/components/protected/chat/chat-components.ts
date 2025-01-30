@@ -1,7 +1,8 @@
+import { MessagesType } from "@/db/schema"
 import { Message } from "ai"
 import { useEffect } from "react"
 
-export const useMessageScroll = (messages: Message[]) => {
+export const useMessageScroll = (messages: MessagesType[]) => {
     useEffect(() => {
       const messageContainer = document.getElementById("message-container")
       if (messageContainer) {

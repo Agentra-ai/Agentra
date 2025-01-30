@@ -67,7 +67,7 @@ export default function Page() {
       setIsLoading(false);
       setInput("");
     }
-  }
+  }   
 
   return (
     <div className="container mx-auto p-4">

@@ -54,7 +54,7 @@ const MessageList = ({ messages, isLoading }: Props) => {
             )}
           </div>
           <div className="mb-4 max-w-[80%] rounded-2xl bg-white p-4 py-3">
-            <div className="overflow-y-auto max-h-[1000px] cursor-pointer prose prose-sm">
+            <div className="overflow-y-auto max-h-[1500px] cursor-pointer prose prose-sm">
               {conversationOpener}
             </div>
           </div>
