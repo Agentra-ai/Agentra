@@ -1,15 +1,12 @@
 "use client"
 
 import * as React from "react"
-import { useAuthStore } from "@/store/useAuthStore"
-import { signIn, useSession } from "next-auth/react"
-
+import { signIn } from "next-auth/react"
 import { DEFAULT_SIGNIN_REDIRECT } from "@/config/defaults"
-
 import { useToast } from "@/hooks/use-toast"
-
 import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 
 export function OAuthButtons(): JSX.Element {
   const { toast } = useToast()
@@ -21,10 +18,6 @@ export function OAuthButtons(): JSX.Element {
       await signIn(provider, {
         callbackUrl: DEFAULT_SIGNIN_REDIRECT,
       })
-
-      const session = await useSession()
-      const { setUser } = useAuthStore.getState()
-      setUser(session.data?.user ?? null)
 
       toast({
         title: "Success!",
@@ -50,17 +43,17 @@ export function OAuthButtons(): JSX.Element {
         onClick={() => void handleOAuthSignIn("google")}
         className="w-full sm:w-auto"
       >
-        <Icons.google className="mr-2 size-4" />
+        <FcGoogle className="mr-2 text-xl" /> 
         Google
       </Button>
 
       <Button
-        aria-label="Sign in with gitHub"
+        aria-label="Sign in with GitHub"
         variant="outline"
         onClick={() => void handleOAuthSignIn("github")}
         className="w-full sm:w-auto"
       >
-        <Icons.gitHub className="mr-2 size-4" />
+        <FaGithub className="mr-2 text-xl" />
         GitHub
       </Button>
     </div>

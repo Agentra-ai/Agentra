@@ -6,7 +6,7 @@ interface AuthLayoutProps {
 
 export default function AuthLayout({ children }: AuthLayoutProps): JSX.Element {
   return (
-    <div className="flex h-auto min-h-screen w-full items-center justify-center">
+    <div className="flex min-h-screen w-full items-center justify-center p-10">
       {children}
     </div>
   )
