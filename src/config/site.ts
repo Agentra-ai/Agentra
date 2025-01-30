@@ -14,7 +14,7 @@ export const siteConfig = {
   description:
     "Floxify is a workflow automation tool that helps you automate your business processes and workflows with AI agents.",
   links,
-  url: "https://floxify.ai",
+  url: "https://cloud.floxify.ai",
   author: "divyeshradadiya",
   hostingRegion: "",
   keywords: ["AI", "Agents", "orkflow", "automation"],

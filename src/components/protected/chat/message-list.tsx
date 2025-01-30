@@ -54,7 +54,7 @@ const MessageList = ({ messages, isLoading }: Props) => {
             )}
           </div>
           <div className="mb-4 max-w-[80%] rounded-2xl bg-white p-4 py-3">
-            <div className="overflow-y-auto max-h-[1000px] cursor-pointer prose prose-sm">
+            <div className="overflow-y-auto max-h-[1500px] cursor-pointer prose prose-sm">
               {conversationOpener}
             </div>
           </div>
@@ -103,18 +103,18 @@ const MessageList = ({ messages, isLoading }: Props) => {
                 <Tooltip  delayDuration={0}>
                   <TooltipTrigger asChild>
                     <div
-                      className="mb-4 ml-auto flex max-w-[80%] items-center justify-end gap-2 rounded-2xl"
-                      style={{
-                        backgroundColor: userChatColor,
-                        color: userTextColor,
-                      }}
+                      className="mb-4 ml-auto flex max-w-[80%] bg-[#e3eaff]  items-center justify-end gap-2 rounded-2xl"
+                      // style={{
+                      //   backgroundColor: userChatColor,
+                      //   color: userTextColor,
+                      // }}
                     >
                       <p
-                        className="w-full resize-none rounded-2xl border-none bg-inherit px-4 py-3 focus:ring-blue-700"
-                        style={{
-                          color: userTextColor,
-                          backgroundColor: userChatColor,
-                        }}
+                        className="w-full resize-none rounded-2xlborder-none text-[14px] px-4 py-3 focus:ring-blue-700"
+                        // style={{
+                        //   color: userTextColor,  
+                        //   backgroundColor: userChatColor,
+                        // }}
                       >
                         {message.content}
                       </p>{" "}

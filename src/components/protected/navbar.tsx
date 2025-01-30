@@ -56,17 +56,17 @@ const Navbar = () => {
     <div className="relative flex items-center justify-between bg-[#f3f5f7] px-2 py-[10px] text-black">
       <div
         onClick={() => router.push("/apps/studio")}
-        className=" ml-1 flex cursor-pointer gap-2 font-anek font-[500] tracking-tight transition-opacity"
+        className=" ml-1 flex cursor-pointer gap-1 font-anek font-[500] tracking-tight transition-opacity"
       >
         <Img
-          src="/agentra-logo.png"
+          src="/floxify-logo.png"
           alt="A"
           width={32}
           height={18}
           className="flex-shrink-0"
         />
         <>
-          <span className="font-anek text-2xl font-semibold">Agentra:</span>
+          <span className="font-anek text-2xl font-semibold">floxify:</span>
           {/* <span className="text-blue-700">AI</span> */}
         </>
       </div>

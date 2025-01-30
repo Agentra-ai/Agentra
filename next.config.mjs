@@ -32,6 +32,7 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true, // Disables type-checking during the build
   },
+  transpilePackages: ['next-auth'],
 }
 
 export default nextConfig

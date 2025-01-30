@@ -1,12 +1,10 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { redirect } from "next/navigation"
-import { getUserDetails } from "@/actions/user"
-
-import { env } from "@/env.mjs"
-import { DEFAULT_SIGNIN_REDIRECT } from "@/config/defaults"
-
-import auth from "@/lib/auth"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import Image from "next/image";
+import { env } from "@/env.mjs";
+import auth from "@/lib/auth";
+import { DEFAULT_SIGNIN_REDIRECT } from "@/config/defaults";
 
 import {
   Card,
@@ -15,91 +13,77 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { OAuthButtons } from "@/components/auth/oauth-buttons"
-import { SignInWithEmailForm } from "@/components/forms/signin-with-email-form"
-import { SignInWithPasswordForm } from "@/components/forms/signin-with-password-form"
-import { Icons } from "@/components/icons"
+} from "@/components/ui/card";
+import { OAuthButtons } from "@/components/auth/oauth-buttons";
+import { IoEarth } from "react-icons/io5";
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: "Sign In",
   description: "Sign in to your account",
-}
+};
 
 export default async function SignInPage(): Promise<JSX.Element> {
-  const session = await auth()
-  const user = await getUserDetails()
-  if (session && user) {
-    redirect(DEFAULT_SIGNIN_REDIRECT)
+  const session = await auth();
+  if (session) {
+    redirect(DEFAULT_SIGNIN_REDIRECT);
   }
+
   return (
-    <div className="flex h-auto min-h-screen w-full items-center justify-center">
-      <Card className="max-sm:flex  max-sm:w-full max-sm:flex-col max-sm:items-center max-sm:justify-center max-sm:rounded-none max-sm:border-none sm:min-w-[370px] sm:max-w-[368px]">
-        <CardHeader className="space-y-1">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-2xl">Sign in</CardTitle>
-            <Link href="/">
-              <Icons.close className="size-4" />
-            </Link>
-          </div>
-          <CardDescription>
-            Choose your preferred sign in method
+    <div className="relative flex min-h-[600px] w-full items-center justify-center px-4 sm:bg-[#eef4ff] rounded-2xl">
+      {/* Floxify Logo - Top Left */}
+      <div className="absolute top-2 left-2 flex items-center">
+        <Image
+          src="/floxify-logo.png"
+          width={40}
+          height={40}
+          alt="Floxify Logo"
+        />
+        <h1 className="text-lg sm:text-2xl font-urbanist font-semibold text-black">
+          floxify:
+        </h1>
+      </div>
+
+      {/* Language Selector - Top Right */}
+      <div className="absolute top-2 right-2 flex items-center border rounded-lg px-2 py-1">
+        <IoEarth className="w-4 h-4 sm:w-5 sm:h-5 text-gray-700" />
+        <h1 className="text-sm sm:text-md font-inter p-1 text-black">English</h1>
+      </div>
+
+      {/* Authentication Card */}
+      <Card className="w-full max-w-md rounded-lg bg-white shadow-lg border border-gray-200 p-6 sm:p-10">
+        {/* Header */}
+        <CardHeader className="text-center space-y-4">
+          <CardTitle className="text-xl sm:text-2xl font-semibold md:ml-5 text-black text-left">
+            👋 Hey, let's get started!
+          </CardTitle>
+          <CardDescription className="text-gray-800">
+            Sign in with one of the following methods. 🔑
           </CardDescription>
         </CardHeader>
-        <CardContent className="max-sm:w-full max-sm:max-w-[340px] max-sm:px-10">
+
+        {/* OAuth Login Buttons */}
+        <CardContent className="space-y-6 pt-4">
           <OAuthButtons />
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative mb-3 mt-6 flex justify-center text-xs uppercase">
-              <span className="bg-background px-2">
-                Or continue with magic link
-              </span>
-            </div>
-          </div>
-          <SignInWithEmailForm />
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
-            </div>
-            <div className="relative mb-3 mt-6 flex justify-center text-xs uppercase">
-              <span className="bg-background px-2">
-                Or continue with password
-              </span>
-            </div>
-          </div>
-          <SignInWithPasswordForm />
         </CardContent>
 
-        <CardFooter className="grid w-full text-sm text-muted-foreground max-sm:max-w-[340px] max-sm:px-10">
-          <div>
-            <span>Don&apos;t have an account? </span>
-            <Link
-              aria-label="Sign up"
-              href="/signup"
-              className="font-bold tracking-wide text-primary underline-offset-4 transition-colors hover:underline"
-            >
-              Sign up
-              <span className="sr-only">Sign up</span>
-            </Link>
-            .
-          </div>
-          <div>
-            <span>Forgot your password? </span>
-            <Link
-              aria-label="Reset password"
-              href="/signin/password-reset"
-              className="text-sm font-normal text-primary underline-offset-4 transition-colors hover:underline"
-            >
-              Reset now
-              <span className="sr-only">Reset Password</span>
-            </Link>
-            .
-          </div>
+        {/* Separator */}
+        {/* {/* <div className="relative my-6 flex items-center">
+          <div className="w-full border-t border-gray-300"></div>
+          <span className="mx-4 text-gray-500 text-sm">or</span>
+          <div className="w-full border-t border-gray-300"></div>
+        </div> */}
+
+        {/* Sign-In Options (Optional) */} 
+        <CardContent className="space-y-4">{/* Placeholder for Email & Password Login (Add Later) */}</CardContent>
+
+        {/* Footer */}
+        <CardFooter className="absolute bottom-2 right-2 text-gray-600">
+          <p className="text-sm">
+            &copy;{new Date().getFullYear()} floxify.ai. All rights reserved.
+          </p>
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }
