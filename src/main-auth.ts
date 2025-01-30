@@ -12,16 +12,17 @@ import {
   updateUserWorkspaceInUserTable,
 } from "./actions/workspace-action"
 
-const checkTrustHost = (url: string) : boolean=> {
-  switch (url) {
-    case env.TRUSTHOST_URL:
-    case 'http://localhost:3000':
-    case 'http://floxify.ai':
-      return true;
-    default:
-      return false;
-  }
-}
+// const checkTrustHost = (url: string) : boolean=> {
+//   switch (url) {
+//     case env.TRUSTHOST_URL:
+//     case 'http://localhost:3000':
+//     case 'https://floxify.ai':
+//     case 'https://cloud.floxify.ai':
+//       return true;
+//     default:
+//       return false;
+//   }
+// }
 
 const nextAuth = NextAuth({
   adapter: DrizzleAdapter(db),

@@ -29,8 +29,7 @@ export const metadata: Metadata = {
 
 export default async function SignInPage(): Promise<JSX.Element> {
   const session = await auth()
-  const user = await getUserDetails()
-  if (session && user) {
+  if (session) {
     redirect(DEFAULT_SIGNIN_REDIRECT)
   }
   return (

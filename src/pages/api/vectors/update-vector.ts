@@ -18,7 +18,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== "PUT") {
-    return res.status(405).json({ error: "Method not allowed" })
+    return res.status(
+      403
+    ).json({ error: "Method not allowed" })
   }
 
   try {
