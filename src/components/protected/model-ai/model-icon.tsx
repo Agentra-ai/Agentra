@@ -34,6 +34,7 @@ export const ModelIcon = ({ type, size }: TModelIcon) => {
     duckduckgo_search: "/icons/duckduckgo.svg",
     website_reader: "/icons/website_reader.svg",
     ollama: "/icons/ollama.svg",
+    groq: "/icons/groq.svg",
   };
 
   if (type === "custom") {
@@ -58,7 +59,7 @@ export const ModelIcon = ({ type, size }: TModelIcon) => {
       height={0}
       alt={type}
       className={cn(
-        "object-cover",
+        "object-cover rounded-[6px]",
         size === "sm" && "min-w-6 h-6",
         size === "md" && "min-w-8 h-8",
         size === "lg" && "min-w-10 h-10"

@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 import { useClipboard } from "@/hooks/use-clipboard";
 // import { Tooltip } from "@components/ui/tooltip";
 import { Button } from "@/components/ui/button"
-import { ibmPlex } from "@/app/(protected)/docshub/askme/component/font";
 import { Check, Copy } from "lucide-react";
+import { ibmPlex } from "@/config/font";
 
 export type codeBlockProps = {
   lang?: string;

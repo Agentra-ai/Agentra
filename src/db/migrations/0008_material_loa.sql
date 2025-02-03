@@ -1,1 +1,0 @@
-ALTER TABLE "app_customizations" ADD COLUMN "user_text_color" text NOT NULL;

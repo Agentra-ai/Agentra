@@ -4,10 +4,9 @@ import { getUserDetails } from "@/actions/user"
 import { eq } from "drizzle-orm"
 import { v4 as uuidv4 } from "uuid"
 
-import { db } from "@/config/db"
-import { appConfigs, appCustomizations, apps, conversations } from "@/db/schema"
+import { db } from "@/lib/db"
+import { appConfigs, appCustomizations, apps } from "@/lib/db/schema"
 
-import { actionClient } from "@/lib/safe-action"
 
 type AppDetails = {
   name: string
@@ -43,7 +42,7 @@ export const createApp = async (appDetails: AppDetails) => {
       appDetails.existingAppId !== "null"
     ) {
       console.log("Updating existing app")
-      // Update existing app
+      // Update existing app  
       await db
         .update(apps)
         .set({
@@ -154,7 +153,7 @@ export const deleteApp = async (appId: string) => {
   }
 }
 
-export const getWorkspaceApps = actionClient.action(async () => {
+export const getWorkspaceApps = async () => {
   // await rateLimitByIp({ key: "getWorkspaceApps", limit: 10, window: 60000 })
   const users = await getUserDetails()
   if (users === null || !users.workspaceId) return null
@@ -164,4 +163,4 @@ export const getWorkspaceApps = actionClient.action(async () => {
     .from(apps)
     .where(eq(apps.workspaceId, users.workspaceId))
   return workspaceApps
-})
+}

@@ -1,21 +1,17 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "noUncheckedIndexedAccess": true,
-    "baseUrl": ".",
     "plugins": [
       {
         "name": "next"
@@ -23,10 +19,15 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@/services/*": ["./src/services/*"],
-      "contentlayer/generated": ["./.contentlayer/generated"]
+      "@/app/*": ["./src/app/*"],
+      "@/actions/*": ["./src/actions/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/styles/*": ["./src/styles/*"],
+      "@/types/*": ["./src/types/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.mjs", "next-env.d.ts", ".next/types/**/*.ts", ".contentlayer/generated"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

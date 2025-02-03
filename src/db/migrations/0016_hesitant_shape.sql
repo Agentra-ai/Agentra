@@ -1,1 +1,0 @@
-ALTER TABLE "app_file" ADD COLUMN "file_size" text;

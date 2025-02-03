@@ -11,6 +11,7 @@ import { BsDatabaseCheck, BsRobot } from "react-icons/bs"
 import { MdOutlineAnalytics } from "react-icons/md"
 
 import Profile from "./profile"
+import Image from "next/image"
 // import { ThemeToggle } from "../theme-toggle"
 
 const tabs = [
@@ -58,7 +59,7 @@ const Navbar = () => {
         onClick={() => router.push("/apps/studio")}
         className=" ml-1 flex cursor-pointer gap-1 font-anek font-[500] tracking-tight transition-opacity"
       >
-        <Img
+        <Image
           src="/floxify-logo.png"
           alt="A"
           width={32}

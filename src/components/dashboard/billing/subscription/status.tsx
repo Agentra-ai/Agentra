@@ -1,6 +1,6 @@
 import { Badge, type BadgeProps } from "@lemonsqueezy/wedges"
 
-import { type SubscriptionStatusType } from "@/db/schema"
+import { type SubscriptionStatusType } from "@/lib/db/schema"
 
 export function SubscriptionStatus({
   status,

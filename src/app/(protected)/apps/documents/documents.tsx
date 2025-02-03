@@ -3,11 +3,9 @@
 import React from "react"
 import { useRouter } from "next/navigation"
 import { updateAppDocumentAction } from "@/actions/documents/app-docs-action"
-import { CopyPlus, EllipsisVertical, FilePenLine, Trash2 } from "lucide-react"
-import { PiFoldersFill } from "react-icons/pi"
-
-import { AppDocuments as _appDocuments, AppDocumentType } from "@/db/schema" // Import table schemas
-
+import { FilePenLine, Trash2 } from "lucide-react"
+import { AppDocuments as _appDocuments, AppDocumentType } from "@/lib/db/schema" // Import table schemas
+import { LuEllipsisVertical } from "react-icons/lu"
 import { deleteMultipleFilesFromS3 } from "@/hooks/api-action/s3"
 import { useToast } from "@/hooks/use-toast"
 
@@ -24,6 +22,7 @@ import {
   useDeleteAppDocument,
   useUpdateAppDocument,
 } from "@/app/services/app-docs/app-docs-service"
+import Image from "next/image"
 
 type Props = {}
 
@@ -58,7 +57,7 @@ const AppDocuments = (props: Props) => {
       )
       setAppDocumentFolder(sortedDocs)
     }
-  }, [appDocs, isLoading]) // Only depend on appDocs and isLoading
+  }, [appDocs, isLoading, appDocumentFolder])
 
   const handleDeleteConfirmation = (documents: AppDocumentType) => {
     setDocumentToDelete(documents)
@@ -193,7 +192,7 @@ const AppDocuments = (props: Props) => {
                     <div className="flex items-center justify-start">
                       {docs.icon && docs.icon.length > 10 ? (
                         <span className="mr-2 flex h-10 w-10 items-center justify-center rounded-[8px]">
-                          <img
+                          <Image
                             src={docs.icon ?? ""}
                             alt="🤖"
                             className="rounded-[8px]"
@@ -231,7 +230,7 @@ const AppDocuments = (props: Props) => {
                             className="z-50 rounded-lg p-1 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <EllipsisVertical size={18} />
+                            <LuEllipsisVertical size={18} />
                           </button>
                         </PopoverTrigger>
                         <PopoverContent className="z-10 mt-2 w-36 rounded-md bg-white p-0 shadow-lg">

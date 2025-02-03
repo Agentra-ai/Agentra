@@ -2,7 +2,7 @@ import { useState } from "react"
 import useSWR, { mutate } from "swr"
 import useSWRMutation from "swr/mutation"
 
-import { AppDocumentType, AppFileType } from "@/db/schema"
+import { AppDocumentType, AppFileType } from "@/lib/db/schema"
 
 import { axiosInstance } from "../fetcher"
 

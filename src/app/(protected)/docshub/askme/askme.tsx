@@ -111,7 +111,7 @@ const AskMe = (props: Props) => {
 
                         {/* <div className="mb-1 text-sm font-medium text-blue-100">You</div> */}
                         <div>
-                          Hi, I'm ready for the interview...
+                          Hi, I&apos;m ready for the interview...
                         </div>
                       </div>
                       <div className="flex-shrink-0">

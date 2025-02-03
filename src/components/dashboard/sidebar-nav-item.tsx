@@ -53,3 +53,5 @@ export const SidebarNavItem = forwardRef<
     </li>
   )
 })
+
+SidebarNavItem.displayName = "SidebarNavItem";

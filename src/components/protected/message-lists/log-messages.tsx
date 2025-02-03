@@ -2,10 +2,7 @@ import React from "react"
 import dayjs from "dayjs"
 import { PiUserCircleFill } from "react-icons/pi"
 import { RiChatSmile3Fill } from "react-icons/ri"
-import ReactMarkdown from "react-markdown"
-
-import { MessagesType } from "@/db/schema"
-
+import { MessagesType } from "@/lib/db/schema"
 import {
   Tooltip,
   TooltipContent,
@@ -60,7 +57,7 @@ const LogMessagesList = ({ messages, isLoading }: Props) => {
                 <>
                   <div className="mr-2 flex-shrink-0">
                     {/* {botLogo ? (
-                    <img
+                    <Img
                       // src={URL.createObjectURL(botLogo)}
                       src={"/dama-logo.png"}
                       alt="Bot Logo"
@@ -77,7 +74,7 @@ const LogMessagesList = ({ messages, isLoading }: Props) => {
                         className="mb-4 max-w-[80%] items-center rounded-2xl bg-white p-4 py-3 cursor-pointer"
                       >
                         <div className="overflow-y-auto max-h-[1200px] prose prose-sm">
-                          <Markdown children={message.content} />
+                          <Markdown>{message.content}</Markdown>
                         </div>
                       </div>
                     </TooltipTrigger>

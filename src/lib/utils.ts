@@ -1,15 +1,13 @@
-import { type Subscription } from "@lemonsqueezy/lemonsqueezy.js"
-import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-
-import { env } from "@/env.mjs"
+import { Subscription } from "@lemonsqueezy/lemonsqueezy.js";
+import { clsx, type ClassValue } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
+  return twMerge(clsx(inputs));
 }
 
 export function absoluteUrl(path: string) {
-  return `${env.NEXT_PUBLIC_APP_URL}${path}`
+  return `${process.env.BASE_URL}${path}`
 }
 
 export function truncate(str: string, length: number) {

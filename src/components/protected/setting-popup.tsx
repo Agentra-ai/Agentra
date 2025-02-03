@@ -20,7 +20,7 @@ import {
   SubscriptionStatusType,
   TypePricingPlan,
   TypeSubscription,
-} from "@/db/schema"
+} from "@/lib/db/schema"
 
 
 import { Button } from "@/components/ui/button"

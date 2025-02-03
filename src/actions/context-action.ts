@@ -18,9 +18,22 @@ export async function getContextAction(
 
 
 
+  interface Match {
+    id: string;
+    score: number;
+    values: any[];
+    sparseValues?: any;
+    metadata: {
+      file_key: string;
+      isActive: boolean;
+      pageNumber: number;
+      text: string;
+    };
+  }
+
   const sortedResult = matches.sort((a, b) => {
-    return (b.score ?? 0) - (a.score ?? 0)
-  })
+    return (b.score ?? 0) - (a.score ?? 0);
+  });
 
   // console.log("quelified", matches)
 

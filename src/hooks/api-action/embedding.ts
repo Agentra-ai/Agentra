@@ -3,11 +3,10 @@
 import OpenAI from "openai"
 import { Configuration, OpenAIApi } from "openai-edge"
 
-import { env } from "@/env.mjs"
-import { EmbeddingModal } from "@/db/schema"
+import { EmbeddingModal } from "@/lib/db/schema"
 
 const config = new Configuration({
-  apiKey: env.OPENAI_API_KEY!,
+  apiKey: process.env.OPENAI_API_KEY!,
 })
 
 const openai = new OpenAI()

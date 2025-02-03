@@ -12,7 +12,7 @@ import { Button, Loading } from "@lemonsqueezy/wedges"
 import { CheckIcon, PlusIcon } from "lucide-react"
 import { toast } from "sonner"
 
-import { TypePricingPlan } from "@/db/schema"
+import { TypePricingPlan } from "@/lib/db/schema"
 
 type ButtonElement = ElementRef<typeof Button>
 type ButtonProps = ComponentProps<typeof Button> & {
@@ -91,6 +91,7 @@ export const SignupButton = forwardRef<ButtonElement, ButtonProps>(
           }
 
           embed
+          //@ts-ignore
             ? checkoutUrl && window.LemonSqueezy.Url.Open(checkoutUrl)
             : router.push(checkoutUrl ?? "/")
         }}
@@ -101,3 +102,5 @@ export const SignupButton = forwardRef<ButtonElement, ButtonProps>(
     )
   }
 )
+
+SignupButton.displayName = "SignupButton";

@@ -1,7 +1,7 @@
 import React, { useCallback } from "react"
 import { PiFoldersFill } from "react-icons/pi"
 
-import { AppDocumentType } from "@/db/schema"
+import { AppDocumentType } from "@/lib/db/schema"
 
 import { Button } from "@/components/ui/button"
 import LoadingIcon from "@/components/loading"

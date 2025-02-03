@@ -1,7 +1,7 @@
 import { getChatMessagesByConvId, getConversation, getConversationsByIdAction } from "../chat/chat-action"
 import { and, count, eq, gte, sql } from "drizzle-orm"
-import { conversations, messages } from "@/db/schema" // Adjust import path as needed
-import { db } from "@/config/db"
+import { conversations, messages } from "@/lib/db/schema" // Adjust import path as needed
+import { db } from "@/lib/db"
 
 export const getAppMonitoring = async (appId: string) => {
   // const appId = 'pp/a243f2ac-a423-4e8b-a028-f5d48df8072d'

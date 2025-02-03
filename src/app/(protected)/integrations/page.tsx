@@ -1,4 +1,3 @@
-import { NotebookPen } from "lucide-react"
 
 // const integrationsLinks = [
 //   { href: '/integrations/overview', label: 'Overview', icons: <NotebookPen /> },

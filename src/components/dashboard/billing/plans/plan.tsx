@@ -1,7 +1,7 @@
 import { Alert } from "@lemonsqueezy/wedges"
 import { SearchXIcon } from "lucide-react"
 
-import { TypePricingPlan } from "@/db/schema"
+import { TypePricingPlan } from "@/lib/db/schema"
 
 import { cn, formatPrice } from "@/lib/utils"
 

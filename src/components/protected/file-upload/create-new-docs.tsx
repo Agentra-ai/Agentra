@@ -1,13 +1,13 @@
 import { getUserDetails } from "@/actions/user"
 
-import { db } from "@/config/db"
+import { db } from "@/lib/db"
 import {
   AppDocuments,
   Appfile,
   DocumentStatus,
   EmbeddingModal,
   User,
-} from "@/db/schema"
+} from "@/lib/db/schema"
 
 interface S3Data {
   file_key: string

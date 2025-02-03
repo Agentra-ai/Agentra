@@ -1,5 +1,4 @@
-import { MessagesType } from "@/db/schema"
-import { Message } from "ai"
+import { MessagesType } from "@/lib/db/schema"
 import { useEffect } from "react"
 
 export const useMessageScroll = (messages: MessagesType[]) => {

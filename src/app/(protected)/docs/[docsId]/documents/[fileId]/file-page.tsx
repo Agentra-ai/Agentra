@@ -8,14 +8,13 @@ import {
   getVectorsByfileId,
   updateVectorDataInPG,
 } from "@/actions/vectors/vectordb-action"
-import { EditIcon, Trash2Icon, TrendingUpDown } from "lucide-react"
+import { EditIcon, Trash2Icon } from "lucide-react"
 import { FaFileAlt } from "react-icons/fa"
 import { MdOutlineAddToPhotos } from "react-icons/md"
 import { TbDotsVertical } from "react-icons/tb"
 import { v4 as uuidv4 } from "uuid"
-
-import { AppFileType, TypeVectorDBData } from "@/db/schema"
-
+import { LuTrendingUpDown } from "react-icons/lu"
+import { AppFileType, TypeVectorDBData } from "@/lib/db/schema"
 import { Button } from "@/components/ui/button"
 import { Switch } from "@/components/ui/switch"
 import AddVectorModal from "@/components/protected/Modals/add-vector-modal"
@@ -23,7 +22,6 @@ import DeleteVectorModal from "@/components/protected/Modals/delete-vector-modal
 import useDeleteVectorById, {
   useUpdateVectorById,
 } from "@/app/services/vectors/vector-service"
-
 import FileDetails from "./file-details"
 
 const AppFilesPage = () => {
@@ -40,6 +38,23 @@ const AppFilesPage = () => {
   >()
 
   const { deleteVectorById, isLoading } = useDeleteVectorById()
+  const { updateVectorById, isLoading: isUpdateLoading } = useUpdateVectorById()
+
+  // Memoized fetchVectors with useCallback
+  const fetchVectors = React.useCallback(async () => {
+    try {
+      const data = await getVectorsByfileId(fileId)
+      setVectors(data)
+      const details = await getFileByFileId(fileId)
+      setFileDetails(details)
+    } catch (error) {
+      console.error("Error fetching vectors:", error)
+    }
+  }, [fileId]) // Only recreates when fileId changes
+
+  React.useEffect(() => {
+    fetchVectors()
+  }, [fetchVectors])
 
   const handleDeleteClick = (vectorId: string) => {
     setVectorToDeleteId(vectorId)
@@ -63,8 +78,6 @@ const AppFilesPage = () => {
       }
     }
   }
-
-  const { updateVectorById, isLoading: isUpdateLoading } = useUpdateVectorById()
 
   const handleAddVector = async (
     content: string,
@@ -94,12 +107,6 @@ const AppFilesPage = () => {
           cOverlap
         )
         await addVectorDataInPG(newVectorId, fileDetails?.id || "", content)
-        console.log(
-          "vectorId in update-vector API",
-          newVectorId,
-          content,
-          fileDetails?.fileKey,
-        )
       }
       setIsAddModalOpen(false)
       setSelectedVector(undefined)
@@ -108,23 +115,6 @@ const AppFilesPage = () => {
       console.error("Error saving vector:", error)
     }
   }
-
-  const fetchVectors = async () => {
-    try {
-      const data = await getVectorsByfileId(fileId)
-      setVectors(data)
-      const details = await getFileByFileId(fileId)
-      setFileDetails(details)
-    } catch (error) {
-      console.error("Error fetching vectors:", error)
-    }
-  }
-
-  React.useEffect(() => {
-    fetchVectors()
-  }, [fileId])
-
-  console.log("vectors", vectors)
 
   return (
     <div className="mx-auto h-full w-full flex-1 overflow-hidden bg-white py-4 text-[13px]">
@@ -199,7 +189,7 @@ const AppFilesPage = () => {
                 </div>
                 <div className="absolute bottom-0 left-0 hidden w-full items-center justify-between bg-white px-4 py-2 text-xs text-gray-800 group-hover:flex">
                   <div>
-                    <TrendingUpDown
+                    <LuTrendingUpDown
                       className="mr-1 inline text-gray-800"
                       size={15}
                     />
@@ -225,7 +215,6 @@ const AppFilesPage = () => {
       </div>
 
       {/* Modals */}
-
       <DeleteVectorModal
         isDeleteModalOpen={isDeleteModalOpen}
         setIsDeleteModalOpen={setIsDeleteModalOpen}

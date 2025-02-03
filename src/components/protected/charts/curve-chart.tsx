@@ -1,6 +1,5 @@
 "use client"
 
-import { TrendingUp } from "lucide-react"
 import { IoInformationCircleOutline } from "react-icons/io5"
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
 

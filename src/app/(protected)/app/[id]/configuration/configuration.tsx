@@ -18,7 +18,7 @@ import { PiFoldersFill } from "react-icons/pi"
 import { z } from "zod"
 import { useShallow } from "zustand/react/shallow"
 
-import { AppConfig } from "@/db/schema"
+import { AppConfig } from "@/lib/db/schema"
 
 import { useToast } from "@/hooks/use-toast"
 
@@ -162,7 +162,15 @@ const ConfigurationPage = () => {
         setIsLoading(false)
       }
     }
-  }, [appId, setValue, hasLoaded])
+  }, [
+    appId,
+    setValue,
+    hasLoaded,
+    setAppConfig,
+    setCustomization,
+    setOpeningStatement,
+    setSelectedFileKeys,
+  ])
 
   useEffect(() => {
     fetchConfig()
@@ -177,7 +185,6 @@ const ConfigurationPage = () => {
       })
     }
   }
-
   useEffect(() => {
     setAppConfig({
       ...appConfigDetails,
@@ -187,7 +194,15 @@ const ConfigurationPage = () => {
       suggestedQuestions: formData.suggestions,
       contextFileKeys: JSON.stringify(formData.contextFiles || []),
     })
-  }, [setValue, register])
+  }, [
+    appConfigDetails,
+    formData.contextFiles,
+    formData.followUp,
+    formData.instructions,
+    formData.opener,
+    formData.suggestions,
+    setAppConfig,
+  ])
 
   const handleSuggestionChange = (index: number, value: string) => {
     const newSuggestions = [...(formData.suggestions || [])]

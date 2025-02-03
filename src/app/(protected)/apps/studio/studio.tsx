@@ -5,10 +5,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 //icons
-import { CopyPlus, EllipsisVertical, FilePenLine, Trash2 } from "lucide-react"
+import { CopyPlus, FilePenLine, Trash2 } from "lucide-react"
 import { HiOutlineDocument, HiOutlineDocumentText } from "react-icons/hi2"
 
-import { App } from "@/db/schema"
+import { App } from "@/lib/db/schema"
 
 import { useToast } from "@/hooks/use-toast"
 
@@ -22,6 +22,7 @@ import LoadingIcon from "@/components/loading"
 import CreateAppModal from "@/components/protected/Modals/create-app-modal"
 import DeleteAppModal from "@/components/protected/Modals/delete-app-modal"
 import { useDeleteApp, useWorkspaceApps } from "@/app/services/apps/app-service"
+import { LuEllipsisVertical } from "react-icons/lu"
 
 export default function AppsStudio() {
   //hooks to manage the state of the modal
@@ -165,7 +166,7 @@ export default function AppsStudio() {
                   <div className="flex items-center justify-center">
                     {app.icon && app.icon.length > 10 ? (
                       <span className="mr-2 flex h-10 w-10 items-center justify-center rounded-[8px]">
-                        <img
+                        <Image
                           src={app.icon ?? ""}
                           alt="🤖"
                           width={42}
@@ -216,7 +217,7 @@ export default function AppsStudio() {
                           setShowOptions(app.id)
                         }}
                       >
-                        <EllipsisVertical size={18} />
+                        <LuEllipsisVertical size={18} />
                       </button>
                     </PopoverTrigger>
                     {showOptions === app.id && (

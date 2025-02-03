@@ -2,8 +2,8 @@
 import { getUserSubscriptions, syncPlans } from "@/actions/subscription-action"
 import { type Subscription } from "@lemonsqueezy/lemonsqueezy.js"
 
-import { db } from "@/config/db"
-import { pricingPlans, TypePricingPlan } from "@/db/schema"
+import { db } from "@/lib/db"
+import { pricingPlans, TypePricingPlan } from "@/lib/db/schema"
 
 import { InfoMessage, NoPlans, Plan } from "./plan"
 

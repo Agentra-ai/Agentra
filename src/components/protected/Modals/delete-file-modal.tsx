@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-import { AppFileType } from "@/db/schema"
+import { AppFileType } from "@/lib/db/schema"
 
 import { Button } from "@/components/ui/button"
 import Modal from "@/components/modal"

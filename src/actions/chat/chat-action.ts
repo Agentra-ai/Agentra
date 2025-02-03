@@ -1,8 +1,8 @@
 import { desc, eq } from "drizzle-orm"
 import { v4 as uuidv4, validate as validateUUID } from "uuid"
 
-import { db } from "@/config/db"
-import { conversations, messages } from "@/db/schema"
+import { db } from "@/lib/db"
+import { conversations, messages } from "@/lib/db/schema"
 
 import { getUserDetails } from "../user"
 

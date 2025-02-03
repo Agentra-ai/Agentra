@@ -1,1 +1,0 @@
-ALTER TABLE "messages" ALTER COLUMN "conversation_id" DROP NOT NULL;

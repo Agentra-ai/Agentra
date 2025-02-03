@@ -1,6 +1,6 @@
 import { getSubscriptionURLs } from "@/actions/subscription-action"
 
-import { TypeSubscription } from "@/db/schema"
+import { TypeSubscription } from "@/lib/db/schema"
 
 import { SubscriptionActionsDropdown } from "./actions-dropdown"
 

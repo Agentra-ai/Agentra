@@ -1,10 +1,10 @@
+import { AppConfig, AppCustomization } from "@/lib/db/schema"
 import { create } from "zustand"
-import { AppConfig, AppCustomization } from "@/db/schema"
 
 type State = {
   appConfigDetails: AppConfig
   appCustomization: AppCustomization
-  selectedFileKeys: { fileKey: string; docName: string }[]
+  selectedFileKeys: { fileKey: string; docName: string, isActive: boolean }[]
   setAppConfig: (config: AppConfig) => void
   setCustomization: (customization: AppCustomization) => void
   setSelectedFileKeys: (
@@ -12,8 +12,8 @@ type State = {
   ) => void
   openingStatement: string | null
   setOpeningStatement: (statement: string) => void
-  refresh: boolean // Add refresh state
-  setRefresh: (refresh: boolean) => void // Add setRefresh action
+  refresh: boolean
+  setRefresh: (refresh: boolean) => void
 }
 
 export const useAppStore = create<State>((set) => ({
@@ -40,7 +40,7 @@ export const useAppStore = create<State>((set) => ({
     updatedAt: new Date(),
     appId: "",
     botLogo: null,
-    botName: "DamaAI Bot",
+    botName: "Agent",
     bgColor: "#eeeeee",
     botTextColor: "#3d3d3d",
     aiChatColor: "#ffffff",

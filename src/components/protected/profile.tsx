@@ -6,8 +6,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
-import { SignOutButton } from "../auth/signout-button"
 import { SettingPopup } from "./setting-popup"
+import { LogoutButton } from "../auth/LogoutButton"
+import Image from "next/image"
 
 // import { auth } from '@/auth'
 // import { currentUser } from '@/lib/auth'
@@ -26,19 +27,23 @@ const Profile = (props: Props) => {
       <Popover>
         <PopoverTrigger>
           <div className="cursor-pointer">
-            <img
+            <Image
               src="https://avatars.githubusercontent.com/u/43388613?v=4"
               className="h-8 w-8 rounded-full"
               alt="name"
+              width={8}
+              height={8}
             />
           </div>
         </PopoverTrigger>
         <PopoverContent className="z-40 mr-4 mt-2 w-[220px] rounded-[7px] p-4 px-2 font-sans text-lg font-[400] text-gray-600">
           <div className="flex items-center justify-between">
-            <img
+            <Image
               src="https://avatars.githubusercontent.com/u/43388613?v=4"
               className="h-10 w-10 rounded-full"
               alt="name"
+              width={8}
+              height={8}
             />
             <p className="text-sm hover:text-black">Agentra</p>
           </div>
@@ -70,7 +75,7 @@ const Profile = (props: Props) => {
               About
             </p>
             <hr className="my-1" />
-            <SignOutButton />
+            <LogoutButton />
           </div>
         </PopoverContent>
       </Popover>

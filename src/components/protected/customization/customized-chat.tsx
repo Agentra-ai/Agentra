@@ -10,6 +10,7 @@ import { useShallow } from "zustand/react/shallow"
 
 import { TextArea } from "@/components/ui/textarea"
 import { dummyChatArray } from "@/store/constant"
+import Image from "next/image"
 
 // Move this check outside the component
 const getAppId = (pathname: string | null) => {
@@ -77,10 +78,12 @@ const CustomizedChat = () => {
   const renderIcon = () => {
     if (botLogo) {
       return botLogo.length > 10 ? (
-        <img
+        <Image
           src={botLogo}
           alt="Bot Logo"
           className="h-6 w-6 rounded-full object-cover"
+          width={6}
+          height={6}
         />
       ) : (
         <div className="flex h-6 w-6 items-center justify-center rounded-full object-cover text-xl">

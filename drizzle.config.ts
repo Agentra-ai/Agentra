@@ -1,15 +1,16 @@
-import { defineConfig } from "drizzle-kit"
-import dotenv from "dotenv";
-import { env } from "@/env.mjs"
+import { defineConfig } from "drizzle-kit";
+import * as dotenv from "dotenv";
 
-// Load environment variables explicitly from .env
-dotenv.config({ path: "/home/ubuntu/Agentra/.env" });
+dotenv.config({
+  path: ".env",
+});
 
 export default defineConfig({
+  schema: "src/lib/db/schema",
   dialect: "postgresql",
-  schema: "./src/db/schema/index.ts",
-  out: "./src/db/migrations",
+  out: "src/lib/db/migrations",
   dbCredentials: {
     url: process.env.DATABASE_URL!,
   },
-})
+  verbose: true,
+});
