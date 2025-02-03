@@ -1,6 +1,6 @@
 import { ReactNode } from "react"
 import {
-  BotMessageSquareIcon,
+  Bot,
   CalendarDaysIcon,
   KanbanSquareIcon,
   LayoutGridIcon,
@@ -22,7 +22,7 @@ const boardsLinks = [
   {
     href: "/boards/aiboard",
     label: "AiBoard",
-    icons: <BotMessageSquareIcon size={20} strokeWidth={1.5} />,
+    icons: <Bot size={20} strokeWidth={1.5} />,
   },
   {
     href: "/boards/calender",

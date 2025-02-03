@@ -1,5 +1,5 @@
+import { MessagesType } from "@/lib/db/schema";
 import { BaseMessagePromptTemplateLike, ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
-import { Message } from "ai";
 
  export const preparePrompt = async ({
       contextData,
@@ -7,7 +7,7 @@ import { Message } from "ai";
       instructions,
     }: {
       contextData?: any,
-      history: Message[];
+      history: MessagesType[];
       instructions: string;
     }) => {
       const hasPreviousMessages = history?.length > 0;

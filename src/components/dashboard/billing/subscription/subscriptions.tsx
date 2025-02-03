@@ -1,11 +1,11 @@
 import { getUserSubscriptions } from "@/actions/subscription-action"
 
-import { db } from "@/config/db"
+import { db } from "@/lib/db"
 import {
   pricingPlans,
   TypeSubscription,
   type SubscriptionStatusType,
-} from "@/db/schema"
+} from "@/lib/db/schema"
 
 import { cn, isValidSubscription } from "@/lib/utils"
 

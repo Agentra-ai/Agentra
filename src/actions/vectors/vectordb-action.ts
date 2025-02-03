@@ -2,14 +2,14 @@ import { PineconeRecord } from "@pinecone-database/pinecone"
 import { eq } from "drizzle-orm"
 import { v4 as uuidv4 } from "uuid"
 
-import { db } from "@/config/db"
-import { DocumentStatus, VectorsDBData } from "@/db/schema"
+import { db } from "@/lib/db"
+import { DocumentStatus, VectorsDBData } from "@/lib/db/schema"
 
 import { getEmbeddings } from "@/hooks/api-action/embedding"
 import { embedDocument, getPineconeClient, splitTextContent } from "@/hooks/api-action/pinacone"
 import { convertToAscii } from "@/lib/utils"
 
-import { getWorkspaceDetails } from "../workspace-action"
+import { getWorkspaceDetails } from "../workspace/workspace-action"
 
 export const insertVectorsDataToPG = async (
   dataSaveToPG: { vectorId: string; filekey: string; content: string }[],

@@ -1,16 +1,12 @@
 import React, { useState } from "react"
 import Image from "next/image"
-import { uploadImageToS3 } from "@/actions/app/aws/s3-action"
-
-import { App, AppDocumentType } from "@/db/schema"
-
+import { uploadImageToS3 } from "@/actions/aws/s3-action"
+import { App, AppDocumentType } from "@/lib/db/schema"
 import { useToast } from "@/hooks/use-toast"
-
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { TextArea } from "@/components/ui/textarea"
 import Modal from "@/components/modal"
-
 import AddImageModal from "./add-image-modal"
 import { getS3Url } from "@/hooks/api-action/s3"
 
@@ -93,7 +89,7 @@ export default function UpdateDocsModal({
                 className="rounded-md object-cover"
               />
             ) : icon && icon.length > 10 ? (
-              <img src={icon} alt="Icon" width={40} height={40} />
+              <Image src={icon} alt="Icon" width={40} height={40} />
             ) : (
               <span className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-green-200">
                 <span className="text-[18px]">{icon}</span>

@@ -1,7 +1,7 @@
 import React from "react"
 import dayjs from "dayjs"
 
-import { AppFileType, TypeVectorDBData } from "@/db/schema"
+import { AppFileType, TypeVectorDBData } from "@/lib/db/schema"
 
 type Props = {
   vectorsData: TypeVectorDBData[]

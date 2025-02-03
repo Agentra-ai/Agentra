@@ -1,38 +1,15 @@
-import("./src/env.mjs")
+/** @type {import('next').NextConfig} */
+import crypto from "node:crypto"
+globalThis.crypto ??= crypto.webcrypto
 
-/** @type {import("next").NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
-  experimental: {
-    webpackBuildWorker: true,
+  webpack: (config, { webpack }) => {
+    config.externals.push("@node-rs/argon2", "@node-rs/bcrypt");
+    return config;
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
-      },
-      {
-        protocol: "https",
-        hostname: "lh3.googleusercontent.com",
-      },
-      {
-        protocol: "https",
-        hostname: "uploadthing.com",
-      },
-      {
-        protocol: 'https',
-        hostname: 'daama-app-document.s3.eu-north-1.amazonaws.com',
-      },
-    ],
+    domains: ["avatars.githubusercontent.com"],
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true, // Disables type-checking during the build
-  },
-  transpilePackages: ['next-auth'],
-}
+};
 
-export default nextConfig
+export default nextConfig;

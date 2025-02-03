@@ -1,8 +1,6 @@
 import useSWR from "swr"
 
-import { Workspace } from "@/db/schema"
-
-import { workspaceSchema } from "./../../../types/daama-type/index"
+import { Workspace } from "@/lib/db/schema"
 
 export function useWorkspaceApps() {
   const { data, error, isValidating } = useSWR<{ data: Workspace }>(

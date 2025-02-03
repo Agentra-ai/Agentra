@@ -1,4 +1,4 @@
-import { type SubscriptionStatusType } from "@/db/schema"
+import { type SubscriptionStatusType } from "@/lib/db/schema"
 
 import { formatDate } from "@/lib/utils"
 

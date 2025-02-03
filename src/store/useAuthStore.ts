@@ -1,4 +1,4 @@
-import { User } from "next-auth"
+import { User } from "@/lib/db/schema"
 import { create } from "zustand"
 
 type AuthState = {

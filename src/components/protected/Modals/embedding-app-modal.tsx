@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import Modal from "@/components/modal"
+import Image from "next/image"
 
 interface EmbeddingAppModalProps {
   isOpen: boolean
@@ -45,10 +46,12 @@ export const EmbeddingAppModal: React.FC<EmbeddingAppModalProps> = ({
                 : "border-gray-300 bg-white"
             }`}
           >
-            <img
+            <Image
               src="/images/embed-placeholder.png"
               alt={`Embed ${option.title}`}
               className="mb-4 w-full rounded-lg"
+              width={100}
+              height={100}
             />
             <p className="text-center font-medium">{option.title}</p>
           </div>

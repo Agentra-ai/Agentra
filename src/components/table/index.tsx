@@ -4,7 +4,7 @@ import dayjs from "dayjs"
 import { AnimatePresence, motion } from "framer-motion"
 import { PencilIcon, Trash2Icon } from "lucide-react"
 
-import { AppFileType } from "@/db/schema"
+import { AppFileType } from "@/lib/db/schema"
 
 import { deleteFileFromS3 } from "@/hooks/api-action/s3"
 import { useToast } from "@/hooks/use-toast"

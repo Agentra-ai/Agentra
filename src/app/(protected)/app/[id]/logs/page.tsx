@@ -4,7 +4,7 @@ import React from "react";
 import { redirect, usePathname } from "next/navigation";
 import dayjs from "dayjs";
 import { RiArrowLeftFill, RiArrowRightFill } from "react-icons/ri";
-import { ConversationType } from "@/db/schema";
+import { ConversationType } from "@/lib/db/schema";
 import { Button } from "@/components/ui/button";
 import LoadingIcon from "@/components/loading";
 import useGetAppConversation from "@/app/services/conversation/app-conversation-service";

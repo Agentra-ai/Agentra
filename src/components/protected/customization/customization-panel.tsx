@@ -2,7 +2,7 @@
 
 import React from "react"
 import { redirect, usePathname } from "next/navigation"
-import { uploadImageToS3 } from "@/actions/app/aws/s3-action"
+import { uploadImageToS3 } from "@/actions/aws/s3-action"
 import {
   getAppCustomization,
   updateAppCustomization,
@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select"
 
 import AddImageModal from "../Modals/add-image-modal"
+import Image from "next/image"
 
 // Move this check outside the component
 const getAppId = (pathname: string | null) => {
@@ -94,11 +95,11 @@ const AppCustomizationPanel = () => {
       })
       setAppIcon(constomizationResponse.botLogo ?? "")
     }
-  }, [appId])
+  }, [appId, appCustomization, selectedFile, setCustomization])
 
   React.useEffect(() => {
     fetchCustom()
-  }, [])
+  }, [fetchCustom])
 
   const updateCustomization = (key: string, value: any) => {
     setCustomization({
@@ -202,7 +203,7 @@ const AppCustomizationPanel = () => {
             >
               {appIcon || selectedFile || localImageUrl ? (
                 localImageUrl ? (
-                  <img
+                  <Image
                     src={localImageUrl}
                     alt="Bot Logo"
                     className="h-24 w-24 rounded-full border-2 border-gray-200 object-cover"

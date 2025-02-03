@@ -10,7 +10,7 @@ import {
 import { Button, DropdownMenu, Loading } from "@lemonsqueezy/wedges"
 import { MoreVerticalIcon } from "lucide-react"
 
-import { TypeSubscription } from "@/db/schema"
+import { TypeSubscription } from "@/lib/db/schema"
 
 import { LemonSqueezyModalLink } from "./modal-link"
 

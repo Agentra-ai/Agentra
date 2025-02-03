@@ -1,7 +1,7 @@
 "use server"
 
 import { insertVectorsDataToPG } from "@/actions/vectors/vectordb-action"
-import { getWorkspaceDetails } from "@/actions/workspace-action"
+import { getWorkspaceDetails } from "@/actions/workspace/workspace-action"
 import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf"
 import {
   Document,
@@ -9,8 +9,6 @@ import {
 } from "@pinecone-database/doc-splitter"
 import { Pinecone, PineconeRecord } from "@pinecone-database/pinecone"
 import { v4 as uuidv4 } from "uuid"
-
-import { env } from "@/env.mjs"
 
 import { convertToAscii } from "@/lib/utils"
 
@@ -20,7 +18,7 @@ import { getS3Url } from "./s3"
 export const getPineconeClient = () => {
   return new Pinecone({
     // environment: process.env.PINECONE_ENVIRONMENT!,
-    apiKey: env.PINACONE_API_KEY!,
+    apiKey: process.env.PINACONE_API_KEY!,
   })
 }
 

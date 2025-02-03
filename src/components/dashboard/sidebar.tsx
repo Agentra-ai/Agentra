@@ -1,12 +1,14 @@
 import Link from "next/link"
-import { auth } from "@/auth"
 import { CitrusIcon, HomeIcon, SettingsIcon } from "lucide-react"
 
 import { SidebarNav } from "./sidebar-nav"
 import { UserMenu } from "./user-menu"
+import { getUserDetails } from "@/actions/user";
 
 export async function Sidebar() {
-  const session = await auth()
+  
+  const user = await getUserDetails();
+  if(!user) return null
 
   return (
     <aside className="bg-surface-100/70 m-5 mr-0 hidden flex-col gap-6 rounded-2xl px-3 pb-3 pt-5 md:flex">
@@ -31,9 +33,9 @@ export async function Sidebar() {
         </SidebarNav>
       </SidebarNav>
 
-      <div className="mt-auto flex flex-col justify-stretch gap-3">
-        <UserMenu user={session?.user} />
-      </div>
+        <div className="mt-auto flex flex-col justify-stretch gap-3">
+          <UserMenu user={user} />
+        </div>
     </aside>
   )
 }

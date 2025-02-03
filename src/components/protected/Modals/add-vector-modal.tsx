@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { FilePenLineIcon } from "lucide-react"
 
-import { TypeVectorDBData } from "@/db/schema"
+import { TypeVectorDBData } from "@/lib/db/schema"
 
 import { Button } from "@/components/ui/button"
 import { TextArea } from "@/components/ui/textarea"
@@ -48,7 +48,7 @@ const AddVectorModal = ({
     }
     setChunkSize(defaultChunkSize)
     setChunkOverlap(defaultChunkOverlap)
-  }, [selectedVector, isOpen])
+  }, [selectedVector, isOpen, defaultChunkSize, defaultChunkOverlap])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

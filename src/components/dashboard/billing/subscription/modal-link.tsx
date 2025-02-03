@@ -11,6 +11,7 @@ export function LemonSqueezyModalLink({
   children: ReactNode
 }) {
   useEffect(() => {
+    //@ts-ignore
     window.createLemonSqueezy()
   }, [])
 
@@ -18,6 +19,7 @@ export function LemonSqueezyModalLink({
     <DropdownMenu.Item
       onClick={() => {
         if (href) {
+              //@ts-ignore
           window.LemonSqueezy.Url.Open(href)
         } else {
           throw new Error(

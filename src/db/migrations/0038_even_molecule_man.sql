@@ -1,1 +1,0 @@
-ALTER TABLE "app_configs" ALTER COLUMN "follow_up" SET NOT NULL;

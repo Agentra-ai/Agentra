@@ -22,7 +22,7 @@ const FileUpload = ({
 
   React.useEffect(() => {
     setFileName(fileName || null)
-  }, [fileName])
+  }, [fileName, setFileName])
 
   const handleRemoveFile = (event: React.MouseEvent) => {
     event.stopPropagation() // Prevent the file input from opening

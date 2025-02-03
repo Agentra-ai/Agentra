@@ -1,105 +1,43 @@
-"use server"
+"use server";
 
-import { unstable_noStore as noStore } from "next/cache"
+import { unstable_noStore as noStore } from "next/cache";
+import { db } from "@/lib/db";
+import { userTable } from "@/lib/db/schema";
+import { eq } from "drizzle-orm";
+import { validateRequest } from "@/lib/auth/get-session";
 
-import { db } from "@/config/db"
-import {
-  psGetUserByEmail,
-  psGetUserByEmailVerificationToken,
-  psGetUserById,
-  psGetUserByResetPasswordToken,
-} from "@/db/prepared/statements"
-import { users, type User } from "@/db/schema"
-import {
-  getUserByEmailSchema,
-  getUserByEmailVerificationTokenSchema,
-  getUserByIdSchema,
-  getUserByResetPasswordTokenSchema,
-  type GetUserByEmailInput,
-  type GetUserByEmailVerificationTokenInput,
-  type GetUserByIdInput,
-  type GetUserByResetPasswordTokenInput,
-} from "@/validations/user"
-
-export async function getUserById(
-  rawInput: GetUserByIdInput
-): Promise<User | null> {
+export async function getUserDetails() {
   try {
-    const validatedInput = getUserByIdSchema.safeParse(rawInput)
-    if (!validatedInput.success) return null
+    const session = await validateRequest();
+    if (!session.user?.id) return null;
 
-    noStore()
-    const [user] = await psGetUserById.execute({ id: validatedInput.data.id })
-    return user || null
+    noStore();
+
+    const [user] = await db.query.userTable.findMany({
+      where: eq(userTable.id, session.user.id),
+    });
+
+    return user || null;
   } catch (error) {
-    console.error(error)
-    throw new Error("Error getting user by id")
+    console.error("Error getting user details:", error);
+    throw new Error("Error fetching user details");
   }
 }
 
-export async function getUserDetails(): Promise<User | null> {
+export async function getUserByEmail() {
   try {
-    const user = await db.query.users.findMany()
-    // console.log("getUsrFetsils", user)
-    return user[0] || null
+    const session = await validateRequest();
+    if (!session.user?.email) return null;
+
+    noStore();
+
+    const [user] = await db.query.userTable.findMany({
+      where: eq(userTable.email, session.user.email),
+    });
+
+    return user || null;
   } catch (error) {
-    console.error(error)
-    throw new Error("Error getting user details")
-    // throw new Error("Error getting user details by email")
-  }
-}
-
-export async function getUserByEmail(
-  rawInput: GetUserByEmailInput
-): Promise<User | null> {
-  try {
-    const validatedInput = getUserByEmailSchema.safeParse(rawInput)
-    if (!validatedInput.success) return null
-
-    noStore()
-    const [user] = await psGetUserByEmail.execute({
-      email: validatedInput.data.email,
-    })
-    return user || null
-  } catch (error) {
-    console.error(error)
-    throw new Error("Error getting user by email")
-  }
-}
-
-export async function getUserByResetPasswordToken(
-  rawInput: GetUserByResetPasswordTokenInput
-): Promise<User | null> {
-  try {
-    const validatedInput = getUserByResetPasswordTokenSchema.safeParse(rawInput)
-    if (!validatedInput.success) return null
-
-    noStore()
-    const [user] = await psGetUserByResetPasswordToken.execute({
-      token: validatedInput.data.token,
-    })
-    return user || null
-  } catch (error) {
-    console.error(error)
-    throw new Error("Error getting user by reset password token")
-  }
-}
-
-export async function getUserByEmailVerificationToken(
-  rawInput: GetUserByEmailVerificationTokenInput
-): Promise<User | null> {
-  try {
-    const validatedInput =
-      getUserByEmailVerificationTokenSchema.safeParse(rawInput)
-    if (!validatedInput.success) return null
-
-    noStore()
-    const [user] = await psGetUserByEmailVerificationToken.execute({
-      token: validatedInput.data.token,
-    })
-    return user || null
-  } catch (error) {
-    console.error(error)
-    throw new Error("Error getting user by email verification token")
+    console.error("Error getting user by email:", error);
+    throw new Error("Error fetching user by email");
   }
 }

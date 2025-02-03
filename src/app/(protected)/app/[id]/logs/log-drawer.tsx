@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ConversationType } from "@/db/schema";
+import { ConversationType } from "@/lib/db/schema";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,

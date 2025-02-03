@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
-import { AppDocumentType } from "@/db/schema";
+import { AppDocumentType } from "@/lib/db/schema";
 import { useUpdateAppDocument } from "@/app/services/app-docs/app-docs-service";
 import { useToast } from "@/hooks/use-toast";
 import { getAppDocumentById } from "@/actions/documents/app-docs-action";

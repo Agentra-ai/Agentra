@@ -3,17 +3,10 @@
 import { usePathname, useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import {
-  Edit3Icon,
-  Icon,
-  Logs,
-  Monitor,
   ScrollTextIcon,
-  Settings,
 } from "lucide-react"
-// Import the icons
 import { GiSpeedometer } from "react-icons/gi"
 import { IoColorFilterOutline } from "react-icons/io5"
-import { MdDisplaySettings, MdManageHistory } from "react-icons/md"
 import { SiPoe } from "react-icons/si"
 
 import StudioSidebar from "@/components/protected/studio-sidebar"

@@ -2,13 +2,14 @@ import React from "react"
 import { useAppStore } from "@/store/useAppStore"
 import { PiUserCircleFill } from "react-icons/pi"
 import { RiChatSmile3Fill } from "react-icons/ri"
-import { MessagesType } from "@/db/schema"
+import { MessagesType } from "@/lib/db/schema"
 import { ChatLoadingIcon } from "@/components/loading/chat-loading-icon"
 import { useShallow } from "zustand/react/shallow"
 import { Markdown } from "./use-markdown"
 import { TooltipContent } from "@radix-ui/react-tooltip"
 import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip"
 import dayjs from "dayjs"
+import Image from "next/image"
 
 type Props = {
   isLoading: boolean
@@ -42,10 +43,12 @@ const MessageList = ({ messages, isLoading }: Props) => {
         <div className="flex w-full items-start">
           <div className="mr-2 flex-shrink-0">
             {botLogo ? (
-              <img
+              <Image
                 src={"/agentra-logo.png"}
                 alt="Bot Logo"
                 className="h-8 w-8 rounded-full object-cover" 
+                width={8}
+                height={8}
               />
             ) : (
               <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#116be1]">
@@ -68,10 +71,12 @@ const MessageList = ({ messages, isLoading }: Props) => {
               <>
                 <div className="mr-2 flex-shrink-0">
                   {botLogo ? (
-                    <img
-                      src={"/agentra-logo.png"}
+                    <Image
+                      src="/agentra-logo.png"
                       alt="Bot Logo"
                       className="h-8 w-8 rounded-full object-cover" 
+                      width={8}
+                      height={8}
                     />
                   ) : (
                     <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#116be1]">
@@ -84,7 +89,7 @@ const MessageList = ({ messages, isLoading }: Props) => {
                   <TooltipTrigger asChild>
                     <div className="mb-4 max-w-[80%] items-center rounded-2xl bg-white p-4 py-3">
                       <div className="overflow-y-auto cursor-pointer prose prose-sm">
-                        <Markdown children={message.content}/>
+                        <Markdown>{message.content}</Markdown>
                       </div>
                     </div>
                   </TooltipTrigger>

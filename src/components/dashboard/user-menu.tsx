@@ -4,9 +4,9 @@ import { useState } from "react"
 import { logout } from "@/actions/subscription-action"
 import { Avatar, DropdownMenu, Loading } from "@lemonsqueezy/wedges"
 import { ChevronRightIcon, MoreVertical } from "lucide-react"
-import { type User } from "next-auth"
+import { User } from "@/lib/db/schema"
 
-export function UserMenu(props: { user?: User }) {
+export function UserMenu(props: { user: User | null }) {
   const { user } = props
   const [loading, setLoading] = useState(false)
 
@@ -27,14 +27,14 @@ export function UserMenu(props: { user?: User }) {
             <Avatar
               className="group-disabled:opacity-50"
               size="sm"
-              src={user.image ?? undefined}
-              alt={user.name ?? undefined}
+              src={user?.email ?? undefined}
+              alt={user?.email?? undefined}
             />
           )}
 
           <div className="text-start leading-5 group-disabled:opacity-50">
             <div className="max-w-[130px] truncate font-medium">
-              {user.name}
+              {user?.username}
             </div>
           </div>
 

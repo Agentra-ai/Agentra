@@ -3,10 +3,8 @@
 "use server"
 
 import crypto from "node:crypto"
-
 import { revalidatePath } from "next/cache"
-import { notFound } from "next/navigation"
-import { signOut } from "@/auth"
+import { logout as logoutAction } from "@/lib/api/auth/logout";
 import {
   cancelSubscription,
   createCheckout,
@@ -22,9 +20,8 @@ import {
 } from "@lemonsqueezy/lemonsqueezy.js"
 import { eq, max } from "drizzle-orm"
 
-import { env } from "@/env.mjs"
-import { db } from "@/config/db"
-import { configureLemonSqueezy } from "@/config/lemonsqueezy"
+import { db } from "@/lib/db"
+import { configureLemonSqueezy } from "@/lib/payment/lemonsqueezy"
 import {
   pricingPlans,
   subscriptions,
@@ -32,9 +29,9 @@ import {
   TypeSubscription,
   TypeWebhookEvents,
   webhookEvents,
-} from "@/db/schema"
+} from "@/lib/db/schema"
 
-import { webhookHasData, webhookHasMeta } from "@/lib/typeguards"
+import { webhookHasData, webhookHasMeta } from "@/lib/payment/typeguards"
 import { takeUniqueOrThrow } from "@/lib/utils"
 
 import { getUserDetails } from "./user"
@@ -43,7 +40,7 @@ import { getUserDetails } from "./user"
  * This action will log out the current user.
  */
 export async function logout() {
-  await signOut()
+  await logoutAction()
 }
 
 /**
@@ -75,7 +72,7 @@ export async function getCheckoutURL(variantId: number, embed = false) {
       },
       productOptions: {
         enabledVariants: [variantId],
-        redirectUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/billing/`,
+        redirectUrl: `${process.env.BASE_URL}/dashboard/billing/`,
         receiptButtonText: "Go to Dashboard",
         receiptThankYouNote: "Thank you for signing up to Lemon Stand!",
       },
@@ -274,7 +271,7 @@ export async function storeWebhookEvent(
   eventName: string,
   body: TypeWebhookEvents["body"]
 ) {
-  if (!env.DATABASE_URL) {
+  if (!process.env.DATABASE_URL) {
     throw new Error("DATABASE_URL is not set")
   }
 

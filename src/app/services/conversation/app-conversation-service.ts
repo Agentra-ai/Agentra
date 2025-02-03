@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import { ConversationType, MessagesType } from "@/db/schema";
+import { ConversationType, MessagesType } from "@/lib/db/schema";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 

@@ -1,8 +1,7 @@
 
 import { redirect } from "next/navigation"
-import { DEFAULT_UNAUTHENTICATED_REDIRECT } from "@/config/defaults"
-import auth from "@/lib/auth"
 import Navbar from "@/components/protected/navbar"
+import { validateRequest } from "@/lib/auth/get-session"
 interface ProtectedLayoutProps {
   children: React.ReactNode
 }
@@ -10,9 +9,9 @@ interface ProtectedLayoutProps {
 // const font = Inter({ subsets: ["latin"], weight: ["400"] });
 
 const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
-  const session = await auth()
+  const session = await validateRequest()
 
-  if (!session) redirect(DEFAULT_UNAUTHENTICATED_REDIRECT)
+  if (!session) redirect('/auth/login')
   return (
     <div className={`flex h-screen w-full flex-col overflow-hidden`}>
       <Navbar />

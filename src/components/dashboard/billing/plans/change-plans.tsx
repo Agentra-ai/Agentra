@@ -2,8 +2,8 @@
 import { redirect } from "next/navigation"
 import { getUserSubscriptions } from "@/actions/subscription-action"
 
-import { db } from "@/config/db"
-import { pricingPlans, TypePricingPlan } from "@/db/schema"
+import { db } from "@/lib/db"
+import { pricingPlans, TypePricingPlan } from "@/lib/db/schema"
 
 import { InfoMessage, NoPlans, Plan } from "./plan"
 

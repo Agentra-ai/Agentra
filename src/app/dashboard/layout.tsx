@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Script from "next/script"
 
 import { Sidebar } from "@/components/dashboard/sidebar"
-import { Toaster } from "@/components/toaster"
+import { Toaster } from "@/components/ui/sonnar-toaster"
 
 export const metadata: Metadata = {
   title: "Dashboard | Lemon Squeezy Next.js Billing Template",

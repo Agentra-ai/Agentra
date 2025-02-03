@@ -1,18 +1,16 @@
 "use client"
 
 import React, { useState } from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import {  useRouter, useSearchParams } from "next/navigation"
 import { getUserDetails } from "@/actions/user"
-import * as PDFJS from "pdfjs-dist/legacy/build/pdf.mjs"
-import { FaFileAlt } from "react-icons/fa"
 import { HiAdjustmentsHorizontal } from "react-icons/hi2"
 import { IoEarth } from "react-icons/io5"
 import { v4 as uuidv4 } from "uuid"
 
-import { AppDocuments, Appfile, EmbeddingModal, User } from "@/db/schema" // I
+import { EmbeddingModal, User } from "@/lib/db/schema" // I
 
 import { loadFilesIntoPinecone } from "@/hooks/api-action/pinacone"
-import { getS3Url, uploadToS3 } from "@/hooks/api-action/s3"
+import { uploadToS3 } from "@/hooks/api-action/s3"
 import { toast } from "@/hooks/use-toast"
 
 import { Button } from "@/components/ui/button"
@@ -27,6 +25,7 @@ import {
 import LoadingIcon from "@/components/loading"
 import FileUpload from "@/components/protected/file-upload"
 import { CreateNewDocs } from "@/components/protected/file-upload/create-new-docs"
+import { FaFileAlt } from "react-icons/fa"
 
 type Props = {}
 

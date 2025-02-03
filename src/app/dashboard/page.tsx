@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic"
 export const revalidate = 0
 
 export default async function Page() {
-  const hasWh = Boolean(await hasWebhook())
+  const hasWh = Boolean(await hasWebhook()) 
 
   return (
     <DashboardContent title="Dashboard" action={<PageTitleAction />}>
@@ -26,7 +26,7 @@ export default async function Page() {
             This app relies on webhooks to listen for changes made on Lemon
             Squeezy. Make sure that you have entered all the required
             environment variables (.env). This section is an example of how
-            you'd use the Lemon Squeezy API to interact with webhooks.
+            you&apos;d use the Lemon Squeezy API to interact with webhooks.
           </p>
 
           <p className="mb-6">
@@ -47,3 +47,4 @@ export default async function Page() {
     </DashboardContent>
   )
 }
+

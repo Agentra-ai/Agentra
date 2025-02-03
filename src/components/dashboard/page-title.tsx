@@ -8,9 +8,7 @@ export const PageTitle = forwardRef<
     action?: ReactNode
     subtitle?: ReactNode
   }
->((props, ref) => {
-  const { action, children, className, ...otherProps } = props
-
+>(({ action, children, className, ...otherProps }, ref) => {
   if (!children) return null
 
   return (
@@ -24,9 +22,14 @@ export const PageTitle = forwardRef<
         {action}
       </div>
 
-      {props.subtitle && (
-        <p className="text-surface-500 text-base leading-8">{props.subtitle}</p>
+      {otherProps.subtitle && (
+        <p className="text-surface-500 text-base leading-8">
+          {otherProps.subtitle}
+        </p>
       )}
     </header>
   )
 })
+
+PageTitle.displayName = "PageTitle"
+

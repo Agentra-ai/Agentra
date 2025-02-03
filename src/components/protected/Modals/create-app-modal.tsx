@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { getS3Url, uploadImageToS3 } from "@/actions/app/aws/s3-action"
+import { getS3Url, uploadImageToS3 } from "@/actions/aws/s3-action"
 import { z } from "zod"
 
-import { App } from "@/db/schema"
+import { App } from "@/lib/db/schema"
 
 import { useToast } from "@/hooks/use-toast"
 
@@ -217,7 +217,7 @@ export default function CreateAppModal({
                       />
                     ) : appIcon && appIcon.length > 10 ? (
                       <span className="mr-2 flex h-10 w-10 items-center justify-center rounded-[8px]">
-                        <img
+                        <Image
                           src={appIcon ?? ""}
                           alt="🤖"
                           width={32}

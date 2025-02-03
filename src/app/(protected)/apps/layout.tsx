@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { HammerIcon, TelescopeIcon, TvMinimalPlayIcon } from "lucide-react"
+import { HammerIcon, TelescopeIcon } from "lucide-react"
 import { PiCubeDuotone } from "react-icons/pi"
 import { RiFileList3Line } from "react-icons/ri"
 

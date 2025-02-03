@@ -1,9 +1,7 @@
 "use server"
 
-import { getWorkspaceDetails } from "@/actions/workspace-action"
+import { getWorkspaceDetails } from "@/actions/workspace/workspace-action"
 import { Pinecone } from "@pinecone-database/pinecone"
-
-import { env } from "@/env.mjs"
 
 import { convertToAscii } from "@/lib/utils"
 
@@ -19,11 +17,11 @@ export async function getMatchesFromEmbeddings(
   const workspaceNamespace = workspaceDetails?.workspaceVectorDB
 
   if (!workspaceNamespace) {
-    throw new Error("Workspace namespace not found in workspace details")
+    throw new Error("Workspacenamespace not found in workspace details")
   }
 
   const client = new Pinecone({
-    apiKey: env.PINACONE_API_KEY!,
+    apiKey: process.env.PINACONE_API_KEY!,
   })
   const pineconeIndex = await client.index("agentra-app-documents")
   const nameSpaceName = convertToAscii(workspaceNamespace)

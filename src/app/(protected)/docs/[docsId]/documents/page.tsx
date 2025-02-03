@@ -4,7 +4,7 @@ import React from "react"
 import { usePathname } from "next/navigation"
 import { Plus } from "lucide-react"
 
-import { AppFileType } from "@/db/schema"
+import { AppFileType } from "@/lib/db/schema"
 
 import { Button } from "@/components/ui/button"
 import LoadingIcon from "@/components/loading"
