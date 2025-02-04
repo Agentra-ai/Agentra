@@ -53,3 +53,4 @@ jobs:
 
         # Clean up the private key
         rm -f ssh_key
+
