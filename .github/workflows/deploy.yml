@@ -35,12 +35,14 @@ jobs:
         echo "$PRIVATE_KEY" > ssh_key
         chmod 600 ssh_key
 
-        # Start SSH agent and add the key
+        # Start SSH agent and add the private key
         eval $(ssh-agent -s)
+        
+        # Add the key to ssh-agent
         ssh-add ssh_key
 
-        # SSH into EC2 and perform deployment
-        ssh -o StrictHostKeyChecking=no -i ssh_key $USER@$HOST << 'EOF'
+        # Debugging: Use -v for verbose output
+        ssh -v -o StrictHostKeyChecking=no -i ssh_key $USER@$HOST << 'EOF'
           cd /home/ubuntu/Agentra
           git pull origin main
           npm install --omit=dev
