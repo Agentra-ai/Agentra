@@ -14,7 +14,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
       with:
-        path: Agentra
+        path: Agentra 
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
@@ -31,16 +31,23 @@ jobs:
         USER: ${{ secrets.EC2_USER }}
         PRIVATE_KEY: ${{ secrets.EC2_KEY }}
       run: |
+        # Save the private key to a file
         echo "$PRIVATE_KEY" > ssh_key
         chmod 600 ssh_key
+
+        # Start SSH agent and add the key
+        eval $(ssh-agent -s)
+        ssh-add ssh_key
+
+        # SSH into EC2 and perform deployment
         ssh -o StrictHostKeyChecking=no -i ssh_key $USER@$HOST << 'EOF'
           cd /home/ubuntu/Agentra
           git pull origin main
           npm install --omit=dev
 
-          # No need to generate .env file since environment variables are already set on EC2
-
           # Ensure PM2 is using the environment variables
           pm2 restart Agentra || pm2 start npm --name "Agentra" -- start
         EOF
+
+        # Clean up the private key
         rm -f ssh_key
