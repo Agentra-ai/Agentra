@@ -74,7 +74,8 @@ const ConfigChat = () => {
     setMessages([]);
     setConversationId(null);
     setRefresh(false);
-  }, [appConfigDetails, appId, selectedFileKeys, toast, setRefresh, setConversationId, setMessages]);
+  // }, [appConfigDetails, appId, selectedFileKeys, toast, setRefresh, setConversationId, setMessages]);
+  }, []);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

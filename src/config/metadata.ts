@@ -16,7 +16,7 @@ export const siteConfig = {
   url: "https://cloud.floxify.ai",
   author: "divyeshradadiya",
   hostingRegion: "",
-  keywords: ["AI", "Agents", "orkflow", "automation"],
+  keywords: ["AI", "Agents", "workflow", "automation"],
   navItems: [
     {
       title: "About",

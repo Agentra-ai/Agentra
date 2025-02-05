@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid"
 
 import { db } from "@/lib/db"
 import { appConfigs, appCustomizations, apps } from "@/lib/db/schema"
+import { validateRequest } from "@/lib/auth/get-session"
 
 
 type AppDetails = {
@@ -20,14 +21,14 @@ type AppDetails = {
 export const createApp = async (appDetails: AppDetails) => {
   console.log(appDetails)
   try {
-    const users = await getUserDetails()
-    console.log(users)
+    const {user} = await validateRequest()
+    console.log(user)
     console.log("exisiting id :", appDetails.existingAppId)
-    if (!users) {
+    if (!user) {
       console.log("cannot find user in app-action.tsx")
       return
     }
-    if (!users?.workspaceId) {
+    if (!user?.workspaceId) {
       console.log("User does not have a workspace")
       return
     }
@@ -62,8 +63,8 @@ export const createApp = async (appDetails: AppDetails) => {
       console.log(appDetails)
       await db.insert(apps).values({
         id: newAppId,
-        workspaceId: users.workspaceId!,
-        userId: users.id!,
+        workspaceId: user.workspaceId!,
+        userId: user.id!,
         description: appDetails.description,
         icon: appDetails.icon,
         apiRph: 0,
@@ -126,13 +127,13 @@ export const createApp = async (appDetails: AppDetails) => {
 }
 
 export const deleteApp = async (appId: string) => {
-  const users = await getUserDetails()
+  const {user} = await validateRequest()
   try {
-    if (!users) {
+    if (!user) {
       console.log("cannot find user in app-action.tsx")
       return
     }
-    if (!users?.workspaceId) {
+    if (!user?.workspaceId) {
       console.log("User does not have a workspace")
       return
     }
@@ -155,12 +156,13 @@ export const deleteApp = async (appId: string) => {
 
 export const getWorkspaceApps = async () => {
   // await rateLimitByIp({ key: "getWorkspaceApps", limit: 10, window: 60000 })
-  const users = await getUserDetails()
-  if (users === null || !users.workspaceId) return null
-
+  const user = await getUserDetails()
+  if (user === null || !user.workspaceId) return null
+  
   const workspaceApps = await db
     .select()
     .from(apps)
-    .where(eq(apps.workspaceId, users.workspaceId))
-  return workspaceApps
+    .where(eq(apps.workspaceId, user.workspaceId))
+
+    return workspaceApps
 }

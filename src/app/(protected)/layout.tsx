@@ -9,9 +9,9 @@ interface ProtectedLayoutProps {
 // const font = Inter({ subsets: ["latin"], weight: ["400"] });
 
 const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
-  const session = await validateRequest()
+  const { user } = await validateRequest()
 
-  if (!session) redirect('/auth/login')
+  if (!user) redirect('/auth/login')
   return (
     <div className={`flex h-screen w-full flex-col overflow-hidden`}>
       <Navbar />

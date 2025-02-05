@@ -27,8 +27,6 @@ export const fontAnek = Anek_Latin({
   variable: "--font-anek",
 })
 
-export const inter = Inter({ subsets: ["latin"] });
-
 
 export const ibmPlex = IBM_Plex_Mono({
   weight: ["400"],
