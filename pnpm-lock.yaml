@@ -160,7 +160,7 @@ importers:
         version: 14.2.2(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-safe-action:
         specifier: ^6.2.0
-        version: 6.2.0(ajv@8.17.1)(next@14.2.2(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 6.2.0(ajv@6.12.6)(next@14.2.2(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       next-themes:
         specifier: ^0.2.1
         version: 0.2.1(next@14.2.2(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -288,6 +288,9 @@ importers:
       react-email:
         specifier: ^2.1.1
         version: 2.1.6(@opentelemetry/api@1.9.0)(@swc/helpers@0.5.15)(eslint@8.57.1)
+      tailwind-scrollbar:
+        specifier: ^3.0.0
+        version: 3.0.0(tailwindcss@3.4.17)
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.17
@@ -7940,6 +7943,12 @@ packages:
   tailwind-merge@2.6.0:
     resolution: {integrity: sha512-P+Vu1qXfzediirmHOC3xKGAYeZtPcV9g76X+xg2FD4tYgR71ewMA35Y3sCz3zhiN/dwefRpJX0yBcgwi1fXNQA==}
 
+  tailwind-scrollbar@3.0.0:
+    resolution: {integrity: sha512-OkVRX9Q1T769vk979UZ519jhj/j/zNBHql7zPLI+tlhX+ahksYO4ZryWD29lOETDx9Wj1sw+K1OeW7W3+ECQOA==}
+    engines: {node: '>=12.13.0'}
+    peerDependencies:
+      tailwindcss: 3.x
+
   tailwind-variants@0.1.20:
     resolution: {integrity: sha512-AMh7x313t/V+eTySKB0Dal08RHY7ggYK0MSn/ad8wKWOrDUIzyiWNayRUm2PIJ4VRkvRnfNuyRuKbLV3EN+ewQ==}
     engines: {node: '>=16.x', pnpm: '>=7.x'}
@@ -9133,9 +9142,9 @@ snapshots:
       - encoding
       - utf-8-validate
 
-  '@decs/typeschema@0.12.2(ajv@8.17.1)(zod@3.24.1)':
+  '@decs/typeschema@0.12.2(ajv@6.12.6)(zod@3.24.1)':
     optionalDependencies:
-      ajv: 8.17.1
+      ajv: 6.12.6
       zod: 3.24.1
 
   '@dqbd/tiktoken@1.0.19': {}
@@ -16719,9 +16728,9 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next-safe-action@6.2.0(ajv@8.17.1)(next@14.2.2(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  next-safe-action@6.2.0(ajv@6.12.6)(next@14.2.2(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@decs/typeschema': 0.12.2(ajv@8.17.1)(zod@3.24.1)
+      '@decs/typeschema': 0.12.2(ajv@6.12.6)(zod@3.24.1)
       next: 14.2.2(@babel/core@7.24.5)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
     optionalDependencies:
@@ -17858,6 +17867,10 @@ snapshots:
       '@babel/runtime': 7.26.7
 
   tailwind-merge@2.6.0: {}
+
+  tailwind-scrollbar@3.0.0(tailwindcss@3.4.17):
+    dependencies:
+      tailwindcss: 3.4.17
 
   tailwind-variants@0.1.20(tailwindcss@3.4.17):
     dependencies:

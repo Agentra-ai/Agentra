@@ -1,10 +1,10 @@
 import useSWR from "swr"
 
-import { Workspace } from "@/lib/db/schema"
+import { App, Workspace } from "@/lib/db/schema"
 
 export function useWorkspaceApps() {
-  const { data, error, isValidating } = useSWR<{ data: Workspace }>(
-    "/api/workspace/workspace-details"
+  const { data, error, isValidating } = useSWR<{ data: App[] }>(
+    "/api/app/get-apps"
   )
 
   // If the API returns `undefined`, fallback to an empty array

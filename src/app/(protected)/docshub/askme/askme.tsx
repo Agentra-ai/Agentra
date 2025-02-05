@@ -68,7 +68,7 @@ const AskMe = (props: Props) => {
       {/* Main Chat Area */}
       <div className="flex flex-col flex-1 relative h-full overflow-hidden shadow-md shadow-gray-200">
         {/* Header - Sticky with toggle button */}
-        <div className="sticky top-0 z-10 flex h-[60px] shadow-sm items-center justify-between bg-[#fafcff] px-4 ">
+        <div className="sticky top-0 flex h-[60px] shadow-sm items-center justify-between bg-[#fafcff] px-4 ">
           <button
             onClick={() => setSidebarOpen(!isSidebarOpen)}
             className="rounded-lg p-2 hover:bg-gray-100"
@@ -83,7 +83,11 @@ const AskMe = (props: Props) => {
         </div>
 
         {/* Messages - Scrollable */}
-        <div className="flex-1 overflow-y-auto px-4 bg-[#f3f5f7]">
+        <div className="flex-1 px-4 bg-[#f3f5f7] overflow-y-scroll"
+        style={{
+          scrollbarWidth: 'thin',
+        }}
+        >
           <div className={`mx-auto max-w-3xl ${isSidebarOpen ? 'w-[calc(100%-220px)]' : 'w-full'} rounded-l-2xl transition-all duration-300 ease-in-out`}>
             <div className="flex flex-col gap-6 py-6">
               {Array.from({ length: 10 }).map((_, index) => (

@@ -2,12 +2,12 @@
 
 import { loginWithMagicLink, loginWithPassword } from "@/lib/api/auth/login";
 import { LoginValitor, loginValidator } from "@/lib/validators/auth-validator";
-import { PinInput } from "@ark-ui/react";
+// import { PinInput } from "@ark-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Icon } from "@iconify/react";
+// import { Icon } from "@iconify/react";
 import { Button, Divider, Input, Link, Tooltip, cn } from "@nextui-org/react";
 import { useMutation } from "@tanstack/react-query";
-import { AnimatePresence, motion } from "framer-motion";
+// import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -15,22 +15,22 @@ import { toast } from "sonner";
 import { useStep } from "usehooks-ts";
 import { ProviderForm } from "./ProviderForm";
 
-const variants = {
-  enter: (direction: number) => ({
-    x: direction > 1 ? 20 : -20,
-    opacity: 0,
-  }),
-  center: {
-    zIndex: 1,
-    x: 0,
-    opacity: 1,
-  },
-  exit: (direction: number) => ({
-    zIndex: 0,
-    x: direction < 1 ? 20 : -20,
-    opacity: 0,
-  }),
-};
+// const variants = {
+//   enter: (direction: number) => ({
+//     x: direction > 1 ? 20 : -20,
+//     opacity: 0,
+//   }),
+//   center: {
+//     zIndex: 1,
+//     x: 0,
+//     opacity: 1,
+//   },
+//   exit: (direction: number) => ({
+//     zIndex: 0,
+//     x: direction < 1 ? 20 : -20,
+//     opacity: 0,
+//   }),
+// };                                                                            
 
 export default function LoginForm() {
   const [isVisible, setIsVisible] = useState(false);
@@ -44,11 +44,11 @@ export default function LoginForm() {
   });
 
   const {
-    handleSubmit,
-    control,
+    // handleSubmit,
+    // control,
     formState: { errors },
-    setValue,
-    trigger,
+    // setValue,
+    // trigger,
   } = methods;
 
   const magicLinkMutation = useMutation({
@@ -83,13 +83,13 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = (data: LoginValitor) => {
-    if (data.withPassword) {
-      passwordMutation.mutate(data);
-    } else {
-      magicLinkMutation.mutate(data);
-    }
-  };
+  // const onSubmit = (data: LoginValitor) => {
+  //   if (data.withPassword) {
+  //     passwordMutation.mutate(data);
+  //   } else {
+  //     magicLinkMutation.mutate(data);
+  //   }
+  // };
 
   return (
     <div className="flex h-full w-full items-center justify-center">

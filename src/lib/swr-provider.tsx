@@ -12,7 +12,7 @@ export default function SWRProviders({ children }: { children: ReactNode }) {
         fetcher,
         // refreshInterval: 3000,
         // revalidateIfStale: false,
-        // revalidateOnFocus: false,
+        revalidateOnFocus: false,
         // revalidateOnReconnect: false,
       }}
     >

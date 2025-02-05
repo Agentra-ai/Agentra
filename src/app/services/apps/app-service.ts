@@ -3,17 +3,22 @@ import useSWRMutation from "swr/mutation"
 
 import { App } from "@/lib/db/schema" // Ensure this matches your actual type definition.
 
-import { axiosInstance } from "@/app/services/fetcher"
+import fetcher, { axiosInstance } from "@/app/services/fetcher"
 
 export function useWorkspaceApps() {
   const { data, error, isValidating } = useSWR<{ data: App[] }>(
-    "/api/app/get-apps"
+    "/api/app/get-apps", fetcher,
+    {
+      revalidateOnFocus: false,
+    }
   )
 
   // console.log(data)
   // If the API returns `undefined`, fallback to an empty array
   const workspaceApps = data?.data || []
 
+  console.log('api called',workspaceApps)
+  
   return { workspaceApps, error, isLoading: isValidating && !data }
 }
 
