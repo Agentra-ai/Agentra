@@ -1,11 +1,11 @@
 import { desc, eq, sql } from "drizzle-orm";
-import { db } from "@/lib/db";
-import { conversations } from "@/lib/db/schema";
+import db from "@/drizzle";
+import { conversations } from "@/drizzle/schema";
 
 export const getAppConversations = async (
   appId: string,
   limit: number,
-  offset: number
+  offset: number,
 ) => {
   // Fetch paginated conversations
   const appConversations = await db
@@ -16,7 +16,6 @@ export const getAppConversations = async (
     .limit(limit)
     .offset(offset);
 
-  // Fetch the total number of conversations for the app
   const totalResult = await db
     .select({ count: sql<number>`count(*)` })
     .from(conversations)

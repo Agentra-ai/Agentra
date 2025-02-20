@@ -1,10 +1,10 @@
-import React from "react"
-import DocsSetting from "./setting-docs"
+import React from "react";
+import DocsSetting from "./setting-docs";
 
-type Props = {}
+type Props = {};
 
 const DocsAppSettings = (props: Props) => {
-  return <DocsSetting />
-}
+  return <DocsSetting />;
+};
 
-export default DocsAppSettings
+export default DocsAppSettings;

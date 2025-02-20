@@ -15,7 +15,7 @@ export const GeminiSettings = () => {
   return (
     <Flex direction={"col"} gap={"sm"}>
       <div className="flex flex-row items-end justify-between">
-        <p className="text-xs md:text-sm  text-zinc-500">
+        <p className="text-xs text-zinc-500 md:text-sm">
           Google Gemini API Key
         </p>
       </div>
@@ -37,8 +37,9 @@ export const GeminiSettings = () => {
             window.open("https://aistudio.google.com/app/apikey", "_blank");
           }}
         >
-          Get your API key here <ArrowRight size={16} className="font-semibold" />
-          </Button>
+          Get your API key here{" "}
+          <ArrowRight size={16} className="font-semibold" />
+        </Button>
         {/* {key &&
           key !== apiKeys?.gemini &&
           renderSaveApiKeyButton("gemini", key, () => {
@@ -59,8 +60,8 @@ export const GeminiSettings = () => {
       </div>
 
       <div className="flex flex-row items-center gap-1 py-2 text-zinc-500">
-      <Info size={16} className="font-semibold" />
-      <p className="text-xs">
+        <Info size={16} className="font-semibold" />
+        <p className="text-xs">
           Your API Key is stored locally on your browser and never sent anywhere
           else.
         </p>

@@ -1,15 +1,15 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 
-import { AppFileType } from "@/lib/db/schema"
+import { AppFileType } from "@/drizzle/schema";
 
-import { Button } from "@/components/ui/button"
-import Modal from "@/components/modal"
+import { Button } from "@/components/ui/button";
+import Modal from "@/components/modal";
 
 interface DeleteFileModalProps {
-  isDeleteModalOpen: boolean
-  setIsDeleteModalOpen: (isOpen: boolean) => void
-  confirmDeleteFile: () => Promise<void>
-  fileToDelete: AppFileType
+  isDeleteModalOpen: boolean;
+  setIsDeleteModalOpen: (isOpen: boolean) => void;
+  confirmDeleteFile: () => Promise<void>;
+  fileToDelete: AppFileType;
 }
 
 const DeleteFileModal: React.FC<DeleteFileModalProps> = ({
@@ -18,17 +18,17 @@ const DeleteFileModal: React.FC<DeleteFileModalProps> = ({
   confirmDeleteFile,
   // fileToDelete,
 }) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleDelete = async () => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
-      await confirmDeleteFile()
+      await confirmDeleteFile();
     } finally {
-      setIsLoading(false)
-      setIsDeleteModalOpen(false)
+      setIsLoading(false);
+      setIsDeleteModalOpen(false);
     }
-  }
+  };
 
   return (
     <Modal
@@ -62,6 +62,6 @@ const DeleteFileModal: React.FC<DeleteFileModalProps> = ({
         </Button>
       </div>
     </Modal>
-  )
-}
-export default DeleteFileModal
+  );
+};
+export default DeleteFileModal;

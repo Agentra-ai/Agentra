@@ -1,12 +1,12 @@
-import { ReactNode } from "react"
-import { HammerIcon, TelescopeIcon } from "lucide-react"
-import { PiCubeDuotone } from "react-icons/pi"
-import { RiFileList3Line } from "react-icons/ri"
+import { ReactNode } from "react";
+import { HammerIcon, TelescopeIcon, TvMinimalPlayIcon } from "lucide-react";
+import { PiCubeDuotone } from "react-icons/pi";
+import { RiFileList3Line } from "react-icons/ri";
 
-import Sidebar from "@/components/protected/sidebar"
+import Sidebar from "@/components/protected/sidebar";
 
 interface LayoutProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 const agentsLinks = [
@@ -35,7 +35,7 @@ const agentsLinks = [
   //   label: "LiveAgents",
   //   icons: <TvMinimalPlayIcon size={20} strokeWidth={1.5} />,
   // },
-]
+];
 
 const AppLayout = ({ children }: LayoutProps) => {
   return (
@@ -45,7 +45,7 @@ const AppLayout = ({ children }: LayoutProps) => {
         <main className="flex-1 bg-gray-100">{children}</main>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default AppLayout
+export default AppLayout;

@@ -1,3 +1,4 @@
+import { NotebookPen } from "lucide-react";
 
 // const integrationsLinks = [
 //   { href: '/integrations/overview', label: 'Overview', icons: <NotebookPen /> },
@@ -16,7 +17,7 @@ const Integrations = () => {
         </main>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Integrations
+export default Integrations;

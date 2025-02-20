@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { IoInformationCircleOutline } from "react-icons/io5"
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import { IoInformationCircleOutline } from "react-icons/io5";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -10,32 +10,32 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-import { MonitoringDataType } from "@/app/services/monitoring/monitoring-service"
+} from "@/components/ui/chart";
+import { MonitoringDataType } from "@/app/services/monitoring/monitoring-service";
 
-export const description = "A simple area chart"
+export const description = "A simple area chart";
 
 const chartConfig = {
   desktop: {
     label: "Desktop",
     color: "hsl(var(--chart-4))",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 
 interface CurveChartProps {
-  title: string
+  title: string;
   data: {
-    x_axis: string
-    y_axis: string
-  }[]
-  color: string
-  monitoringData: number
+    x_axis: string;
+    y_axis: string;
+  }[];
+  color: string;
+  monitoringData: number;
 }
 
 export function CurveChart({
@@ -48,22 +48,22 @@ export function CurveChart({
   const numericData = data.map((item) => ({
     ...item,
     y_axis: parseFloat(item.y_axis),
-  }))
-  console.log("numericData", numericData, data)
-  const maxValue = Math.max(...numericData.map((item) => item.y_axis))
+  }));
+  console.log("numericData", numericData, data);
+  const maxValue = Math.max(...numericData.map((item) => item.y_axis));
   // const padding = maxValue * 0.1; // 10% padding
 
   const formatMonitoringData = (value: number, title: string) => {
-    console.log("value", value)
-    let formattedValue = value.toLocaleString()
+    console.log("value", value);
+    let formattedValue = value.toLocaleString();
     if (value >= 1000) {
-      formattedValue = (value / 1000).toFixed(3) + " k"
+      formattedValue = (value / 1000).toFixed(3) + " k";
     }
     if (title === "Token Output Speed (tokens/sec)") {
-      formattedValue += " /s"
+      formattedValue += " /s";
     }
-    return formattedValue
-  }
+    return formattedValue;
+  };
 
   return (
     <Card>
@@ -130,5 +130,5 @@ export function CurveChart({
         </div>
       </CardFooter> */}
     </Card>
-  )
+  );
 }

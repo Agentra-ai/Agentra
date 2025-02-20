@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from "react"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { getS3Url, uploadImageToS3 } from "@/actions/aws/s3-action"
-import { z } from "zod"
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { getS3Url, uploadImageToS3 } from "@/actions/aws/s3-action";
+import { z } from "zod";
 
-import { App } from "@/lib/db/schema"
+import { App } from "@/drizzle/schema";
 
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import MultiSelect from "@/components/ui/multi-select"
-import { TextArea } from "@/components/ui/textarea"
-import Modal from "@/components/modal"
-import { useUpdateApp } from "@/app/services/apps/app-service"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import MultiSelect from "@/components/ui/multi-select";
+import { TextArea } from "@/components/ui/textarea";
+import Modal from "@/components/modal";
+import { useUpdateApp } from "@/app/services/apps/app-service";
 
-import AddImageModal from "./add-image-modal"
+import AddImageModal from "./add-image-modal";
 
 type CreateAppModalProps = {
-  isOpen: boolean
-  onClose: () => void
-  selectedAppDetails: App | null
-}
+  isOpen: boolean;
+  onClose: () => void;
+  selectedAppDetails: App | null;
+};
 
 const appSchema = z.object({
   name: z.string().min(1, "App name is required"),
@@ -29,10 +29,10 @@ const appSchema = z.object({
   icon: z.string().min(1, "Icon is required"),
   tags: z.array(z.string()).min(1, "At least one tag is required"),
   appType: z.string().min(1, "App type is required"),
-})
+});
 
 interface Option {
-  label: string
+  label: string;
 }
 
 export default function CreateAppModal({
@@ -41,61 +41,61 @@ export default function CreateAppModal({
   selectedAppDetails,
 }: CreateAppModalProps) {
   //hooks to manage the state of the modal
-  const [selectedTags, setSelectedTags] = useState<Option[]>([])
-  const [appName, setAppName] = useState("")
-  const [appDescription, setAppDescription] = useState("")
-  const [appType, setAppType] = useState("")
-  const [appIcon, setAppIcon] = useState("🤖")
+  const [selectedTags, setSelectedTags] = useState<Option[]>([]);
+  const [appName, setAppName] = useState("");
+  const [appDescription, setAppDescription] = useState("");
+  const [appType, setAppType] = useState("");
+  const [appIcon, setAppIcon] = useState("🤖");
   const [tagsOptions, setTagsOptions] = useState<Option[]>([
     { label: "Tag1" },
     { label: "Tag2" },
     { label: "Tag3" },
-  ])
+  ]);
   const [errors, setErrors] = useState<{ name?: string; description?: string }>(
-    {}
-  )
-  const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [localImageUrl, setLocalImageUrl] = useState<string>("")
+    {},
+  );
+  const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [localImageUrl, setLocalImageUrl] = useState<string>("");
 
   //components
-  const { toast } = useToast()
+  const { toast } = useToast();
 
-  const { updateApp, isLoading } = useUpdateApp()
-  const router = useRouter() // Initialize router
+  const { updateApp, isLoading } = useUpdateApp();
+  const router = useRouter(); // Initialize router
 
   useEffect(() => {
     if (selectedAppDetails) {
-      setAppName(selectedAppDetails.name ?? "")
-      setAppDescription(selectedAppDetails.description ?? "")
-      setAppIcon(selectedAppDetails.icon ?? "")
+      setAppName(selectedAppDetails.name ?? "");
+      setAppDescription(selectedAppDetails.description ?? "");
+      setAppIcon(selectedAppDetails.icon ?? "");
       const tags = Array.isArray(selectedAppDetails.tags)
         ? selectedAppDetails.tags.map((tag) => ({ label: tag }))
-        : []
-      setSelectedTags(tags)
-      setAppType(selectedAppDetails.appType ?? "")
+        : [];
+      setSelectedTags(tags);
+      setAppType(selectedAppDetails.appType ?? "");
     } else {
       // Reset form fields to default values
-      setAppName("")
-      setAppDescription("")
-      setAppIcon("🤖")
-      setSelectedTags([])
-      setAppType("")
+      setAppName("");
+      setAppDescription("");
+      setAppIcon("🤖");
+      setSelectedTags([]);
+      setAppType("");
     }
-  }, [selectedAppDetails, isOpen])
+  }, [selectedAppDetails, isOpen]);
 
   const handleSubmit = async () => {
-    let uploadedIconUrl = ""
+    let uploadedIconUrl = "";
 
     if (selectedFile && appIcon !== localImageUrl) {
       try {
-        const { file_key } = await uploadImageToS3(selectedFile)
-        const presignedUrl = await getS3Url(file_key)
-        uploadedIconUrl = presignedUrl
-        console.log("uploadedIconUrl", uploadedIconUrl)
+        const { file_key } = await uploadImageToS3(selectedFile);
+        const presignedUrl = await getS3Url(file_key);
+        uploadedIconUrl = presignedUrl;
+        console.log("uploadedIconUrl", uploadedIconUrl);
       } catch (error) {
-        console.error("Failed to upload image:", error)
-        return
+        console.error("Failed to upload image:", error);
+        return;
       }
     }
 
@@ -106,17 +106,17 @@ export default function CreateAppModal({
       tags: selectedTags.map((option) => option.label),
       appType: appType,
       existingAppId: selectedAppDetails?.id ? selectedAppDetails.id : null,
-    }
+    };
 
-    console.log("subit data from modal", appData)
+    console.log("subit data from modal", appData);
 
-    console.log("icon", appIcon)
+    console.log("icon", appIcon);
     try {
-      appSchema.parse(appData)
-      setErrors({}) // Clear previous errors
+      appSchema.parse(appData);
+      setErrors({}); // Clear previous errors
 
-      const CreateAppResponse = await updateApp(appData)
-      const createdAppId = CreateAppResponse.appId
+      const CreateAppResponse = await updateApp(appData);
+      const createdAppId = CreateAppResponse.appId;
       // console.log("createdAppId", CreateAppResponse)
 
       if (selectedAppDetails?.id) {
@@ -124,36 +124,36 @@ export default function CreateAppModal({
           title: "Success",
           description: "The app has been updated successfully.",
           variant: "default",
-        })
+        });
       } else {
         toast({
           title: "Success",
           description: "The app has been created successfully.",
           variant: "default",
-        })
+        });
       }
 
-      onClose()
+      onClose();
 
       if (
         (!selectedAppDetails || selectedAppDetails?.id === null) &&
         createdAppId
       ) {
-        console.log("createdAppId", createdAppId)
-        router.push(`/app/${createdAppId}/configuration`)
+        console.log("createdAppId", createdAppId);
+        router.push(`/app/${createdAppId}/configuration`);
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
-        const fieldErrors: { name?: string; description?: string } = {}
+        const fieldErrors: { name?: string; description?: string } = {};
         error.errors.forEach((err) => {
-          if (err.path.includes("name")) fieldErrors.name = err.message
+          if (err.path.includes("name")) fieldErrors.name = err.message;
           if (err.path.includes("description"))
-            fieldErrors.description = err.message
-        })
-        setErrors(fieldErrors)
+            fieldErrors.description = err.message;
+        });
+        setErrors(fieldErrors);
       }
     }
-  }
+  };
 
   return (
     <>
@@ -185,7 +185,7 @@ export default function CreateAppModal({
                         : ""
                     }`}
                     onClick={() => {
-                      setAppType(template.name)
+                      setAppType(template.name);
                     }}
                   >
                     <div
@@ -261,7 +261,7 @@ export default function CreateAppModal({
                 <span className="text-md block text-left font-medium text-black">
                   Tags
                 </span>
-                <div className="mt-2 flex items-center ">
+                <div className="mt-2 flex items-center">
                   <MultiSelect
                     className="z-10 !w-full" // Add z-index to ensure dropdown is above other elements
                     options={tagsOptions}
@@ -272,11 +272,11 @@ export default function CreateAppModal({
                     variant={"gray"}
                     className="ml-2 bg-gray-200 text-gray-800 hover:bg-gray-100"
                     onClick={() => {
-                      const newTag = prompt("Enter new tag:")
+                      const newTag = prompt("Enter new tag:");
                       if (newTag) {
-                        const newOption = { label: newTag }
-                        setSelectedTags([...selectedTags, newOption])
-                        setTagsOptions([...tagsOptions, newOption])
+                        const newOption = { label: newTag };
+                        setSelectedTags([...selectedTags, newOption]);
+                        setTagsOptions([...tagsOptions, newOption]);
                       }
                     }}
                   >
@@ -289,7 +289,7 @@ export default function CreateAppModal({
                   variant={"gray"}
                   className="bg-gray-100 text-[#6c6c6c] hover:bg-gray-200"
                   onClick={() => {
-                    onClose()
+                    onClose();
                   }}
                 >
                   Cancel
@@ -316,24 +316,24 @@ export default function CreateAppModal({
         isOpen={isAddImageModalOpen}
         onClose={(e) => {
           if (e) {
-            e.preventDefault()
-            e.stopPropagation()
+            e.preventDefault();
+            e.stopPropagation();
           }
-          setIsAddImageModalOpen(false)
+          setIsAddImageModalOpen(false);
         }}
         onSelect={(icon) => {
-          setAppIcon(icon)
-          setLocalImageUrl("")
-          setSelectedFile(null)
-          setIsAddImageModalOpen(false)
+          setAppIcon(icon);
+          setLocalImageUrl("");
+          setSelectedFile(null);
+          setIsAddImageModalOpen(false);
         }}
         onFileSelect={(file) => {
-          setSelectedFile(file)
-          setLocalImageUrl(URL.createObjectURL(file))
-          setAppIcon("")
-          setIsAddImageModalOpen(false)
+          setSelectedFile(file);
+          setLocalImageUrl(URL.createObjectURL(file));
+          setAppIcon("");
+          setIsAddImageModalOpen(false);
         }}
       />
     </>
-  )
+  );
 }

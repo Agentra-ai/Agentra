@@ -42,7 +42,7 @@ export const OllamaSettings = () => {
   return (
     <Flex direction={"col"} gap={"sm"}>
       <div className="flex flex-row items-end justify-between">
-        <p className="text-xs md:text-sm text-zinc-500">
+        <p className="text-xs text-zinc-500 md:text-sm">
           Ollama local server URL
         </p>
       </div>

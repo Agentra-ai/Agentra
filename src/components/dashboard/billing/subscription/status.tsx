@@ -1,15 +1,15 @@
-import { Badge, type BadgeProps } from "@lemonsqueezy/wedges"
+import { Badge, type BadgeProps } from "@lemonsqueezy/wedges";
 
-import { type SubscriptionStatusType } from "@/lib/db/schema"
+import { type SubscriptionStatusType } from "@/drizzle/schema";
 
 export function SubscriptionStatus({
   status,
   statusFormatted,
   isPaused,
 }: {
-  status: SubscriptionStatusType
-  statusFormatted: string
-  isPaused?: boolean
+  status: SubscriptionStatusType;
+  statusFormatted: string;
+  isPaused?: boolean;
 }) {
   const statusColor: Record<SubscriptionStatusType, BadgeProps["color"]> = {
     active: "green",
@@ -20,10 +20,10 @@ export function SubscriptionStatus({
     unpaid: "red",
     pause: "yellow",
     paused: "yellow",
-  }
+  };
 
-  const _status = isPaused ? "paused" : status
-  const _statusFormatted = isPaused ? "Paused" : statusFormatted
+  const _status = isPaused ? "paused" : status;
+  const _statusFormatted = isPaused ? "Paused" : statusFormatted;
 
   return (
     <>
@@ -39,5 +39,5 @@ export function SubscriptionStatus({
         {_statusFormatted}
       </Badge>
     </>
-  )
+  );
 }

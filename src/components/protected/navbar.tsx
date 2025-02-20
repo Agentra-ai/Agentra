@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import Img from "next/image"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
-import { Route } from "lucide-react"
-import { BsDatabaseCheck, BsRobot } from "react-icons/bs"
+import { useEffect, useRef, useState } from "react";
+import Img from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import { Route } from "lucide-react";
+import { BsDatabaseCheck, BsRobot } from "react-icons/bs";
 // import { RiRobot3Line } from "react-icons/ri";
-import { MdOutlineAnalytics } from "react-icons/md"
+import { MdOutlineAnalytics } from "react-icons/md";
 
-import Profile from "./profile"
-import Image from "next/image"
+import Profile from "./profile";
+import Image from "next/image";
 // import { ThemeToggle } from "../theme-toggle"
 
 const tabs = [
@@ -31,33 +31,33 @@ const tabs = [
     label: "Integrations",
     icon: <Route size={20} strokeWidth={1.5} />,
   },
-]
+];
 
 const Navbar = () => {
-  const [selectedLink, setSelectedLink] = useState<string>(tabs[0]?.href || "")
-  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 })
-  const navRef = useRef<HTMLDivElement | null>(null)
-  const router = useRouter()
+  const [selectedLink, setSelectedLink] = useState<string>(tabs[0]?.href || "");
+  const [indicatorStyle, setIndicatorStyle] = useState({ left: 0, width: 0 });
+  const navRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
   const handleLinkClick = (href: string) => {
-    setSelectedLink(href)
-  }
+    setSelectedLink(href);
+  };
 
   useEffect(() => {
-    const selectedTab = document.querySelector(`[data-href="${selectedLink}"]`)
+    const selectedTab = document.querySelector(`[data-href="${selectedLink}"]`);
 
     if (selectedTab && navRef.current) {
-      const { offsetLeft, offsetWidth } = selectedTab as HTMLElement
-      setIndicatorStyle({ left: offsetLeft, width: offsetWidth })
+      const { offsetLeft, offsetWidth } = selectedTab as HTMLElement;
+      setIndicatorStyle({ left: offsetLeft, width: offsetWidth });
     }
-  }, [selectedLink])
+  }, [selectedLink]);
 
   // bg-[#f3f4f9]
   return (
     <div className="relative flex items-center justify-between bg-[#f3f5f7] px-2 py-[10px] text-black">
       <div
         onClick={() => router.push("/apps/studio")}
-        className=" ml-1 flex cursor-pointer gap-1 font-anek font-[500] tracking-tight transition-opacity"
+        className="font-anek ml-1 flex cursor-pointer gap-1 font-[500] tracking-tight transition-opacity"
       >
         <Image
           src="/floxify-logo.png"
@@ -98,8 +98,8 @@ const Navbar = () => {
               onClick={() => handleLinkClick(link.href)}
               className={`relative mx-[2px] flex cursor-pointer items-center justify-center gap-1 rounded-xl px-4 py-2 text-sm font-semibold ${
                 selectedLink === link.href
-                  ? " text-[#1a55ff]"
-                  : "text-gray-500 hover:bg-[#eaebf1] hover:text-blue-600 "
+                  ? "text-[#1a55ff]"
+                  : "text-gray-500 hover:bg-[#eaebf1] hover:text-blue-600"
               }`}
             >
               {link.icon}
@@ -110,7 +110,7 @@ const Navbar = () => {
       </nav>
       <Profile />
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

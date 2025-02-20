@@ -1,24 +1,24 @@
-import React, { useState } from "react"
-import Image from "next/image"
-import { uploadImageToS3 } from "@/actions/aws/s3-action"
-import { App, AppDocumentType } from "@/lib/db/schema"
-import { useToast } from "@/hooks/use-toast"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { TextArea } from "@/components/ui/textarea"
-import Modal from "@/components/modal"
-import AddImageModal from "./add-image-modal"
-import { getS3Url } from "@/hooks/api-action/s3"
+import React, { useState } from "react";
+import Image from "next/image";
+import { uploadImageToS3 } from "@/actions/aws/s3-action";
+import { App, AppDocumentType } from "@/drizzle/schema";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { TextArea } from "@/components/ui/textarea";
+import Modal from "@/components/modal";
+import AddImageModal from "./add-image-modal";
+import { getS3Url } from "@/hooks/api-action/s3";
 
 interface UpdateDocsModalProps {
-  isOpen: boolean
-  onClose: () => void
-  documentsToUpdate: AppDocumentType | null
+  isOpen: boolean;
+  onClose: () => void;
+  documentsToUpdate: AppDocumentType | null;
   onUpdateDocs: (data: {
-    name: string
-    description: string
-    icon: string
-  }) => void
+    name: string;
+    description: string;
+    icon: string;
+  }) => void;
 }
 
 export default function UpdateDocsModal({
@@ -27,44 +27,44 @@ export default function UpdateDocsModal({
   onUpdateDocs,
   documentsToUpdate,
 }: UpdateDocsModalProps) {
-  const { toast } = useToast()
-  const [name, setName] = useState(documentsToUpdate?.name ?? "")
+  const { toast } = useToast();
+  const [name, setName] = useState(documentsToUpdate?.name ?? "");
   const [description, setDescription] = useState(
-    documentsToUpdate?.description ?? ""
-  )
-  const [icon, setIcon] = useState(documentsToUpdate?.icon ?? "📝")
-  const [isLoading, setIsLoading] = useState(false)
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [localImageUrl, setLocalImageUrl] = useState<string>("")
-  const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false)
+    documentsToUpdate?.description ?? "",
+  );
+  const [icon, setIcon] = useState(documentsToUpdate?.icon ?? "📝");
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [localImageUrl, setLocalImageUrl] = useState<string>("");
+  const [isAddImageModalOpen, setIsAddImageModalOpen] = useState(false);
 
   React.useEffect(() => {
-    setName(documentsToUpdate?.name ?? "")
-    setDescription(documentsToUpdate?.description ?? "")
-    setIcon(documentsToUpdate?.icon ?? "📝")
-  }, [documentsToUpdate])
+    setName(documentsToUpdate?.name ?? "");
+    setDescription(documentsToUpdate?.description ?? "");
+    setIcon(documentsToUpdate?.icon ?? "📝");
+  }, [documentsToUpdate]);
 
   const handleUpdate = async () => {
-    setIsLoading(true)
-    let uploadedIconUrl = icon
+    setIsLoading(true);
+    let uploadedIconUrl = icon;
 
     try {
       if (selectedFile && icon !== localImageUrl) {
-        const { file_key } = await uploadImageToS3(selectedFile)
-        uploadedIconUrl = await getS3Url(file_key)
+        const { file_key } = await uploadImageToS3(selectedFile);
+        uploadedIconUrl = await getS3Url(file_key);
       }
 
       if (onUpdateDocs) {
-        onUpdateDocs({ name, description, icon: uploadedIconUrl })
+        onUpdateDocs({ name, description, icon: uploadedIconUrl });
       }
 
-      onClose()
+      onClose();
     } catch (error) {
-      toast({ title: "Error updating document" })
+      toast({ title: "Error updating document" });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <>
@@ -101,14 +101,14 @@ export default function UpdateDocsModal({
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full flex-grow text-[14px] rounded border bg-slate-100 p-2"
+            className="w-full flex-grow rounded border bg-slate-100 p-2 text-[14px]"
           />
 
           <label className="text-sm font-medium">Description</label>
           <TextArea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full flex-grow text-[14px] rounded border bg-slate-100 p-2"
+            className="w-full flex-grow rounded border bg-slate-100 p-2 text-[14px]"
           />
         </div>
 
@@ -126,24 +126,24 @@ export default function UpdateDocsModal({
         isOpen={isAddImageModalOpen}
         onClose={(e) => {
           if (e) {
-            e.preventDefault()
-            e.stopPropagation()
+            e.preventDefault();
+            e.stopPropagation();
           }
-          setIsAddImageModalOpen(false)
+          setIsAddImageModalOpen(false);
         }}
         onSelect={(icon) => {
-          setIcon(icon)
-          setLocalImageUrl("")
-          setSelectedFile(null)
-          setIsAddImageModalOpen(false)
+          setIcon(icon);
+          setLocalImageUrl("");
+          setSelectedFile(null);
+          setIsAddImageModalOpen(false);
         }}
         onFileSelect={(file) => {
-          setSelectedFile(file)
-          setLocalImageUrl(URL.createObjectURL(file))
-          setIcon("")
-          setIsAddImageModalOpen(false)
+          setSelectedFile(file);
+          setLocalImageUrl(URL.createObjectURL(file));
+          setIcon("");
+          setIsAddImageModalOpen(false);
         }}
       />
     </>
-  )
+  );
 }
