@@ -1,67 +1,67 @@
-"use client";
+"use client"
 
-import React, { useState } from "react";
-import { usePathname } from "next/navigation";
-import { ChevronRight, Clock, FileText, Search, Send } from "lucide-react";
-import { FaFileLines } from "react-icons/fa6";
-import { toast } from "sonner";
+import React, { useState } from "react"
+import { usePathname } from "next/navigation"
+import { ChevronRight, Clock, FileText, Search, Send } from "lucide-react"
+import { FaFileLines } from "react-icons/fa6"
+import { toast } from "sonner"
 
-import { truncateString } from "@/lib/helpers";
+import { truncateString } from "@/lib/helpers"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { TextArea } from "@/components/ui/textarea";
-import Modal from "@/components/modal";
-import { useAppFiles } from "@/app/services/app-docs/app-docs-service";
+} from "@/components/ui/select"
+import { TextArea } from "@/components/ui/textarea"
+import Modal from "@/components/modal"
+import { useAppFiles } from "@/app/services/app-docs/app-docs-service"
 import {
   MatchVectorResponse,
   useGetDocsQueryResults,
-} from "@/app/services/vectors/vector-service";
-import ShowVectorModal from "@/components/protected/Modals/show-vector-modal";
+} from "@/app/services/vectors/vector-service"
+import ShowVectorModal from "@/components/protected/Modals/show-vector-modal"
 
 interface RecentSearch {
-  text: string;
-  time: string;
+  text: string
+  time: string
 }
 
 interface RetrievalParagraph {
-  content: string;
-  source: string;
+  content: string
+  source: string
 }
 
 const RetrievalTesting: React.FC = () => {
-  const [sourceText, setSourceText] = useState("");
-  const [topK, setTopK] = useState<string>("3");
-  const [recentSearches, setRecentSearches] = useState<any[]>([]);
-  const [modalOpen, setModalOpen] = useState(false);
+  const [sourceText, setSourceText] = useState("")
+  const [topK, setTopK] = useState<string>("3")
+  const [recentSearches, setRecentSearches] = useState<any[]>([])
+  const [modalOpen, setModalOpen] = useState(false)
   const [selectedResult, setSelectedResult] =
-    useState<MatchVectorResponse | null>(null);
+    useState<MatchVectorResponse | null>(null)
 
-  const pathname = usePathname();
-  const documentId = pathname?.split("/")[2] || "";
+  const pathname = usePathname()
+  const documentId = pathname?.split("/")[2] || ""
 
-  const { appFiles } = useAppFiles(documentId);
+  const { appFiles } = useAppFiles(documentId)
   const fileKeyArray = appFiles.map((file) => ({
     fileKey: file.fileKey,
     isActive: file.isActive,
-  }));
+  }))
 
   const { getDocsQueryResults, vectorResult, isLoading, error } =
-    useGetDocsQueryResults();
+    useGetDocsQueryResults()
 
-  console.log(vectorResult);
+  console.log(vectorResult)
 
   const handleTesting = () => {
-    const trimmedText = sourceText.trim();
+    const trimmedText = sourceText.trim()
     if (trimmedText.length === 0) {
-      toast.error("Please enter some text to search");
-      return;
+      toast.error("Please enter some text to search")
+      return
     }
 
     try {
@@ -69,27 +69,27 @@ const RetrievalTesting: React.FC = () => {
         queryText: trimmedText,
         fileKeys: fileKeyArray,
         topKvalue: topK,
-      });
+      })
     } catch (error) {
-      console.error("Error in testing", error);
-      toast.error("Something went wrong while fetching results");
+      console.error("Error in testing", error)
+      toast.error("Something went wrong while fetching results")
     }
-  };
+  }
 
   const getFileNameByFileKey = (fileKey: string) => {
-    const file = appFiles.find((file) => file.fileKey === fileKey);
-    return file?.name || "";
-  };
+    const file = appFiles.find((file) => file.fileKey === fileKey)
+    return file?.name || ""
+  }
 
   const handleOpenModal = (data: MatchVectorResponse) => {
-    setSelectedResult(data);
-    setModalOpen(true);
-  };
+    setSelectedResult(data)
+    setModalOpen(true)
+  }
 
   const handleCloseModal = () => {
-    setModalOpen(false);
-    setSelectedResult(null);
-  };
+    setModalOpen(false)
+    setSelectedResult(null)
+  }
 
   return (
     <div className="flex h-[calc(100vh-60px)] gap-4 bg-[#f3f5f7] p-4">
@@ -139,8 +139,8 @@ const RetrievalTesting: React.FC = () => {
                 className="items-center gap-2"
                 disabled={isLoading}
               >
-                {isLoading ? "Loading..." : "Query Search"}
                 <Send className="h-4 w-4" />
+                {isLoading ? "Loading..." : "Query Search"}
               </Button>
             </div>
           </div>
@@ -208,7 +208,7 @@ const RetrievalTesting: React.FC = () => {
                     </span>
                   </div>
                 </div>
-              ),
+              )
             )
           )}
         </div>
@@ -219,7 +219,7 @@ const RetrievalTesting: React.FC = () => {
         getFileNameByFileKey={getFileNameByFileKey}
       />
     </div>
-  );
-};
+  )
+}
 
-export default RetrievalTesting;
+export default RetrievalTesting

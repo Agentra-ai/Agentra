@@ -1,34 +1,34 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useState } from "react"
 import {
   cancelSub,
   pauseUserSubscription,
   unpauseUserSubscription,
   type getSubscriptionURLs,
-} from "@/actions/subscription-action";
-import { Button, DropdownMenu, Loading } from "@lemonsqueezy/wedges";
-import { MoreVerticalIcon } from "lucide-react";
+} from "@/actions/subscription-action"
+import { Button, DropdownMenu, Loading } from "@lemonsqueezy/wedges"
+import { MoreVerticalIcon } from "lucide-react"
 
-import { TypeSubscription } from "@/drizzle/schema";
+import { TypeSubscription } from "@/lib/db/schema"
 
-import { LemonSqueezyModalLink } from "./modal-link";
+import { LemonSqueezyModalLink } from "./modal-link"
 
 export function SubscriptionActionsDropdown({
   subscription,
   urls,
 }: {
-  subscription: TypeSubscription;
-  urls: Awaited<ReturnType<typeof getSubscriptionURLs>>;
+  subscription: TypeSubscription
+  urls: Awaited<ReturnType<typeof getSubscriptionURLs>>
 }) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   if (
     subscription.status === "expired" ||
     subscription.status === "cancelled" ||
     subscription.status === "unpaid"
   ) {
-    return null;
+    return null
   }
 
   return (
@@ -54,12 +54,12 @@ export function SubscriptionActionsDropdown({
             {!subscription.isPaused && (
               <DropdownMenu.Item
                 onClick={async () => {
-                  setLoading(true);
+                  setLoading(true)
                   await pauseUserSubscription(subscription.lemonSqueezyId).then(
                     () => {
-                      setLoading(false);
-                    },
-                  );
+                      setLoading(false)
+                    }
+                  )
                 }}
               >
                 Pause payments
@@ -69,12 +69,12 @@ export function SubscriptionActionsDropdown({
             {subscription.isPaused && (
               <DropdownMenu.Item
                 onClick={async () => {
-                  setLoading(true);
+                  setLoading(true)
                   await unpauseUserSubscription(
-                    subscription.lemonSqueezyId,
+                    subscription.lemonSqueezyId
                   ).then(() => {
-                    setLoading(false);
-                  });
+                    setLoading(false)
+                  })
                 }}
               >
                 Unpause payments
@@ -98,13 +98,13 @@ export function SubscriptionActionsDropdown({
                 if (
                   // eslint-disable-next-line no-alert -- allow
                   confirm(
-                    `Please confirm if you want to cancel your subscription.`,
+                    `Please confirm if you want to cancel your subscription.`
                   )
                 ) {
-                  setLoading(true);
+                  setLoading(true)
                   await cancelSub(subscription.lemonSqueezyId).then(() => {
-                    setLoading(false);
-                  });
+                    setLoading(false)
+                  })
                 }
               }}
               destructive
@@ -115,5 +115,5 @@ export function SubscriptionActionsDropdown({
         </DropdownMenu.Content>
       </DropdownMenu>
     </>
-  );
+  )
 }

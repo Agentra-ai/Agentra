@@ -2,10 +2,10 @@ import hljs from "highlight.js";
 import { useEffect, useRef } from "react";
 
 import { useClipboard } from "@/hooks/use-clipboard";
-import { fontIbemPlex } from "@/lib/fonts";
 // import { Tooltip } from "@components/ui/tooltip";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import { Check, Copy } from "lucide-react";
+import { ibmPlex } from "@/config/font";
 
 export type codeBlockProps = {
   lang?: string;
@@ -26,29 +26,29 @@ export const CodeBlock = ({ lang, code }: codeBlockProps) => {
   }, [code, language]);
 
   return (
-    <div className="not-prose w-full flex-shrink-0 overflow-hidden rounded-xl border border-zinc-50 bg-zinc-50/40 text-zinc-600 dark:border-white/5 dark:bg-black/30 dark:text-white">
-      <div className="flex w-full items-center justify-between border-b border-zinc-50 bg-gray-100 p-1 dark:border-white/5">
-        <p className="gap-1 px-2 text-xs text-zinc-500">{language}</p>
-        <Button
-          className="gap-1 !text-xs"
-          variant="gray"
-          size="sm"
-          onClick={() => {
-            code && copy(code);
-          }}
-        >
-          {showCopied ? (
-            <Check size={14} strokeWidth="2" />
-          ) : (
-            <Copy size={14} strokeWidth="2" />
-          )}{" "}
-          Copy
-        </Button>
+    <div className="not-prose bg-zinc-50/40 border overflow-hidden border-zinc-50 dark:border-white/5 text-zinc-600 dark:text-white dark:bg-black/30 rounded-xl w-full flex-shrink-0">
+      <div className="p-1 w-full flex justify-between items-center border-b border-zinc-50 dark:border-white/5 bg-gray-100">
+        <p className="text-xs px-2 gap-1 text-zinc-500">{language}</p>
+          <Button
+            className="!text-xs gap-1"
+            variant="gray"
+            size="sm"
+            onClick={() => {
+              code && copy(code);
+            }}
+          >
+            {showCopied ? (
+              <Check size={14}  strokeWidth="2" />
+            ) : (
+              <Copy size={14}  strokeWidth="2" />
+            )}{" "}
+            Copy
+          </Button>
       </div>
       <pre className="w-full px-4 py-1">
         <code
-          style={fontIbemPlex.style}
-          className={`hljs language-${language} inline-block w-full overflow-x-auto whitespace-pre-wrap break-words pr-[100%] !text-[11px] tracking-wide lg:text-[12px]`}
+          style={ibmPlex.style}
+          className={`hljs language-${language} tracking-wide whitespace-pre-wrap break-words overflow-x-auto w-full inline-block pr-[100%] !text-[11px] lg:text-[12px]`}
           ref={ref}
         ></code>
       </pre>

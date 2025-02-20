@@ -1,10 +1,10 @@
-import React from "react";
-import RetrievalTesting from "./testing";
+import React from "react"
+import RetrievalTesting from "./testing"
 
-type Props = {};
+type Props = {}
 
 const DocsTesting = (props: Props) => {
-  return <RetrievalTesting />;
-};
+  return <RetrievalTesting />
+}
 
-export default DocsTesting;
+export default DocsTesting

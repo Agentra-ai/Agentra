@@ -1,16 +1,16 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { logout } from "@/actions/subscription-action";
-import { Avatar, DropdownMenu, Loading } from "@lemonsqueezy/wedges";
-import { ChevronRightIcon, MoreVertical } from "lucide-react";
-import { User } from "@/drizzle/schema";
+import { useState } from "react"
+import { logout } from "@/actions/subscription-action"
+import { Avatar, DropdownMenu, Loading } from "@lemonsqueezy/wedges"
+import { ChevronRightIcon, MoreVertical } from "lucide-react"
+import { User } from "@/lib/db/schema"
 
 export function UserMenu(props: { user: User | null }) {
-  const { user } = props;
-  const [loading, setLoading] = useState(false);
+  const { user } = props
+  const [loading, setLoading] = useState(false)
 
-  if (!user) return null;
+  if (!user) return null
 
   return (
     <DropdownMenu>
@@ -28,13 +28,13 @@ export function UserMenu(props: { user: User | null }) {
               className="group-disabled:opacity-50"
               size="sm"
               src={user?.email ?? undefined}
-              alt={user?.email ?? undefined}
+              alt={user?.email?? undefined}
             />
           )}
 
           <div className="text-start leading-5 group-disabled:opacity-50">
             <div className="max-w-[130px] truncate font-medium">
-              {/* {user?.username} */}
+              {user?.username}
             </div>
           </div>
 
@@ -50,8 +50,8 @@ export function UserMenu(props: { user: User | null }) {
         <DropdownMenu.Group>
           <DropdownMenu.Item
             onClick={async () => {
-              setLoading(true);
-              await logout();
+              setLoading(true)
+              await logout()
             }}
           >
             <>
@@ -62,5 +62,5 @@ export function UserMenu(props: { user: User | null }) {
         </DropdownMenu.Group>
       </DropdownMenu.Content>
     </DropdownMenu>
-  );
+  )
 }

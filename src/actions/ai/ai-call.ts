@@ -8,9 +8,9 @@
 // import { MessagesPlaceholder } from "@langchain/core/prompts";
 // import { TokenUsage } from "@langchain/core/language_models/base";
 // import { LLMResult } from "@langchain/core/outputs";
-// import { messages as _messages, MessagesType } from "@/drizzle/schema";
+// import { messages as _messages, MessagesType } from "@/lib/db/schema";
 // import { v4 as uuidv4 } from "uuid";
-// import db from "@/drizzle";
+// import { db } from "@/lib/db";
 // import { getContext } from "@/hooks/api-action/get-match-embedding";
 
 // export async function runAgent({
@@ -30,7 +30,7 @@
 //   fileKeys?: { fileKey: string; isActive: boolean }[];
 //   followUp?: boolean;
 // }) {
-
+  
 // console.log(instruction,
 //   input,
 //   conversationId,
@@ -38,21 +38,21 @@
 //   messages ,
 //   fileKeys ,
 //   followUp )
-
+  
 //   const stream = createStreamableValue<{
 //     content: string;
 //     tokenUsage?: TokenUsage;
 //     error?: string;
 //   }>();
-
+  
 //   (async () => {
 //     let accumulatedText = "";
 //     let tokenUsage: TokenUsage | undefined;
 
 //     try {
-//       const model = getModelByKey(modelKey);
+//       const model = getModelByKey(modelKey);    
 //       if (!model) throw new Error("Invalid model selected");
-
+      
 //       const apiKey = process.env[`${model.baseModel.toUpperCase()}_API_KEY`];
 //       if (!apiKey) throw new Error("Missing API key");
 
@@ -67,8 +67,8 @@
 //       const llm = await createInstance(model, apiKey);
 
 //       const tools = [new WikipediaQueryRun({ topKResults: 3, maxDocContentLength: 4000 })];
-
-//       // const context = fileKeys.length > 0
+      
+//       // const context = fileKeys.length > 0 
 //       //   ? await getContext(
 //       //       followUp ? messages.map(m => m.content).join("\n") : input,
 //       //       fileKeys
@@ -101,13 +101,13 @@
 //                 tokenUsage = output.llmOutput?.tokenUsage;
 //               },
 //               handleLLMError: async (error: Error) => {
-//                 stream.update({
+//                 stream.update({ 
 //                   content: accumulatedText,
 //                   error: `LLM Error: ${error.message}`
 //                 });
 //               },
 //               handleChainError: async (error: Error) => {
-//                 stream.update({
+//                 stream.update({ 
 //                   content: accumulatedText,
 //                   error: `Chain Error: ${error.message}`
 //                 });
@@ -117,7 +117,7 @@
 //         }
 //       );
 
-//       stream.update({
+//       stream.update({ 
 //         content: accumulatedText,
 //         tokenUsage
 //       });
@@ -125,7 +125,7 @@
 
 //     } catch (error) {
 //       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-//       stream.update({
+//       stream.update({ 
 //         content: accumulatedText,
 //         error: `Execution Error: ${errorMessage}`
 //       });
@@ -136,6 +136,7 @@
 //   return { streamData: stream.value };
 // }
 
+
 // export const createPromptTemplate = async (
 //   messages: any[],
 //   instructions: string,
@@ -143,11 +144,11 @@
 //   appDocumentsKeys:  { fileKey: string; isActive: boolean }[]
 // ) => {
 //   const lastMessage = messages[messages.length - 1]?.content || "";
-//   const queryMessages = followUp
-//     ? messages.map(({ role, content }) => ({ role, content }))
+//   const queryMessages = followUp 
+//     ? messages.map(({ role, content }) => ({ role, content })) 
 //     : [{ role: messages[messages.length - 1]?.role || "user", content: lastMessage }];
-
-//   const context = appDocumentsKeys?.length > 0
+  
+//   const context = appDocumentsKeys?.length > 0 
 //     ? await getContext(queryMessages.toString(), appDocumentsKeys)
 //     : "No context available";
 
@@ -156,5 +157,5 @@
 //     ["human", `Context: ${context}\n\nQuery: {input}`],
 //     new MessagesPlaceholder("chat_history"),
 //     ["placeholder", "{agent_scratchpad}"],
-//   ]);
+//   ]);  
 // };

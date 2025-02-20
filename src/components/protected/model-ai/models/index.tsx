@@ -21,7 +21,7 @@ export const ModelSettings = () => {
     anthropic: "anthropic",
     gemini: "gemini",
     ollama: "ollama",
-  };
+  }; 
   const modelSettingsData = [
     {
       label: "OpenAI",
@@ -54,44 +54,36 @@ export const ModelSettings = () => {
   ];
 
   return (
-    <Flex
-      direction={"col"}
-      gap={"lg"}
-      className="w-full bg-gradient-to-b from-gray-50/50 to-white p-6"
-    >
+    <Flex direction={"col"} gap={"lg"} className="p-6 w-full bg-gradient-to-b from-gray-50/50 to-white">
       <Accordion type="single" collapsible className="w-full space-y-3">
         {modelSettingsData.map((model) => (
-          <AccordionItem
-            key={model.value}
+          <AccordionItem 
+            key={model.value} 
             value={model.value}
             className={cn(
-              "rounded-xl border border-gray-100 px-3",
+              "border border-gray-100 rounded-xl px-3",
               "bg-white/80 backdrop-blur-sm",
-              "hover:border-gray-400 hover:shadow-md",
-              "transition-all duration-200",
+              "hover:shadow-md  hover:border-gray-400",
+              "transition-all duration-200"
             )}
           >
             <AccordionTrigger className="py-5">
               <Flex gap={"sm"} items="center" className="flex-1">
-                <div
-                  className={cn(
-                    "rounded-lg p-2",
-                    model.connected ? "bg-blue-50/60" : "bg-gray-50/60",
-                  )}
-                >
+                <div className={cn(
+                  "p-2 rounded-lg",
+                  model.connected ? "bg-blue-50/60" : "bg-gray-50/60"
+                )}>
                   <ModelIcon type={model.iconType as ModelIconType} size="sm" />
                 </div>
-                <span className="font-semibold text-gray-700">
-                  {model.label}
-                </span>
+                <span className="font-semibold text-gray-700">{model.label}</span>
               </Flex>
               <div
                 className={cn(
-                  "flex items-center gap-2 rounded-full px-4 py-1.5",
+                  "px-4 py-1.5 rounded-full flex items-center gap-2",
                   "transition-colors duration-200",
-                  model.connected
-                    ? "border border-emerald-100 bg-emerald-50/70 text-emerald-600"
-                    : "border border-amber-100 bg-amber-50/70 text-amber-600",
+                  model.connected 
+                    ? "text-emerald-600 bg-emerald-50/70 border border-emerald-100" 
+                    : "text-amber-600 bg-amber-50/70 border border-amber-100"
                 )}
               >
                 {model.connected ? (
@@ -107,8 +99,8 @@ export const ModelSettings = () => {
                 )}
               </div>
             </AccordionTrigger>
-            <AccordionContent className="px-3 py-6">
-              <div className="rounded-lg border border-gray-100 bg-gray-50/50 p-4">
+            <AccordionContent className="py-6 px-3">
+              <div className="bg-gray-50/50 rounded-lg p-4 border border-gray-100">
                 <model.settingsComponent />
               </div>
             </AccordionContent>

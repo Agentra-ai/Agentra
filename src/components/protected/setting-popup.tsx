@@ -1,35 +1,36 @@
-"use client";
+"use client"
 
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react"
 import {
   getPricingPlanAction,
   getUserSubscriptions,
-} from "@/actions/subscription-action";
+} from "@/actions/subscription-action"
 import {
   DatabaseZapIcon,
   PencilLineIcon,
   SettingsIcon,
   UserIcon,
   UsersIcon,
-} from "lucide-react";
+} from "lucide-react"
 // Example icons
 
-import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import { RiMoneyDollarCircleLine } from "react-icons/ri"
 
 import {
   SubscriptionStatusType,
   TypePricingPlan,
   TypeSubscription,
-} from "@/drizzle/schema";
+} from "@/lib/db/schema"
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import Modal from "@/components/modal";
 
-import { BillingSetting } from "./subscription/billing-setting";
-import { ModelSettings } from "./model-ai/models";
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Separator } from "@/components/ui/separator"
+import Modal from "@/components/modal"
+
+import { BillingSetting } from "./subscription/billing-setting"
+import { ModelSettings } from "./model-ai/models"
 
 // Tabs Array for Workspace
 const workspaceTabs = [
@@ -59,7 +60,7 @@ const workspaceTabs = [
     label: "Customization",
     icon: <PencilLineIcon size={20} strokeWidth={1.25} />,
   },
-];
+]
 
 // Tabs Array for Account
 const accountTabs = [
@@ -70,45 +71,45 @@ const accountTabs = [
     label: "Others",
     icon: <SettingsIcon size={18} strokeWidth={1.25} />,
   },
-];
+]
 
 type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-};
+  isOpen: boolean
+  onClose: () => void
+}
 
 export const SettingPopup = ({ isOpen, onClose }: Props) => {
-  const [activeTab, setActiveTab] = useState("modelProvider");
-  const [allPlans, setAllPlans] = useState<TypePricingPlan[]>([]);
+  const [activeTab, setActiveTab] = useState("modelProvider")
+  const [allPlans, setAllPlans] = useState<TypePricingPlan[]>([])
   const [userSubscriptions, setUserSubscriptions] = useState<
     TypeSubscription[] | null
-  >(null);
+  >(null)
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const subsData = await getUserSubscriptions();
-  //       setUserSubscriptions(subsData);
-  //       const plansData = await getPricingPlanAction();
-  //       setAllPlans(plansData);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const subsData = await getUserSubscriptions()
+        setUserSubscriptions(subsData)
+        const plansData = await getPricingPlanAction()
+        setAllPlans(plansData)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchData()
+  }, [])
 
   const sortedSubscriptions = userSubscriptions?.sort((a, b) => {
     if (a.status === "active" && b.status !== "active") {
-      return -1;
+      return -1
     }
 
     if (a.status === "paused" && b.status === "cancelled") {
-      return -1;
+      return -1
     }
 
-    return 0;
-  });
+    return 0
+  })
 
   // Function to render content based on the active tab
   const renderContent = () => {
@@ -116,15 +117,15 @@ export const SettingPopup = ({ isOpen, onClose }: Props) => {
       case "modelProvider":
         return (
           <div className="flex flex-col gap-4 py-4">
-            <ModelSettings />
+              <ModelSettings />
           </div>
-        );
+        )
       case "members":
         return (
           <div className="flex flex-col gap-4 py-4">
             <p>Manage workspace members.</p>
           </div>
-        );
+        )
       case "myAccount":
         return (
           <div className="flex flex-col gap-4 py-4">
@@ -149,22 +150,22 @@ export const SettingPopup = ({ isOpen, onClose }: Props) => {
               />
             </div>
           </div>
-        );
+        )
       case "integrations":
-        return <p className="text-sm">Manage integrations here.</p>;
+        return <p className="text-sm">Manage integrations here.</p>
       case "language":
-        return <p className="text-sm">Select your preferred language.</p>;
+        return <p className="text-sm">Select your preferred language.</p>
       case "billing":
         return (
           <div>
             <BillingSetting />
             hi
           </div>
-        );
+        )
       default:
-        return <p className="text-sm">No content available for this tab.</p>;
+        return <p className="text-sm">No content available for this tab.</p>
     }
-  };
+  }
 
   return (
     <>
@@ -241,5 +242,5 @@ export const SettingPopup = ({ isOpen, onClose }: Props) => {
         </div>
       </Modal>
     </>
-  );
-};
+  )
+}

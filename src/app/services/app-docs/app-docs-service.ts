@@ -1,20 +1,23 @@
-import { useState } from "react";
-import useSWR, { mutate } from "swr";
-import useSWRMutation from "swr/mutation";
+import { useState } from "react"
+import useSWR, { mutate } from "swr"
+import useSWRMutation from "swr/mutation"
 
-import { AppDocumentType, AppFileType } from "@/drizzle/schema";
+import { AppDocumentType, AppFileType } from "@/lib/db/schema"
 
-import { axiosInstance } from "../fetcher";
+import { axiosInstance } from "../fetcher"
 
 export function useAppDocs() {
   const { data, error, isValidating } = useSWR<{ data: AppDocumentType[] }>(
     "/api/app-docs/get-docs",
-  );
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      refreshInterval: 0,
+    }
+  )
+  const appDocs = data?.data || []
 
-  const appDocs = data?.data || [];
-  console.log("------ ", appDocs);
-
-  return { appDocs, error, isLoading: isValidating && !data };
+  return { appDocs, error, isLoading: isValidating && !data}
 }
 
 export function useDeleteAppDocument() {
@@ -25,34 +28,34 @@ export function useDeleteAppDocument() {
   } = useSWRMutation(
     "/api/app-docs/delete-docs",
     async (url, { arg: documentId }: { arg: AppDocumentType["id"] }) => {
-      console.log("document ID:", documentId);
+      console.log("document ID:", documentId)
       await axiosInstance.delete(url, {
         data: { documentId }, // The data to send with the DELETE request
         // withCredentials: true, // Include credentials
-      });
+      })
 
-      mutate("/api/app-docs/get-docs");
+      mutate("/api/app-docs/get-docs")
     },
     {
       onError: (error) => {
-        console.log(error);
+        console.log(error)
       },
       onSuccess(data, key) {
-        console.log("Data:", data);
-        console.log("Key:", key);
+        console.log("Data:", data)
+        console.log("Key:", key)
       },
-    },
-  );
-  return { deleteAppDocument, isLoading: isMutating, error };
+    }
+  )
+  return { deleteAppDocument, isLoading: isMutating, error }
 }
 
 export function useAppFiles(documentId: string) {
   const { data, error, isValidating } = useSWR<{ data: AppFileType[] }>(
-    `/api/app-docs/get-files?documentId=${documentId}`,
-  );
-  const appFiles = data?.data || [];
+    `/api/app-docs/get-files?documentId=${documentId}`
+  )
+  const appFiles = data?.data || []
 
-  return { appFiles, error, isLoading: isValidating && !data };
+  return { appFiles, error, isLoading: isValidating && !data }
 }
 
 export function useDeleteAppFile(documentId: string) {
@@ -63,41 +66,41 @@ export function useDeleteAppFile(documentId: string) {
   } = useSWRMutation(
     "/api/app-docs/delete-files",
     async (url, { arg: fileId }: { arg: AppFileType["id"] }) => {
-      console.log("file ID:", fileId);
-      await axiosInstance.delete(url, { data: { fileId } });
-      mutate(`/api/app-docs/get-files?documentId=${documentId}`);
+      console.log("file ID:", fileId)
+      await axiosInstance.delete(url, { data: { fileId } })
+      mutate(`/api/app-docs/get-files?documentId=${documentId}`)
     },
     {
       onError: (error) => {
-        console.log(error);
+        console.log(error)
       },
       onSuccess(data, key) {
-        console.log("Data:", data);
-        console.log("Key:", key);
+        console.log("Data:", data)
+        console.log("Key:", key)
       },
-    },
-  );
+    }
+  )
 
-  return { deleteAppFile, isLoading: isMutating, error };
+  return { deleteAppFile, isLoading: isMutating, error }
 }
 
 export function useUpdateAppDocument() {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error | null>(null);
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<Error | null>(null)
 
   const updateAppDocument = async (
     documentId: string,
-    data: { name: string; description: string; icon: string },
+    data: { name: string; description: string; icon: string }
   ) => {
-    setIsLoading(true);
-    setError(null);
+    setIsLoading(true)
+    setError(null)
     console.log(
       "documentId in update-doc API",
       documentId,
       data.name,
       data.description,
-      data.icon,
-    );
+      data.icon
+    )
     try {
       const response = await fetch(`/api/app-docs/update-docs`, {
         method: "PUT",
@@ -110,44 +113,33 @@ export function useUpdateAppDocument() {
           description: data.description,
           icon: data.icon,
         }),
-      });
-      const responseData = await response.json();
+      })
+      const responseData = await response.json()
 
       if (response.ok) {
-        mutate("/api/app-docs/get-docs");
+        mutate("/api/app-docs/get-docs")
       } else {
-        throw new Error(responseData.message || "Failed to update document");
+        throw new Error(responseData.message || "Failed to update document")
       }
     } catch (err) {
-      setError(err as Error);
+      setError(err as Error)
     } finally {
-      setIsLoading(false);
+      setIsLoading(false)
     }
-  };
+  }
 
-  return { updateAppDocument, isLoading, error };
+  return { updateAppDocument, isLoading, error }
 }
+
 
 export function useDocsHubData() {
   const { data, error, isValidating } = useSWR<{ data: AppDocumentType[] }>(
     "/api/app-docs/get-docshub",
-  );
+  )
   // If the API returns `undefined`, fallback to an empty array
-  const DocsHubData = data?.data || [];
+  const DocsHubData = data?.data || []
 
-  console.log(DocsHubData);
+  console.log(DocsHubData)
 
-  return { DocsHubData, error, isLoading: isValidating && !data };
-}
-
-export function useAppDocument(documentId: string) {
-  const { data, error, isValidating } = useSWR<{ data: AppDocumentType }>(
-    documentId ? `/api/app-docs/get-document?documentId=${documentId}` : null,
-  );
-
-  return {
-    document: data?.data,
-    error,
-    isLoading: isValidating && !data,
-  };
+  return { DocsHubData, error, isLoading: isValidating && !data }
 }

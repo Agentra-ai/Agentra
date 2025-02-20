@@ -1,24 +1,23 @@
 // hooks/useChat.ts
-import { useCallback, useRef } from "react";
-import { useChatStore } from "@/store/useChatStore";
-import { messages as _messages } from "@/drizzle/schema";
-import { v4 as uuidv4 } from "uuid";
-import { useToast } from "@/hooks/use-toast";
+import { useCallback, useRef } from 'react';
+import { useChatStore } from '@/store/useChatStore';
+import { createConversation } from '@/actions/chat/chat-action';
+import { messages as _messages } from '@/lib/db/schema';
+import { v4 as uuidv4 } from 'uuid';
+import { useToast } from '@/hooks/use-toast';
 import { cookies } from "next/headers";
-import { useAppStore } from "@/store/useAppStore";
-import { useShallow } from "zustand/react/shallow";
-import { ChatPromptTemplate } from "@langchain/core/prompts";
-import { WikipediaQueryRun } from "@langchain/community/tools/wikipedia_query_run";
-import { AgentExecutor, createToolCallingAgent } from "langchain/agents";
-import { createInstance, getModelByKey, TModelKey } from "@/hooks/use-llm";
-import { MessagesPlaceholder } from "@langchain/core/prompts";
-import { TokenUsage } from "@langchain/core/language_models/base";
-import { LLMResult } from "@langchain/core/outputs";
-import { getContext } from "./api-action/get-match-embedding";
-import { useChatService } from "@/app/services/chat/chat-service";
-import { useMessageService } from "@/app/services/chat/chat-service";
-
-import Cookies from "js-cookie";
+import { useAppStore } from '@/store/useAppStore';
+import { useShallow } from 'zustand/react/shallow';
+import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { WikipediaQueryRun } from '@langchain/community/tools/wikipedia_query_run';
+import { AgentExecutor, createToolCallingAgent } from 'langchain/agents';
+import { createInstance, getModelByKey, TModelKey } from '@/hooks/use-llm';
+import { MessagesPlaceholder } from '@langchain/core/prompts';
+import { TokenUsage } from '@langchain/core/language_models/base';
+import { LLMResult } from '@langchain/core/outputs';
+import { getContext } from './api-action/get-match-embedding';
+import { db } from '@/lib/db';
+import Cookies from "js-cookie"
 
 export const useChat = (appId: string) => {
   const {
@@ -40,21 +39,19 @@ export const useChat = (appId: string) => {
       selectedFileKeys: state.selectedFileKeys,
       appConfigDetails: state.appConfigDetails,
       openingStatement: state.openingStatement,
-    })),
+    }))
   );
 
   const { toast } = useToast();
-  const streamedMessage = useRef("");
+  const streamedMessage = useRef('');
   const currentAbortController = useRef<AbortController | null>(null);
-  const { createNewConversation } = useChatService();
-  const { saveMessage } = useMessageService();
 
   const updateCurrentMessage = useCallback(
     (updates: {
       isLoading: boolean;
       rawAI: string;
       stop: boolean;
-      stopReason?: "cancel" | "error";
+      stopReason?: 'cancel' | 'error';
     }) => {
       updateLastMessage({
         content: updates.rawAI,
@@ -63,7 +60,7 @@ export const useChat = (appId: string) => {
         stopReason: updates.stopReason,
       });
     },
-    [updateLastMessage],
+    [updateLastMessage]
   );
 
   const handleSendMessage = useCallback(async () => {
@@ -75,27 +72,24 @@ export const useChat = (appId: string) => {
 
     try {
       if (!conversationId) {
-        await createNewConversation({
+        await createConversation({
           appId,
           fileKeys: selectedFileKeys,
           newConversationId: newConvId,
-          openingStatement:
-            openingStatement || appConfigDetails?.openingStatement || "",
+          openingStatement: openingStatement || appConfigDetails?.openingStatement || '',
         });
-        Cookies.set(`conversationIdFor${appId}`, newConvId, {
-          expires: 0.03125,
-        });
-        setConversationId(newConvId); 
+        Cookies.set(`conversationIdFor${appId}`, newConvId, { expires: 0.03125 });
+        setConversationId(newConvId);
       }
 
       // Add user message
       appendMessage({
         id: userMessageId,
         content: input,
-        role: "user",
+        role: 'user',
         createdAt: new Date(),
         conversationId: newConvId,
-        messageType: "text",
+        messageType: 'text',
         totalUsedToken: null,
         completionToken: null,
         promptToken: null,
@@ -103,16 +97,16 @@ export const useChat = (appId: string) => {
       });
 
       setIsLoading(true);
-      streamedMessage.current = "";
+      streamedMessage.current = '';
 
       // Initialize AI message
       appendMessage({
         id: assistantMessageId,
-        content: "",
-        role: "assistant",
+        content: '',
+        role: 'assistant',
         createdAt: new Date(),
         conversationId: newConvId,
-        messageType: "text",
+        messageType: 'text',
         totalUsedToken: null,
         completionToken: null,
         promptToken: null,
@@ -122,23 +116,18 @@ export const useChat = (appId: string) => {
 
       // Get model instance
       const model = getModelByKey(selectedModel);
-      if (!model) throw new Error("Invalid model selected");
+      if (!model) throw new Error('Invalid model selected');
 
       const apiKey = process.env[`${model.baseModel.toUpperCase()}_API_KEY`];
-      if (!apiKey) throw new Error("Missing API key");
+      if (!apiKey) throw new Error('Missing API key');
 
       const llm = await createInstance(model, apiKey);
-      const tools = [
-        new WikipediaQueryRun({ topKResults: 3, maxDocContentLength: 4000 }),
-      ];
+      const tools = [new WikipediaQueryRun({ topKResults: 3, maxDocContentLength: 4000 })];
       const prompt = await createPromptTemplate(
         messages,
-        appConfigDetails?.instructions || "",
+        appConfigDetails?.instructions || '',
         appConfigDetails?.followUp ?? false,
-        selectedFileKeys.map((file) => ({
-          fileKey: file.fileKey,
-          isActive: file.isActive,
-        })),
+        selectedFileKeys.map((file) => ({ fileKey: file.fileKey, isActive: file.isActive })),
       );
 
       const agent = createToolCallingAgent({ llm, tools, prompt });
@@ -159,7 +148,7 @@ export const useChat = (appId: string) => {
               handleLLMStart: async () => {
                 updateCurrentMessage({
                   isLoading: true,
-                  rawAI: "",
+                  rawAI: '',
                   stop: false,
                 });
               },
@@ -178,22 +167,22 @@ export const useChat = (appId: string) => {
                   stop: true,
                 });
 
-                // Save assistant message using the service instead of direct DB call
-                await saveMessage({
+                // Save assistant message to DB
+                await db.insert(_messages).values({
                   id: assistantMessageId,
                   conversationId: newConvId,
                   content: streamedMessage.current,
-                  role: "assistant",
-                  messageType: "text",
+                  role: 'assistant',
+                  messageType: 'text',
                 });
               },
               handleLLMError: async (error: Error) => {
-                console.error("handleLLMError", error);
+                console.error('handleLLMError', error);
                 if (!currentAbortController.current?.signal.aborted) {
                   toast({
-                    title: "Error",
-                    description: "Something went wrong",
-                    variant: "destructive",
+                    title: 'Error',
+                    description: 'Something went wrong',
+                    variant: 'destructive',
                   });
                 }
 
@@ -201,34 +190,31 @@ export const useChat = (appId: string) => {
                   isLoading: false,
                   rawAI: streamedMessage.current,
                   stop: true,
-                  stopReason: currentAbortController.current?.signal.aborted
-                    ? "cancel"
-                    : "error",
+                  stopReason: currentAbortController.current?.signal.aborted ? 'cancel' : 'error',
                 });
               },
               handleChainError: async (error: Error) => {
-                console.error("handleChainError", error);
+                console.error('handleChainError', error);
                 updateCurrentMessage({
                   isLoading: false,
                   rawAI: streamedMessage.current,
                   stop: true,
-                  stopReason: "error",
+                  stopReason: 'error',
                 });
               },
             },
           ],
           signal: currentAbortController.current.signal,
-        },
+        }
       );
     } catch (error) {
       toast({
-        title: "Error",
-        description:
-          error instanceof Error ? error.message : "Failed to send message",
-        variant: "destructive",
+        title: 'Error',
+        description: error instanceof Error ? error.message : 'Failed to send message',
+        variant: 'destructive',
       });
     } finally {
-      setInput("");
+      setInput('');
       setIsLoading(false);
       currentAbortController.current = null;
     }
@@ -268,27 +254,21 @@ const createPromptTemplate = async (
   messages: any[],
   instructions: string,
   followUp: boolean,
-  appDocumentsKeys: { fileKey: string; isActive: boolean }[],
+  appDocumentsKeys: { fileKey: string; isActive: boolean }[]
 ) => {
-  const lastMessage = messages[messages.length - 1]?.content || "";
+  const lastMessage = messages[messages.length - 1]?.content || '';
   const queryMessages = followUp
     ? messages.map(({ role, content }) => ({ role, content }))
-    : [
-        {
-          role: messages[messages.length - 1]?.role || "user",
-          content: lastMessage,
-        },
-      ];
+    : [{ role: messages[messages.length - 1]?.role || 'user', content: lastMessage }];
 
-  const context =
-    appDocumentsKeys?.length > 0
-      ? await getContext(queryMessages.toString(), appDocumentsKeys)
-      : "No context available";
+  const context = appDocumentsKeys?.length > 0
+    ? await getContext(queryMessages.toString(), appDocumentsKeys)
+    : 'No context available';
 
   return ChatPromptTemplate.fromMessages([
-    ["system", instructions],
-    ["human", `Context: ${context}\n\nQuery: {input}`],
-    new MessagesPlaceholder("chat_history"),
-    ["placeholder", "{agent_scratchpad}"],
+    ['system', instructions],
+    ['human', `Context: ${context}\n\nQuery: {input}`],
+    new MessagesPlaceholder('chat_history'),
+    ['placeholder', '{agent_scratchpad}'],
   ]);
 };

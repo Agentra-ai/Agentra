@@ -1,10 +1,10 @@
-import React from "react";
-import { redirect } from "next/navigation";
+import React from "react"
+import { redirect } from "next/navigation"
 
-type Props = {};
+type Props = {}
 
 const DocsRedirect = (props: Props) => {
-  return redirect("/docshub/askme");
-};
+  return redirect("/docshub/askme")
+}
 
-export default DocsRedirect;
+export default DocsRedirect

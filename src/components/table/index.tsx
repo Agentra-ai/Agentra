@@ -1,23 +1,23 @@
-import React from "react";
-import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
-import { AnimatePresence, motion } from "framer-motion";
-import { PencilIcon, Trash2Icon } from "lucide-react";
+import React from "react"
+import { useRouter } from "next/navigation"
+import dayjs from "dayjs"
+import { AnimatePresence, motion } from "framer-motion"
+import { PencilIcon, Trash2Icon } from "lucide-react"
 
-import { AppFileType } from "@/drizzle/schema";
+import { AppFileType } from "@/lib/db/schema"
 
-import { deleteFileFromS3 } from "@/hooks/api-action/s3";
-import { useToast } from "@/hooks/use-toast";
+import { deleteFileFromS3 } from "@/hooks/api-action/s3"
+import { useToast } from "@/hooks/use-toast"
 
-import { useDeleteAppFile } from "@/app/services/app-docs/app-docs-service";
+import { useDeleteAppFile } from "@/app/services/app-docs/app-docs-service"
 
-import DeleteFileModal from "../protected/Modals/delete-file-modal";
+import DeleteFileModal from "../protected/Modals/delete-file-modal"
 
 interface Props {
-  headers: string[];
-  documentData?: AppFileType[];
-  lessonType?: string;
-  documentId: string;
+  headers: string[]
+  documentData?: AppFileType[]
+  lessonType?: string
+  documentId: string
   // setIsCourseConfirmModalOpen?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
@@ -28,48 +28,48 @@ const Table: React.FC<Props> = ({
   headers,
   documentId,
 }) => {
-  const router = useRouter();
-  const { toast } = useToast();
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+  const router = useRouter()
+  const { toast } = useToast()
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false)
   const [fileToDelete, setDocumentToDelete] =
-    React.useState<AppFileType | null>(null);
+    React.useState<AppFileType | null>(null)
 
-  const { deleteAppFile } = useDeleteAppFile(documentId);
+  const { deleteAppFile } = useDeleteAppFile(documentId)
 
   const confirmDeleteApp = async () => {
-    console.log("deleting....", fileToDelete?.id);
+    console.log("deleting....", fileToDelete?.id)
     if (fileToDelete) {
-      console.log("deleting....", fileToDelete);
+      console.log("deleting....", fileToDelete)
 
       try {
-        await deleteAppFile(fileToDelete.id);
-        await deleteFileFromS3(fileToDelete.fileKey);
+        await deleteAppFile(fileToDelete.id)
+        await deleteFileFromS3(fileToDelete.fileKey)
         toast({
           title: "Document Deleted",
           description: `${fileToDelete.name} has been deleted successfully.`,
           variant: "default",
-        });
-        setIsDeleteModalOpen(false);
-        setDocumentToDelete(null);
+        })
+        setIsDeleteModalOpen(false)
+        setDocumentToDelete(null)
       } catch (error) {
         toast({
           title: "Error",
           description: "Failed to delete document",
           variant: "destructive",
-        });
+        })
       }
     }
-  };
+  }
 
   const handleRowClick = (fileId: string) => {
-    router.push(`/docs/${documentId}/documents/${fileId}`);
-  };
+    router.push(`/docs/${documentId}/documents/${fileId}`)
+  }
 
   const handleDeleteClick = (event: React.MouseEvent, file: AppFileType) => {
-    event.stopPropagation();
-    setIsDeleteModalOpen(true);
-    setDocumentToDelete(file);
-  };
+    event.stopPropagation()
+    setIsDeleteModalOpen(true)
+    setDocumentToDelete(file)
+  }
 
   return (
     <div className="w-full overflow-x-auto rounded-lg border bg-white">
@@ -79,7 +79,8 @@ const Table: React.FC<Props> = ({
             {headers.map((header, index) => (
               <th
                 key={index}
-                className={`px-6 py-4 text-left text-xs font-semibold tracking-wider text-gray-700 ${index < 2 ? "border-r border-gray-200" : ""}`}
+                className={`px-6 py-4 text-left text-xs font-semibold tracking-wider text-gray-700
+                            ${index < 2 ? "border-r border-gray-200" : ""}`}
               >
                 {header}
               </th>
@@ -152,7 +153,7 @@ const Table: React.FC<Props> = ({
         fileToDelete={fileToDelete as AppFileType}
       />
     </div>
-  );
-};
+  )
+}
 
-export default Table;
+export default Table
