@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   forwardRef,
@@ -6,25 +6,25 @@ import {
   type ElementRef,
   type ReactElement,
   type ReactSVGElement,
-} from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { ChevronRightIcon } from "lucide-react";
+} from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import { ChevronRightIcon } from "lucide-react"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
-type SidebarNavItemElement = ElementRef<typeof Link>;
+type SidebarNavItemElement = ElementRef<typeof Link>
 type SidebarNavItemProps = ComponentPropsWithoutRef<typeof Link> & {
-  icon?: ReactElement<ReactSVGElement>;
-};
+  icon?: ReactElement<ReactSVGElement>
+}
 
 export const SidebarNavItem = forwardRef<
   SidebarNavItemElement,
   SidebarNavItemProps
 >((props, ref) => {
-  const { icon, className, children, href, ...otherProps } = props;
-  const pathname = usePathname();
-  const isCurrentPage = pathname === href;
+  const { icon, className, children, href, ...otherProps } = props
+  const pathname = usePathname()
+  const isCurrentPage = pathname === href
 
   return (
     <li>
@@ -38,7 +38,7 @@ export const SidebarNavItem = forwardRef<
 
           !isCurrentPage &&
             "text-surface-700 hover:bg-surface-700/10 hover:text-surface-900 [&_svg]:text-surface-500",
-          className,
+          className
         )}
         {...otherProps}
       >
@@ -51,7 +51,7 @@ export const SidebarNavItem = forwardRef<
         />
       </Link>
     </li>
-  );
-});
+  )
+})
 
 SidebarNavItem.displayName = "SidebarNavItem";

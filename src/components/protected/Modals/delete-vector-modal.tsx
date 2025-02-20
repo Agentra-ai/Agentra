@@ -1,13 +1,13 @@
-import React from "react";
+import React from "react"
 
-import { Button } from "@/components/ui/button";
-import Modal from "@/components/modal";
+import { Button } from "@/components/ui/button"
+import Modal from "@/components/modal"
 
 interface DeleteVectorModalProps {
-  isDeleteModalOpen: boolean;
-  setIsDeleteModalOpen: (isOpen: boolean) => void;
-  confirmDeleteVector: () => void;
-  isLoading: boolean;
+  isDeleteModalOpen: boolean
+  setIsDeleteModalOpen: (isOpen: boolean) => void
+  confirmDeleteVector: () => void
+  isLoading: boolean
 }
 
 const DeleteVectorModal: React.FC<DeleteVectorModalProps> = ({
@@ -45,7 +45,7 @@ const DeleteVectorModal: React.FC<DeleteVectorModalProps> = ({
         </div>
       </div>
     </Modal>
-  );
-};
+  )
+}
 
-export default DeleteVectorModal;
+export default DeleteVectorModal

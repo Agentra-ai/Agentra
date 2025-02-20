@@ -1,11 +1,11 @@
-import React from "react";
+import React from "react"
 
-import AppDocuments from "./documents";
+import AppDocuments from "./documents"
 
-type Props = {};
+type Props = {}
 
 const Documents = (props: Props) => {
-  return <AppDocuments />;
-};
+  return <AppDocuments />
+}
 
-export default Documents;
+export default Documents

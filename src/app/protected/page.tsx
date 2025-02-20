@@ -1,0 +1,28 @@
+
+import { LogoutButton } from "@/components/auth/LogoutButton";
+import { TwoFactorAuthForm } from "@/components/auth/TwoFactorAuthForm";
+import { validateRequest } from "@/lib/auth/get-session";
+
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const { user } = await validateRequest();
+  if (!user) {
+    return null;
+  }
+  return (
+    <div className="flex justify-center items-center gap-4 flex-col h-dvh">
+      <h1>Hi, {user.email}!</h1>
+      <textarea
+        readOnly
+        defaultValue={JSON.stringify(user)}
+        className="flex overflow-y-auto w-full h-4xl"
+      />
+      <LogoutButton />
+    </div>
+  );
+}

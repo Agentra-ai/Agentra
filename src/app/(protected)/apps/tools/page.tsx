@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react"
 
-type Props = {};
+type Props = {}
 
 const Tools = (props: Props) => {
-  return <div>Tools</div>;
-};
+  return <div>Tools</div>
+}
 
-export default Tools;
+export default Tools

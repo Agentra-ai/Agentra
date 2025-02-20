@@ -1,17 +1,17 @@
-import React from "react";
-import dayjs from "dayjs";
+import React from "react"
+import dayjs from "dayjs"
 
-import { AppFileType, TypeVectorDBData } from "@/drizzle/schema";
+import { AppFileType, TypeVectorDBData } from "@/lib/db/schema"
 
 type Props = {
-  vectorsData: TypeVectorDBData[];
-  fileId: string;
-  fileDetails: AppFileType;
-};
+  vectorsData: TypeVectorDBData[]
+  fileId: string
+  fileDetails: AppFileType
+}
 
 const FileDetails = (props: Props) => {
-  const { fileId, vectorsData, fileDetails } = props;
-  if (!fileId || !vectorsData) return null;
+  const { fileId, vectorsData, fileDetails } = props
+  if (!fileId) return null
 
   return (
     <div className="pb-6 pr-5 lg:w-[380px] lg:pl-7">
@@ -91,8 +91,8 @@ const FileDetails = (props: Props) => {
               ? Math.floor(
                   vectorsData.reduce(
                     (acc, vector) => acc + vector?.charecterLength!,
-                    0,
-                  ) / vectorsData.length,
+                    0
+                  ) / vectorsData.length
                 )
               : "N/A"}
           </p>
@@ -119,7 +119,7 @@ const FileDetails = (props: Props) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default FileDetails;
+export default FileDetails

@@ -1,16 +1,16 @@
-import React, { useRef, useState } from "react";
-import Image from "next/image";
-import { emojisArray } from "@/store/constant";
-import { Inbox, X } from "lucide-react";
+import React, { useRef, useState } from "react"
+import Image from "next/image"
+import { emojisArray } from "@/store/constant"
+import { Inbox, X } from "lucide-react"
 
-import { Button } from "@/components/ui/button";
-import Modal from "@/components/modal";
+import { Button } from "@/components/ui/button"
+import Modal from "@/components/modal"
 
 interface AddImageModalProps {
-  isOpen: boolean;
-  onClose: (e?: React.MouseEvent) => void; // Update interface to accept event
-  onSelect: (icon: string) => void;
-  onFileSelect: (file: File) => void;
+  isOpen: boolean
+  onClose: (e?: React.MouseEvent) => void // Update interface to accept event
+  onSelect: (icon: string) => void
+  onFileSelect: (file: File) => void
 }
 
 export default function AddImageModal({
@@ -19,32 +19,32 @@ export default function AddImageModal({
   onSelect,
   onFileSelect,
 }: AddImageModalProps) {
-  const [activeTab, setActiveTab] = useState<"emoji" | "upload">("emoji");
-  const [file, setFile] = useState<File | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [activeTab, setActiveTab] = useState<"emoji" | "upload">("emoji")
+  const [file, setFile] = useState<File | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleFileSelection = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
+    const selectedFile = e.target.files?.[0]
     if (selectedFile) {
-      setFile(selectedFile);
+      setFile(selectedFile)
     }
-  };
+  }
 
   const handleCancel = (e: React.MouseEvent) => {
-    setFile(null);
-    onClose(e);
-  };
+    setFile(null)
+    onClose(e)
+  }
 
   const handleDone = () => {
     if (activeTab === "upload" && file) {
-      onFileSelect(file);
-      setFile(null);
-      onClose();
+      onFileSelect(file)
+      setFile(null)
+      onClose()
     } else if (activeTab === "emoji") {
       // Don't close modal on Done click for emoji tab
       // Let the emoji click handler handle the closing
     }
-  };
+  }
 
   return (
     <Modal
@@ -134,7 +134,7 @@ export default function AddImageModal({
         </div>
       </div>
     </Modal>
-  );
+  )
 }
 
 // const emojisArray = [

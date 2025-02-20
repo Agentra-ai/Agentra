@@ -1,14 +1,8 @@
-import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { models, TModelKey } from "@/hooks/use-llm";
-import React from "react";
-import { ModelIcon, ModelIconType } from "../model-ai/model-icon";
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { models, TModelKey } from '@/hooks/use-llm';
+import React from 'react';
+import { ModelIcon, ModelIconType } from '../model-ai/model-icon';
 
 type Props = {
   selectedModelKey: TModelKey;
@@ -17,12 +11,14 @@ type Props = {
 
 const ModalSelect = ({ selectedModelKey, onModelSelect }: Props) => {
   return (
-    <div className="flex w-full items-center justify-between rounded-lg bg-white p-4 py-2 shadow-sm">
+    <div className="flex w-full items-center justify-between bg-white shadow-sm p-4 py-2 rounded-lg">
       <div className="flex items-center gap-4">
-        <Select onValueChange={(value) => onModelSelect(value as TModelKey)}>
-          <SelectTrigger className="w-full rounded-md border border-gray-300 bg-gray-100 p-[6px] shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+        <Select
+          onValueChange={(value) => onModelSelect(value as TModelKey)}
+        >
+          <SelectTrigger className="focus:ring- w-full rounded-md border border-gray-300 bg-gray-100 p-[6px] shadow-sm focus:border-blue-500 focus:ring-blue-500">
             <SelectValue
-              className="w-[180px]"
+            className='w-[180px]'
               placeholder="Select Model"
               defaultValue={selectedModelKey}
             />
@@ -35,10 +31,7 @@ const ModalSelect = ({ selectedModelKey, onModelSelect }: Props) => {
                 value={model.key}
               >
                 <div className="flex items-center gap-2">
-                  <ModelIcon
-                    type={model.baseModel as ModelIconType}
-                    size="sm"
-                  />
+                  <ModelIcon type={model.baseModel as ModelIconType} size="sm" />
                   {model.name}
                 </div>
               </SelectItem>

@@ -1,7 +1,6 @@
-import { createApp } from "@/actions/app/app-action";
-import { z, ZodError } from "zod";
-import { DatabaseError, ValidationError } from "@/lib/errors/errors";
-import { auth } from "@/auth";
+import { createApp } from "@/actions/app/app-action"
+import { z, ZodError } from "zod"
+import { DatabaseError, ValidationError } from "@/lib/errors/errors"
 
 const appSchema = z.object({
   description: z.string().default(""),
@@ -10,68 +9,82 @@ const appSchema = z.object({
   appType: z.string(),
   existingAppId: z.string().nullable().default(null),
   name: z.string(),
-});
+})
 
-export const POST = auth(async (req) => {
-  if (!req.auth) {
-    return Response.json({ message: "Not authenticated" }, { status: 401 });
+export async function POST(req: Request, res: Response): Promise<Response> {
+  if (req.method !== "PUT" && req.method !== "POST") {
+    return new Response(`Method ${req.method} Not Allowed`, {
+      status: 405,
+      headers: { Allow: "PUT, POST" },
+    })
   }
 
   try {
-    const body = await req.json();
-    const appDetails = appSchema.parse(body);
-    const AppId = await createApp(appDetails);
+    const body = await req.json()
+    const appDetails = appSchema.parse(body)
+    console.log(appDetails)
 
-    return Response.json({ message: "App updated successfully", appId: AppId });
+    const AppId = await createApp(appDetails)
+    return new Response(JSON.stringify({ message: "App updated successfully", appId: AppId }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    })
   } catch (error) {
     if (error instanceof ZodError) {
-      return Response.json(
-        {
+      return new Response(
+        JSON.stringify({
           error: "Validation error",
           validationError: new ValidationError(error.issues),
-        },
-        { status: 400 },
-      );
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      )
     } else {
-      return Response.json(
-        {
+      return new Response(
+        JSON.stringify({
           error: "Failed to update app",
           databaseError: new DatabaseError(),
-        },
-        { status: 500 },
-      );
+        }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      )
     }
   }
-});
+}
 
-export const PUT = auth(async (req) => {
-  if (!req.auth) {
-    return Response.json({ message: "Not authenticated" }, { status: 401 });
+export async function PUT(req: Request, res: Response): Promise<Response> {
+  if (req.method !== "PUT" && req.method !== "POST") {
+    return new Response(`Method ${req.method} Not Allowed`, {
+      status: 405,
+      headers: { Allow: "PUT, POST" },
+    })
   }
 
   try {
-    const body = await req.json();
-    const appDetails = appSchema.parse(body);
-    const AppId = await createApp(appDetails);
+    const body = await req.json()
+    const appDetails = appSchema.parse(body)
+    console.log(appDetails)
 
-    return Response.json({ message: "App updated successfully", appId: AppId });
+    const AppId = await createApp(appDetails)
+    return new Response(JSON.stringify({ message: "App updated successfully", appId: AppId }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    })
   } catch (error) {
     if (error instanceof ZodError) {
-      return Response.json(
-        {
+      return new Response(
+        JSON.stringify({
           error: "Validation error",
           validationError: new ValidationError(error.issues),
-        },
-        { status: 400 },
-      );
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      )
     } else {
-      return Response.json(
-        {
+      return new Response(
+        JSON.stringify({
           error: "Failed to update app",
           databaseError: new DatabaseError(),
-        },
-        { status: 500 },
-      );
+        }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      )
     }
   }
-});
+}

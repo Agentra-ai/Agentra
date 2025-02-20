@@ -1,23 +1,23 @@
-import { Fragment } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import clsx from "clsx";
-import { X } from "lucide-react";
+import { Fragment } from "react"
+import { Dialog, Transition } from "@headlessui/react"
+import clsx from "clsx"
+import { X } from "lucide-react"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 // https://headlessui.com/react/dialog
 
 type IModal = {
-  className?: string;
-  wrapperClassName?: string;
-  isShow: boolean;
-  onClose?: () => void;
-  title?: React.ReactNode;
-  description?: React.ReactNode;
-  children?: React.ReactNode;
-  closableIcon?: boolean;
-  overflowVisible?: boolean;
-};
+  className?: string
+  wrapperClassName?: string
+  isShow: boolean
+  onClose?: () => void
+  title?: React.ReactNode
+  description?: React.ReactNode
+  children?: React.ReactNode
+  closableIcon?: boolean
+  overflowVisible?: boolean
+}
 
 export default function Modal({
   className,
@@ -48,8 +48,8 @@ export default function Modal({
         <div
           className="fixed inset-0 z-40 overflow-y-auto"
           onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
+            e.preventDefault()
+            e.stopPropagation()
           }}
         >
           <div className="flex min-h-full items-center justify-center p-4 text-center text-sm">
@@ -66,7 +66,7 @@ export default function Modal({
                 className={clsx(
                   "relative z-40 rounded-lg bg-white p-4 shadow-xl",
                   overflowVisible ? "overflow-visible" : "overflow-hidden",
-                  className,
+                  className
                 )}
               >
                 {title && (
@@ -88,8 +88,8 @@ export default function Modal({
                       className="h-4 w-4 text-gray-500"
                       fill="black"
                       onClick={(e) => {
-                        e.stopPropagation();
-                        onClose();
+                        e.stopPropagation()
+                        onClose()
                       }}
                     />
                   </div>
@@ -101,5 +101,5 @@ export default function Modal({
         </div>
       </Dialog>
     </Transition>
-  );
+  )
 }

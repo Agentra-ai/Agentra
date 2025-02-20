@@ -1,15 +1,15 @@
-import { forwardRef, type HTMLAttributes, type ReactNode } from "react";
+import { forwardRef, type HTMLAttributes, type ReactNode } from "react"
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"
 
 export const PageTitle = forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement> & {
-    action?: ReactNode;
-    subtitle?: ReactNode;
+    action?: ReactNode
+    subtitle?: ReactNode
   }
 >(({ action, children, className, ...otherProps }, ref) => {
-  if (!children) return null;
+  if (!children) return null
 
   return (
     <header
@@ -28,7 +28,8 @@ export const PageTitle = forwardRef<
         </p>
       )}
     </header>
-  );
-});
+  )
+})
 
-PageTitle.displayName = "PageTitle";
+PageTitle.displayName = "PageTitle"
+

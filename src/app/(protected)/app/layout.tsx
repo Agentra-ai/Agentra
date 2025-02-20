@@ -1,25 +1,26 @@
-"use client";
+"use client"
 
-import { usePathname, useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { ScrollTextIcon } from "lucide-react";
-// Import the icons
-import { GiSpeedometer } from "react-icons/gi";
-import { IoColorFilterOutline } from "react-icons/io5";
-import { SiPoe } from "react-icons/si";
+import { usePathname, useRouter } from "next/navigation"
+import { motion } from "framer-motion"
+import {
+  ScrollTextIcon,
+} from "lucide-react"
+import { GiSpeedometer } from "react-icons/gi"
+import { IoColorFilterOutline } from "react-icons/io5"
+import { SiPoe } from "react-icons/si"
 
-import StudioSidebar from "@/components/protected/studio-sidebar";
+import StudioSidebar from "@/components/protected/studio-sidebar"
 
-import Configuration from "./[id]/configuration/page";
-import Customization from "./[id]/customization/page";
-import LogsHistory from "./[id]/logs/page";
-import Monitoring from "./[id]/monitoring/page";
+import Configuration from "./[id]/configuration/page"
+import Customization from "./[id]/customization/page"
+import LogsHistory from "./[id]/logs/page"
+import Monitoring from "./[id]/monitoring/page"
 
 interface Tab {
-  id: string;
-  label: string;
-  href: (id: string) => string;
-  icon: React.ReactNode;
+  id: string
+  label: string
+  href: (id: string) => string
+  icon: React.ReactNode
 }
 
 const tabs: Tab[] = [
@@ -47,23 +48,23 @@ const tabs: Tab[] = [
     href: (id: string) => `/app/${id}/customization`,
     icon: <IoColorFilterOutline size={18} strokeWidth={1.5} />,
   },
-];
+]
 
 const StudioLayout = () => {
-  const router = useRouter();
-  const pathname = usePathname();
-  const appId = pathname?.split("/")[2]; // Extract the dynamic id from the URL
+  const router = useRouter()
+  const pathname = usePathname()
+  const appId = pathname?.split("/")[2] // Extract the dynamic id from the URL
 
-  console.log(appId);
+  console.log(appId)
   if (!appId) {
-    return <div>Error: ID not found in URL.</div>;
+    return <div>Error: ID not found in URL.</div>
   }
 
-  const currentTab = tabs.find((tab) => pathname.includes(tab.id)) || tabs[0];
+  const currentTab = tabs.find((tab) => pathname.includes(tab.id)) || tabs[0]
 
   const handleTabChange = (href: string) => {
-    router.push(href); // Navigate to the selected tab route
-  };
+    router.push(href) // Navigate to the selected tab route
+  }
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -72,7 +73,7 @@ const StudioLayout = () => {
         links={tabs.map((tab) => ({
           href: tab.href(appId),
           label: tab.label,
-          icons: tab.icon,
+          icons: tab.icon, // Pass the icon to Sidebar
         }))}
       />
 
@@ -98,7 +99,7 @@ const StudioLayout = () => {
         </motion.div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default StudioLayout;
+export default StudioLayout

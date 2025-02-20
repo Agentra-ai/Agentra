@@ -1,9 +1,9 @@
-import React from "react";
-import { IoClose } from "react-icons/io5";
+import React from "react"
+import { IoClose } from "react-icons/io5"
 
-import { MonitoringDataType } from "@/app/services/monitoring/monitoring-service";
+import { MonitoringDataType } from "@/app/services/monitoring/monitoring-service"
 
-import { CurveChart } from "../charts/curve-chart";
+import { CurveChart } from "../charts/curve-chart"
 
 const chartColors = [
   "hsl(var(--chart-2))",
@@ -12,35 +12,25 @@ const chartColors = [
   "hsl(var(--chart-3))",
   "hsl(var(--chart-4))",
   "hsl(var(--chart-4))",
-];
+]
 
 interface MonitoringChartProps {
-  monitoringData: MonitoringDataType;
+  monitoringData: MonitoringDataType
 }
 
 const MonitoringChart: React.FC<MonitoringChartProps> = ({
   monitoringData,
 }) => {
-  const chartDataArray = [];
-  if (monitoringData.chartData) {
-    const {
-      conversations,
-      messages,
-      totalTokens,
-      completionTokens,
-      promptTokens,
-      tokenSpeed,
-    } = monitoringData.chartData;
-    chartDataArray.push(
-      conversations,
-      messages,
-      totalTokens,
-      tokenSpeed,
-      completionTokens,
-      promptTokens,
-    );
-  }
-  console.log("chartDataArray", chartDataArray);
+  const { conversations, messages, totalTokens, completionTokens, promptTokens, tokenSpeed } = monitoringData.chartData
+  const chartDataArray = [
+    conversations,
+    messages,
+    totalTokens,
+    tokenSpeed,
+    completionTokens,
+    promptTokens
+  ]
+console.log("chartDataArray", chartDataArray)
   return (
     <div className="mb-4 mt-8">
       {/* Analysis Header */}
@@ -72,7 +62,7 @@ const MonitoringChart: React.FC<MonitoringChartProps> = ({
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MonitoringChart;
+export default MonitoringChart

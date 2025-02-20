@@ -1,17 +1,17 @@
-import React, { useState } from "react";
-import Modal from "@/components/modal";
-import Image from "next/image";
+import React, { useState } from "react"
+import Modal from "@/components/modal"
+import Image from "next/image"
 
 interface EmbeddingAppModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean
+  onClose: () => void
 }
 
 export const EmbeddingAppModal: React.FC<EmbeddingAppModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const [selectedOption, setSelectedOption] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(0)
 
   const options = [
     {
@@ -26,7 +26,7 @@ export const EmbeddingAppModal: React.FC<EmbeddingAppModalProps> = ({
       title: "Option 3",
       iframeCode: `<iframe src="https://your-app-link-3.com" style="width: 100%; height: 100%; min-height: 700px;" frameborder="0" allow="microphone"></iframe>`,
     },
-  ];
+  ]
 
   return (
     <Modal isShow={isOpen} onClose={onClose} className="w-2/3 bg-gray-50 p-6">
@@ -67,7 +67,7 @@ export const EmbeddingAppModal: React.FC<EmbeddingAppModalProps> = ({
           className="mt-4 rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
           onClick={() =>
             navigator.clipboard.writeText(
-              options[selectedOption]?.iframeCode ?? "",
+              options[selectedOption]?.iframeCode ?? ""
             )
           }
         >
@@ -75,5 +75,5 @@ export const EmbeddingAppModal: React.FC<EmbeddingAppModalProps> = ({
         </button>
       </div>
     </Modal>
-  );
-};
+  )
+}

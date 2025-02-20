@@ -1,33 +1,33 @@
 /* eslint-disable @typescript-eslint/prefer-optional-chain -- allow */
-import { redirect } from "next/navigation";
-import { getUserSubscriptions } from "@/actions/subscription-action";
+import { redirect } from "next/navigation"
+import { getUserSubscriptions } from "@/actions/subscription-action"
 
-import db from "@/drizzle";
-import { pricingPlans, TypePricingPlan } from "@/drizzle/schema";
+import { db } from "@/lib/db"
+import { pricingPlans, TypePricingPlan } from "@/lib/db/schema"
 
-import { InfoMessage, NoPlans, Plan } from "./plan";
+import { InfoMessage, NoPlans, Plan } from "./plan"
 
 export async function ChangePlans({
   currentPlan,
 }: {
-  currentPlan?: TypePricingPlan;
+  currentPlan?: TypePricingPlan
 }) {
-  const allPlans: TypePricingPlan[] = await db.select().from(pricingPlans);
-  const userSubscriptions = await getUserSubscriptions();
+  const allPlans: TypePricingPlan[] = await db.select().from(pricingPlans)
+  const userSubscriptions = await getUserSubscriptions()
 
   // If user does not have a valid subscription, redirect to the billing page, or
   // if there are no plans in the database, redirect to the billing page to fetch.
   if (!userSubscriptions.length || !allPlans.length) {
-    redirect("/dashboard/billing");
+    redirect("/dashboard/billing")
   }
 
-  const isCurrentPlanUsageBased = currentPlan?.isUsageBased;
+  const isCurrentPlanUsageBased = currentPlan?.isUsageBased
 
   const filteredPlans = allPlans
     .filter((plan) => {
       return isCurrentPlanUsageBased
         ? Boolean(plan.isUsageBased)
-        : Boolean(!plan.isUsageBased);
+        : Boolean(!plan.isUsageBased)
     })
     .sort((a, b) => {
       if (
@@ -36,14 +36,14 @@ export async function ChangePlans({
         b.sort === undefined ||
         b.sort === null
       ) {
-        return 0;
+        return 0
       }
 
-      return a.sort - b.sort;
-    });
+      return a.sort - b.sort
+    })
 
   if (filteredPlans.length < 2) {
-    return <NoPlans />;
+    return <NoPlans />
   }
 
   return (
@@ -57,11 +57,11 @@ export async function ChangePlans({
               plan={plan}
               currentPlan={currentPlan}
             />
-          );
+          )
         })}
       </div>
 
       <InfoMessage />
     </div>
-  );
+  )
 }

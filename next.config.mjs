@@ -1,25 +1,21 @@
 /** @type {import('next').NextConfig} */
+import crypto from "node:crypto"
+globalThis.crypto ??= crypto.webcrypto
+
 const nextConfig = {
-    images: {
-        remotePatterns: [
-          {
-            protocol: "https",
-            hostname: "avatars.githubusercontent.com",
-          },
-          {
-            protocol: "https",
-            hostname: "lh3.googleusercontent.com",
-          },
-          {
-            protocol: "https",
-            hostname: "uploadthing.com",
-          },
-          {
-            protocol: 'https',
-            hostname: 'daama-app-document.s3.eu-north-1.amazonaws.com',
-          },
-        ],
+  webpack: (config, { webpack }) => {
+    config.externals.push("@node-rs/argon2", "@node-rs/bcrypt");
+    return config;
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'avatars.githubusercontent.com',
       },
+    ],
+  },
 };
 
 export default nextConfig;
+

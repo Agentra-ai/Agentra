@@ -1,50 +1,48 @@
-"use client";
+"use client"
 
-import React from "react";
-import { useRouter } from "next/navigation";
-import { EllipsisVertical, FilePenLine, Trash2 } from "lucide-react";
+import React from "react"
+import { useRouter } from "next/navigation"
+import { FilePenLine, Trash2 } from "lucide-react"
+import { AppDocuments as _appDocuments, AppDocumentType } from "@/lib/db/schema"
+import { deleteMultipleFilesFromS3 } from "@/hooks/api-action/s3"
+import { useToast } from "@/hooks/use-toast"
 import Image from "next/image";
-import {
-  AppDocuments as _appDocuments,
-  AppDocumentType,
-} from "@/drizzle/schema"; // Import table schemas
-import { deleteMultipleFilesFromS3 } from "@/hooks/api-action/s3";
-import { useToast } from "@/hooks/use-toast";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import LoadingIcon from "@/components/loading";
-import DeleteAppDocsModal from "@/components/protected/Modals/delete-docs-modal";
-import UpdateDocsModal from "@/components/protected/Modals/update-docs-modal";
+} from "@/components/ui/popover"
+import LoadingIcon from "@/components/loading"
+import DeleteAppDocsModal from "@/components/protected/Modals/delete-docs-modal"
+import UpdateDocsModal from "@/components/protected/Modals/update-docs-modal"
 import {
   useAppDocs,
   useDeleteAppDocument,
   useDocsHubData,
   useUpdateAppDocument,
-} from "@/app/services/app-docs/app-docs-service";
+} from "@/app/services/app-docs/app-docs-service"
+import { LuEllipsisVertical } from "react-icons/lu"
 
-type Props = {};
+type Props = {}
 
 const DocsHubDocument = (props: Props) => {
-  const router = useRouter();
+  const router = useRouter()
   const [appDocumentFolder, setAppDocumentFolder] = React.useState<
     AppDocumentType[]
-  >([]);
+  >([])
 
   //dont delete it, it will be helping for edit documents in popover
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false)
   const [selectedApp, setSelectedApp] = React.useState<AppDocumentType | null>(
-    null,
-  );
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+    null
+  )
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false)
   const [documentToDelete, setDocumentToDelete] =
-    React.useState<AppDocumentType | null>(null);
+    React.useState<AppDocumentType | null>(null)
 
-  const { toast } = useToast();
-  const { DocsHubData, isLoading, error } = useDocsHubData();
-  const { deleteAppDocument } = useDeleteAppDocument();
+  const { toast } = useToast()
+  const { DocsHubData, isLoading, error } = useDocsHubData()
+  const { deleteAppDocument } = useDeleteAppDocument()
 
   React.useEffect(() => {
     if (
@@ -54,72 +52,72 @@ const DocsHubDocument = (props: Props) => {
     ) {
       const sortedDocs = [...DocsHubData].sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-      setAppDocumentFolder(sortedDocs);
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
+      setAppDocumentFolder(sortedDocs)
     }
-  }, [DocsHubData, isLoading, appDocumentFolder]); // Only depend on appDocs and isLoading
+  }, [DocsHubData, isLoading, appDocumentFolder])
 
   const handleDeleteConfirmation = (documents: AppDocumentType) => {
-    setDocumentToDelete(documents);
-    setIsDeleteModalOpen(true);
-  };
+    setDocumentToDelete(documents)
+    setIsDeleteModalOpen(true)
+  }
 
   const confirmDeleteApp = async () => {
     if (documentToDelete) {
       //@ts-ignore
       const deletionFile = documentToDelete?.fileKeys?.map((file) =>
-        typeof file === "object" ? file.fileKey : file,
-      );
+        typeof file === "object" ? file.fileKey : file
+      )
       try {
-        await deleteAppDocument(documentToDelete.id);
+        await deleteAppDocument(documentToDelete.id)
         if (documentToDelete.fileKeys) {
-          await deleteMultipleFilesFromS3(deletionFile as string[]);
+          await deleteMultipleFilesFromS3(deletionFile as string[])
         }
         toast({
           title: "Document Deleted",
           description: `${documentToDelete.name} has been deleted successfully.`,
           variant: "default",
-        });
-        setIsDeleteModalOpen(false);
-        setDocumentToDelete(null);
+        })
+        setIsDeleteModalOpen(false)
+        setDocumentToDelete(null)
       } catch (error) {
         toast({
           title: "Error",
           description: "Failed to delete document",
           variant: "destructive",
-        });
+        })
       }
     }
-  };
+  }
 
-  const { updateAppDocument } = useUpdateAppDocument();
+  const { updateAppDocument } = useUpdateAppDocument()
 
   const handleUpdateDocs = async (data: {
-    name: string;
-    description: string;
-    icon: string;
+    name: string
+    description: string
+    icon: string
   }) => {
-    console.log(data);
+    console.log(data)
     try {
       if (selectedApp?.id) {
-        console.log("clicked");
-        await updateAppDocument(selectedApp.id, data);
-        handleModalClose();
+        console.log("clicked")
+        await updateAppDocument(selectedApp.id, data)
+        handleModalClose()
       }
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to update document",
         variant: "destructive",
-      });
+      })
     }
-  };
+  }
 
   const handleModalClose = () => {
-    setIsModalOpen(false);
-    setSelectedApp(null);
-  };
+    setIsModalOpen(false)
+    setSelectedApp(null)
+  }
 
   return (
     <div className="flex h-[calc(100vh-60px)] flex-col bg-[#f3f5f7]">
@@ -131,7 +129,7 @@ const DocsHubDocument = (props: Props) => {
           <div className="flex gap-6 text-[16px] text-gray-600">
             <button className="text-blue-700">DOCSHUB</button>
           </div>
-          <div className="flex space-x-4">
+          <div className="flex space-x-4">  
             <button className="rounded-[8px] px-4 py-1 text-sm text-gray-700">
               All Tags
             </button>
@@ -191,7 +189,7 @@ const DocsHubDocument = (props: Props) => {
                     className="relative h-[180px] cursor-pointer rounded-xl border-gray-300 bg-white p-4 shadow transition-shadow hover:shadow-md"
                     onClick={(e) => {
                       if (!e.defaultPrevented) {
-                        router.push(`/docs/${docs.id}/documents`);
+                        router.push(`/docs/${docs.id}/documents`)
                       }
                     }}
                   >
@@ -212,10 +210,8 @@ const DocsHubDocument = (props: Props) => {
                         </span>
                       )}
                       <h2 className="flex flex-col text-gray-800">
-                        <span className="break-words text-[14px] font-semibold">
-                          {docs.name.length > 22
-                            ? `${docs.name.substring(0, 22)}...`
-                            : docs.name}
+                        <span className="text-[14px] font-semibold break-words">
+                          {docs.name.length > 22 ? `${docs.name.substring(0, 22)}...` : docs.name}
                         </span>
                         <span className="text-[11px] text-gray-600">
                           20 files
@@ -238,7 +234,7 @@ const DocsHubDocument = (props: Props) => {
                             className="z-50 rounded-lg p-1 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            <EllipsisVertical size={18} />
+                            <LuEllipsisVertical size={18} />
                           </button>
                         </PopoverTrigger>
                         <PopoverContent className="z-10 mt-2 w-36 rounded-md bg-white p-0 shadow-lg">
@@ -247,8 +243,8 @@ const DocsHubDocument = (props: Props) => {
                               <button
                                 className="flex w-full gap-2 px-2 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
                                 onClick={() => {
-                                  setSelectedApp(docs);
-                                  setIsModalOpen(true);
+                                  setSelectedApp(docs)
+                                  setIsModalOpen(true)
                                 }}
                               >
                                 <FilePenLine
@@ -302,7 +298,7 @@ const DocsHubDocument = (props: Props) => {
         onUpdateDocs={handleUpdateDocs}
       />
     </div>
-  );
-};
+  )
+}
 
-export default DocsHubDocument;
+export default DocsHubDocument

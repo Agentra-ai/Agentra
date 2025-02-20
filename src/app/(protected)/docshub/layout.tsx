@@ -1,8 +1,8 @@
-import { ReactNode } from "react";
-import { BookOpenTextIcon, MessagesSquareIcon } from "lucide-react";
-import { VscFolderLibrary } from "react-icons/vsc";
+import { ReactNode } from "react"
+import { BookOpenTextIcon, MessagesSquareIcon } from "lucide-react"
+import { VscFolderLibrary } from "react-icons/vsc"
 
-import Sidebar from "@/components/protected/sidebar";
+import Sidebar from "@/components/protected/sidebar"
 
 const docsvaultLinks = [
   {
@@ -16,9 +16,9 @@ const docsvaultLinks = [
     icons: <VscFolderLibrary size={20} strokeWidth={0.2} />,
   },
   // Add more links as needed
-];
+]
 interface LayoutProps {
-  children: ReactNode;
+  children: ReactNode
 }
 
 const BoardLayout = ({ children }: LayoutProps) => {
@@ -29,7 +29,7 @@ const BoardLayout = ({ children }: LayoutProps) => {
         <main className="flex-1">{children}</main>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default BoardLayout;
+export default BoardLayout

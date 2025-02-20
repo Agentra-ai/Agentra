@@ -1,125 +1,51 @@
-import "@/styles/globals.css";
+import Navbar from "@/components/Navbar";
+import { SessionProvider } from "@/components/auth/SessionProvider";
+import { Providers } from "@/components/provider/Providers";
+import { fontAnek, fontGeist, fontHeading,fontOutfit, fontUrbanist } from "@/config/font";
+import { validateRequest } from "@/lib/auth/get-session";
+// import Script from "next/script";
+import "./globals.css";
 
-import * as React from "react";
-import type { Metadata, Viewport } from "next";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
-
-// import { Analytics } from "@vercel/analytics/react"
-
-import {
-  fontAnek,
-  fontGeist,
-  fontHeading,
-  fontIbemPlex,
-  fontInter,
-  fontOutfit,
-  fontUrbanist,
-} from "@/lib/fonts";
-import { siteConfig } from "@/lib/site";
-
-import { ThemeProvider } from "@/provider/theme-provider";
-import SWRProviders from "@/lib/swr-provider";
+import viewportConfig  from "@/config/viewport";
 import { cn } from "@/lib/utils";
-import { Navbar } from "@/components/navbar";
-import { Toaster } from "@/components/ui/toaster";
-import { Tooltip } from "@/components/ui/tooltip";
-import { Providers } from "@/components/providers";
+import { siteConfig } from "@/config/metadata";
+import { SWRConfig } from "swr";
 
-// import { TailwindIndicator } from "@/components/tailwind-indicator"
+export const metadata = siteConfig;
+export const viewport = viewportConfig;
 
-// export const viewport: Viewport = {
-//   width: "device-width",
-//   initialScale: 1,
-//   minimumScale: 1,
-//   maximumScale: 1,
-//   themeColor: [
-//     { media: "(prefers-color-scheme: light)", color: "white" },
-//     { media: "(prefers-color-scheme: dark)", color: "black" },
-//   ],
-// }
-
-export const metadata = {
-  metadataBase: new URL(process.env.BASE_URL ?? ""),
-  title: {
-    default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
-  },
-  description: siteConfig.description,
-  authors: [
-    {
-      name: siteConfig.author,
-      url: siteConfig.links.authorsWebsite,
-    },
-  ],
-  creator: siteConfig.author,
-  keywords: siteConfig.keywords,
-  robots: {
-    index: true,
-    follow: true,
-  },
-
-  openGraph: {
-    type: "website",
-    locale: "en_US",
-    url: siteConfig.url,
-    title: siteConfig.name,
-    description: siteConfig.description,
-    siteName: siteConfig.name,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.name,
-    description: siteConfig.description,
-    // images: [siteConfig.links.openGraphImage],
-    creator: siteConfig.author,
-  },
-  icons: {
-    icon: "/floxify-logo.png",
-  },
-  // manifest: siteConfig.links.manifestFile,
-};
-
-interface RootLayoutProps {
+export default async function RootLayout({
+  children,
+}: Readonly<{
   children: React.ReactNode;
-}
+}>) {
+  const session = await validateRequest();
 
-export default function RootLayout({ children }: RootLayoutProps): JSX.Element {
   return (
-    <html lang="en" className="overflow-x-hidden">
-      <head>
-        <link rel="icon" href="/floxify-logo.png" />
-      </head>
-
+    <html lang="en">
+      {/* <Script
+        // async
+        // src={process.env.UMAMI_SRC}
+        // data-website-id={process.env.UMAMI_DATA_WEBSITE_ID}
+      /> */}
       <body
         className={cn(
-          "w-full font-sans antialiased",
-          fontInter.variable,
-          fontUrbanist.variable,
-          fontHeading.variable,
           fontAnek.variable,
           fontGeist.variable,
+          fontHeading.variable,
+          // fontInter.variable,
+          fontUrbanist.variable,
           fontOutfit.variable,
-          fontIbemPlex.variable,
-        )}
-      >
-        <Providers>
-          <TooltipProvider>
-            <Tooltip delayDuration={0}>
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="light"
-                enableSystem
-                disableTransitionOnChange
-              >
-                <SWRProviders>
-                  {/* <Navbar/> */}
-                  {children}
-                </SWRProviders>
-                <Toaster />
-              </ThemeProvider>
-            </Tooltip>
-          </TooltipProvider>
-        </Providers>
+          "min-h-screen h-screen"
+        )}>
+        <SessionProvider session={session}>
+          <Providers>
+            {/* <Navbar /> */}
+          <SWRConfig>
+            {children}
+          </SWRConfig>
+          </Providers>
+        </SessionProvider>
       </body>
     </html>
   );

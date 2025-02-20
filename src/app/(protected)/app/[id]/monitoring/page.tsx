@@ -1,41 +1,40 @@
-"use client";
+"use client"
 
-import React from "react";
-import { redirect, usePathname } from "next/navigation";
-import { Settings } from "lucide-react";
-import { FaLaptopCode } from "react-icons/fa";
-import { SlRocket } from "react-icons/sl";
+import React from "react"
+import { redirect, usePathname } from "next/navigation"
+import { Settings } from "lucide-react"
+import { FaLaptopCode } from "react-icons/fa"
+import { SlRocket } from "react-icons/sl"
 
-import { EmbeddingAppModal } from "@/components/protected/Modals/embedding-app-modal";
-import MonitoringChart from "@/components/protected/monitoring/monitoring-chart";
+import { EmbeddingAppModal } from "@/components/protected/Modals/embedding-app-modal"
+import MonitoringChart from "@/components/protected/monitoring/monitoring-chart"
 import useGetAppMonitering, {
   MonitoringDataType,
-} from "@/app/services/monitoring/monitoring-service";
-import { Button } from "@/components/ui/button";
+} from "@/app/services/monitoring/monitoring-service"
 
 const getAppId = (pathname: string | null) => {
-  const id = pathname?.split("/")[2];
+  const id = pathname?.split("/")[2]
   if (!id) {
-    redirect("apps/studio");
+    redirect("apps/studio")
   }
-  return id;
-};
+  return id
+}
 
 const Monitoring = () => {
-  const pathname = usePathname();
-  const appId = React.useMemo(() => getAppId(pathname), [pathname]);
+  const pathname = usePathname()
+  const appId = React.useMemo(() => getAppId(pathname), [pathname])
 
-  const { appMonitoringData, error, isLoading } = useGetAppMonitering(appId);
+  const { appMonitoringData, error, isLoading } = useGetAppMonitering(appId)
 
-  const [isEmbeddingModalOpen, setIsEmbeddingModalOpen] = React.useState(false);
+  const [isEmbeddingModalOpen, setIsEmbeddingModalOpen] = React.useState(false)
 
   const handleOpenEmbeddingModal = () => {
-    setIsEmbeddingModalOpen(true);
-  };
+    setIsEmbeddingModalOpen(true)
+  }
 
   const handleCloseEmbeddingModal = () => {
-    setIsEmbeddingModalOpen(false);
-  };
+    setIsEmbeddingModalOpen(false)
+  }
 
   return (
     <div className="flex h-full w-full flex-col px-14 py-6 text-sm">
@@ -52,10 +51,9 @@ const Monitoring = () => {
           purchase additional quota. we have Plan for Start-ups to Enterprises
           level all business.
         </span>
-        <Button variant="blue" className="max-w-[250px] self-start">
-          {" "}
+        <button className="mt-2 w-[160px] rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-600">
           See Pricing
-        </Button>
+        </button>
       </div>
 
       {/* Monitoring Section */}
@@ -74,7 +72,7 @@ const Monitoring = () => {
             <div className="flex items-center justify-between rounded-[8px] bg-gray-100 p-2">
               <input
                 type="text"
-                value="https://cloud.floxify.ai/chat/qBLFbE6xtJiTqEYn"
+                value="https://dama.app/chat/qBLFbE6xtJiTqEYn"
                 className="w-full border-none bg-transparent text-[13px] text-gray-700 outline-none"
                 readOnly
               />
@@ -159,7 +157,7 @@ const Monitoring = () => {
         onClose={handleCloseEmbeddingModal}
       />
     </div>
-  );
-};
+  )
+}
 
-export default Monitoring;
+export default Monitoring
