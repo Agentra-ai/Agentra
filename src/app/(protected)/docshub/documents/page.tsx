@@ -1,12 +1,10 @@
-import React from 'react'
-import DocsHubDocument from './docshub'
+import React from "react";
+import DocsHubDocument from "./docshub";
 
-type Props = {}
+type Props = {};
 
 const DocsHub = (props: Props) => {
-  return (
-    <DocsHubDocument/>
-  )
-}
+  return <DocsHubDocument />;
+};
 
-export default DocsHub
+export default DocsHub;

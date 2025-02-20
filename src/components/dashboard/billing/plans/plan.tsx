@@ -1,24 +1,24 @@
-import { Alert } from "@lemonsqueezy/wedges"
-import { SearchXIcon } from "lucide-react"
+import { Alert } from "@lemonsqueezy/wedges";
+import { SearchXIcon } from "lucide-react";
 
-import { TypePricingPlan } from "@/lib/db/schema"
+import { TypePricingPlan } from "@/drizzle/schema";
 
-import { cn, formatPrice } from "@/lib/utils"
+import { cn, formatPrice } from "@/lib/utils";
 
-import { Section } from "../../section"
-import { SignupButton } from "./signup-button"
+import { Section } from "../../section";
+import { SignupButton } from "./signup-button";
 
 export function Plan({
   plan,
   currentPlan = null,
   isChangingPlans = false,
 }: {
-  plan: TypePricingPlan
-  currentPlan?: TypePricingPlan | null
-  isChangingPlans?: boolean
+  plan: TypePricingPlan;
+  currentPlan?: TypePricingPlan | null;
+  isChangingPlans?: boolean;
 }) {
-  const { description, id, productName, interval, name, price } = plan
-  const isCurrent = id && currentPlan?.id === id
+  const { description, id, productName, interval, name, price } = plan;
+  const isCurrent = id && currentPlan?.id === id;
 
   return (
     <Section className={cn("not-prose", isCurrent && "bg-surface-50/40")}>
@@ -57,7 +57,7 @@ export function Plan({
         />
       </Section.Item>
     </Section>
-  )
+  );
 }
 
 export function NoPlans() {
@@ -76,7 +76,7 @@ export function NoPlans() {
         There are no plans available at the moment.
       </p>
     </section>
-  )
+  );
 }
 
 export function InfoMessage() {
@@ -92,5 +92,5 @@ export function InfoMessage() {
       </a>{" "}
       on how to do test payments with Lemon Squeezy.
     </Alert>
-  )
+  );
 }

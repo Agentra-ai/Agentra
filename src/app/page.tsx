@@ -1,50 +1,90 @@
-import { Footer } from "@/components/Footer";
-import { FeatureGrid } from "@/components/landing/FeatureGrid";
-import { Spotlight } from "@/components/ui/Spotlight";
-import { Button } from "@nextui-org/react";
-import {
-  SparklesIcon
-} from "lucide-react";
-import Link from "next/link";
-
-export default function Home() {
+export default function HomePage() {
   return (
-    <>
-      <main className="flex-1 w-full">
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container  grid items-center gap-4 px-4 text-center md:px-6 md:gap-10">
-            <div className="space-y-3 relative">
-              <Spotlight
-                className="-top-40 left-0 md:left-60 md:-top-20"
-                fill="white"
-              />{" "}
-              <h1 className="text-4xl md:text-6xl font-bold text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50">
-                Elevate Your Authentication <br />
-                Experience with this Starter Kit .
-              </h1>
-              <p className="pt-4 font-normal text-base lg:text-lg text-neutral-300 max-w-lg text-center mx-auto">
-                Tired of spending hours configuring authentication? setup is
-                quick and painless, so you can focus on building amazing
-                applications.
-              </p>
-            </div>
-            <div className="flex justify-center gap-6 items-center">
-              <Button
-                startContent={<SparklesIcon className="size-5" />}
-                size="lg"
-                as={Link}
-                href="/protected">
-                Sign in
-              </Button>
-              <Button size="lg" variant="bordered" as={Link} href="/protected">
-                Dashboard
-              </Button>
-            </div>
-          </div>
-        </section>
-        <FeatureGrid />
-        <Footer />
-      </main>
-    </>
+    <main className="mt-4">
+      <div className="container">
+        <h1 className="text-3xl font-bold tracking-tight">Welcome</h1>
+
+        <div className="my-2 h-1 bg-muted" />
+        <h2 className="text-2xl font-bold tracking-tight">Features</h2>
+
+        <ul className="mt-4 grid grid-cols-2 gap-2">
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            User in Client Components
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            User in Server Components
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Credentials Provider
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Protect Pages
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Signout
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Google OAuth Provider
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Github OAuth Provider
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Auth.js Drizzle Adapter
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Extend Session Information
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Auth.js Extend Types
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Auth.js Session Events
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Update Session (Client)
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Auth.js Session Callbacks
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Custom errors
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Account Linking
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Middleware
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            User Roles
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Admin Dashboard
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Email Verification
+          </li>
+          <li className="line-clamp-1 break-all p-2 shadow hover:bg-muted">
+            Password Reset
+          </li>
+        </ul>
+
+        <div className="my-2 h-1 bg-muted" />
+        <h2 className="text-2xl font-bold tracking-tight">Created With</h2>
+
+        <ul className="mt-4 grid grid-cols-4 gap-2">
+          <li className="p-2 shadow hover:bg-muted">Next.js</li>
+          <li className="p-2 shadow hover:bg-muted">Tailwind</li>
+          <li className="p-2 shadow hover:bg-muted">shadcn/ui</li>
+          <li className="p-2 shadow hover:bg-muted">Auth.js</li>
+          <li className="p-2 shadow hover:bg-muted">Drizzle ORM</li>
+          <li className="p-2 shadow hover:bg-muted">NeonDB</li>
+          <li className="p-2 shadow hover:bg-muted">PostgreSQL</li>
+          <li className="p-2 shadow hover:bg-muted">Valibot</li>
+          <li className="p-2 shadow hover:bg-muted">TypeScript</li>
+        </ul>
+      </div>
+    </main>
   );
 }

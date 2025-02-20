@@ -1,33 +1,33 @@
-"use server"
+"use server";
 
-import { insertVectorsDataToPG } from "@/actions/vectors/vectordb-action"
-import { getWorkspaceDetails } from "@/actions/workspace/workspace-action"
-import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf"
+import { insertVectorsDataToPG } from "@/actions/vectors/vectordb-action";
+import { getWorkspaceDetails } from "@/actions/workspace/workspace-action";
+import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf";
 import {
   Document,
   RecursiveCharacterTextSplitter,
-} from "@pinecone-database/doc-splitter"
-import { Pinecone, PineconeRecord } from "@pinecone-database/pinecone"
-import { v4 as uuidv4 } from "uuid"
+} from "@pinecone-database/doc-splitter";
+import { Pinecone, PineconeRecord } from "@pinecone-database/pinecone";
+import { v4 as uuidv4 } from "uuid";
 
-import { convertToAscii } from "@/lib/utils"
+import { convertToAscii } from "@/lib/utils";
 
-import { getEmbeddings } from "./embedding"
-import { getS3Url } from "./s3"
+import { getEmbeddings } from "./embedding";
+import { getS3Url } from "./s3";
 
 export const getPineconeClient = () => {
   return new Pinecone({
     // environment: process.env.PINECONE_ENVIRONMENT!,
     apiKey: process.env.PINACONE_API_KEY!,
-  })
-}
+  });
+};
 
 type PDFPage = {
-  pageContent: string
+  pageContent: string;
   metadata: {
-    loc: { pageNumber: number }
-  }
-}
+    loc: { pageNumber: number };
+  };
+};
 
 export async function loadFilesIntoPinecone(
   fileKey: string,
@@ -35,35 +35,35 @@ export async function loadFilesIntoPinecone(
   chunkOverlap: number,
   maxChunkLength: number,
   newFileId: string,
-  isDocsHub: boolean = false
+  isDocsHub: boolean = false,
 ) {
-  const workspaceDetails = await getWorkspaceDetails()
-  const workspaceNamespace = workspaceDetails?.workspaceVectorDB
+  const workspaceDetails = await getWorkspaceDetails();
+  const workspaceNamespace = workspaceDetails?.workspaceVectorDB;
 
   if (!workspaceNamespace) {
-    throw new Error("Workspace namespace not found in workspace details")
+    throw new Error("Workspace namespace not found in workspace details");
   }
 
-  const AWS_s3_url = await getS3Url(fileKey)
-  console.log(AWS_s3_url)
+  const AWS_s3_url = await getS3Url(fileKey);
+  console.log(AWS_s3_url);
 
-  const blobData = await fetchFileFromUrl(AWS_s3_url)
+  const blobData = await fetchFileFromUrl(AWS_s3_url);
   // console.log("blobData : ", blobData)
 
-  const textContent = await extractTextFromBlob(blobData)
+  const textContent = await extractTextFromBlob(blobData);
   // console.log("textContent : ", textContent)
 
-  const clearslashDeleteContent = textContent.replace(/\n/g, "")
+  const clearslashDeleteContent = textContent.replace(/\n/g, "");
   // console.log("clearslashDeleteContent : ", textContent)
 
-  console.log("textContent length : ", clearslashDeleteContent)
+  console.log("textContent length : ", clearslashDeleteContent);
 
   const splitterList = await splitTextContent(
     clearslashDeleteContent,
     maxChunkLength,
-    chunkOverlap
-  )
-  console.log("splitterList : ", splitterList)
+    chunkOverlap,
+  );
+  console.log("splitterList : ", splitterList);
 
   const documents = splitterList.map(
     (content, index) =>
@@ -75,45 +75,45 @@ export async function loadFilesIntoPinecone(
           file_key: fileKey,
           isDocshub: isDocsHub,
         },
-      })
-  )
+      }),
+  );
 
-  console.log("documents : ", documents)
+  console.log("documents : ", documents);
 
   const vectors = await Promise.all(
-    documents.map((doc) => embedDocument(doc, embeddingModal))
-  )
+    documents.map((doc) => embedDocument(doc, embeddingModal)),
+  );
 
-  console.log("vectors : ", vectors)
-  await upsertVectorsToPinecone(vectors, workspaceNamespace, newFileId)
+  console.log("vectors : ", vectors);
+  await upsertVectorsToPinecone(vectors, workspaceNamespace, newFileId);
 
   // Return a plain object instead of a Document instance
   return {
     pageContent: documents[0]?.pageContent,
     metadata: documents[0]?.metadata,
-  }
+  };
 }
 
 // New helper functions
 async function fetchFileFromUrl(url: string): Promise<Blob> {
-  const response = await fetch(url)
-  return await response.blob()
+  const response = await fetch(url);
+  return await response.blob();
 }
 
 async function extractTextFromBlob(blobData: Blob): Promise<string> {
-  const loader = new WebPDFLoader(blobData)
-  const docsPages = await loader.load()
-  let textContent = ""
+  const loader = new WebPDFLoader(blobData);
+  const docsPages = await loader.load();
+  let textContent = "";
   docsPages.forEach((doc) => {
-    textContent += doc.pageContent + " "
-  })
-  return textContent
+    textContent += doc.pageContent + " ";
+  });
+  return textContent;
 }
 
 export async function splitTextContent(
   textContent: string,
   chunkSize: number = 300,
-  chunkOverlap: number = 20
+  chunkOverlap: number = 20,
 ): Promise<string[]> {
   // Validate and enforce constraints
   if (chunkSize < 50) chunkSize = 50; // Minimum chunk size
@@ -154,7 +154,10 @@ export async function splitTextContent(
 
         if (extendedSpaceIndex !== -1 && extendedSpaceIndex <= extendedEnd) {
           end = extendedSpaceIndex; // Split at the space
-        } else if (extendedNewlineIndex !== -1 && extendedNewlineIndex <= extendedEnd) {
+        } else if (
+          extendedNewlineIndex !== -1 &&
+          extendedNewlineIndex <= extendedEnd
+        ) {
           end = extendedNewlineIndex; // Split at the newline
         } else {
           end = extendedEnd; // No delimiter found, extend by 20 characters
@@ -179,7 +182,7 @@ export async function splitTextContent(
       let overlapNewlineIndex = textContent.indexOf("\n", overlapStart);
       let overlapDelimiterIndex = Math.min(
         overlapSpaceIndex === -1 ? Infinity : overlapSpaceIndex,
-        overlapNewlineIndex === -1 ? Infinity : overlapNewlineIndex
+        overlapNewlineIndex === -1 ? Infinity : overlapNewlineIndex,
       );
 
       if (overlapDelimiterIndex <= end) {
@@ -199,55 +202,55 @@ export async function splitTextContent(
 async function upsertVectorsToPinecone(
   vectors: PineconeRecord[],
   workspaceNamespace: string,
-  newFileId: string
+  newFileId: string,
 ) {
-  const client = await getPineconeClient()
-  const pineconeIndex = await client.index("agentra-app-documents")
-  const nameSpaceName = convertToAscii(workspaceNamespace)
-  const namespace = pineconeIndex.namespace(nameSpaceName)
+  const client = await getPineconeClient();
+  const pineconeIndex = await client.index("agentra-app-documents");
+  const nameSpaceName = convertToAscii(workspaceNamespace);
+  const namespace = pineconeIndex.namespace(nameSpaceName);
 
-  console.log("inserting vectors into pinecone")
-  await namespace.upsert(vectors)
-  console.log("inserted vectors into pinecone in PG")
+  console.log("inserting vectors into pinecone");
+  await namespace.upsert(vectors);
+  console.log("inserted vectors into pinecone in PG");
 
   const dataSaveToPG = vectors.map((vector) => {
     return {
       vectorId: vector.id,
       filekey: String(vector.metadata?.file_key ?? ""),
       content: String(vector.metadata?.text ?? ""),
-    }
-  })
+    };
+  });
 
-  await insertVectorsDataToPG(dataSaveToPG, newFileId)
-  console.log("done")
+  await insertVectorsDataToPG(dataSaveToPG, newFileId);
+  console.log("done");
 }
 
 export async function embedDocument(doc: Document, embeddingModal?: string) {
   try {
-    const embeddings = await getEmbeddings(doc.pageContent, embeddingModal)
-    const upsertId = uuidv4()
-    console.log()
+    const embeddings = await getEmbeddings(doc.pageContent, embeddingModal);
+    const upsertId = uuidv4();
+    console.log();
     const Metadata = {
       text: doc.metadata.text,
       pageNumber: doc.metadata.pageNumber as number,
       file_key: doc.metadata.file_key as string,
       isActive: true,
       isDocshub: doc.metadata.isDocshub as boolean,
-    }
-    console.log("metadata", Metadata)
+    };
+    console.log("metadata", Metadata);
     return {
       id: upsertId,
       values: embeddings,
       metadata: Metadata,
-    } as PineconeRecord
+    } as PineconeRecord;
   } catch (error) {
-    console.log("error embedding document", error)
-    throw error
+    console.log("error embedding document", error);
+    throw error;
   }
 }
 
 export const truncateStringByBytes = (str: string, bytes: number): string => {
-  const enc = new TextEncoder()
-  const text = new TextDecoder("utf-8").decode(enc.encode(str).slice(0, bytes))
-  return text
-}
+  const enc = new TextEncoder();
+  const text = new TextDecoder("utf-8").decode(enc.encode(str).slice(0, bytes));
+  return text;
+};

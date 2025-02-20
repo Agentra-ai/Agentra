@@ -1,11 +1,11 @@
-import React from "react"
+import React from "react";
 
-import ExploreApps from "./explore"
+import ExploreApps from "./explore";
 
-type Props = {}
+type Props = {};
 
 const Explore = (props: Props) => {
-  return <ExploreApps />
-}
+  return <ExploreApps />;
+};
 
-export default Explore
+export default Explore;

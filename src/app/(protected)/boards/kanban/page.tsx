@@ -1,9 +1,9 @@
-import React from "react"
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const KanbanBoard = (props: Props) => {
-  return <div>KanbanBoard</div>
-}
+  return <div>KanbanBoard</div>;
+};
 
-export default KanbanBoard
+export default KanbanBoard;

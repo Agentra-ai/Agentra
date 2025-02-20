@@ -1,20 +1,20 @@
-import { AppConfig, AppCustomization } from "@/lib/db/schema"
-import { create } from "zustand"
+import { AppConfig, AppCustomization } from "@/drizzle/schema";
+import { create } from "zustand";
 
 type State = {
-  appConfigDetails: AppConfig
-  appCustomization: AppCustomization
-  selectedFileKeys: { fileKey: string; docName: string, isActive: boolean }[]
-  setAppConfig: (config: AppConfig) => void
-  setCustomization: (customization: AppCustomization) => void
+  appConfigDetails: AppConfig;
+  appCustomization: AppCustomization;
+  selectedFileKeys: { fileKey: string; docName: string; isActive: boolean }[];
+  setAppConfig: (config: AppConfig) => void;
+  setCustomization: (customization: AppCustomization) => void;
   setSelectedFileKeys: (
-    keys: { fileKey: string; docName: string; isActive: boolean }[]
-  ) => void
-  openingStatement: string | null
-  setOpeningStatement: (statement: string) => void
-  refresh: boolean
-  setRefresh: (refresh: boolean) => void
-}
+    keys: { fileKey: string; docName: string; isActive: boolean }[],
+  ) => void;
+  openingStatement: string | null;
+  setOpeningStatement: (statement: string) => void;
+  refresh: boolean;
+  setRefresh: (refresh: boolean) => void;
+};
 
 export const useAppStore = create<State>((set) => ({
   appConfigDetails: {
@@ -33,6 +33,7 @@ export const useAppStore = create<State>((set) => ({
     embedLink: "",
     createdAt: new Date(),
     appId: "",
+    updatedAt: new Date(),
   },
   appCustomization: {
     id: "",
@@ -53,11 +54,13 @@ export const useAppStore = create<State>((set) => ({
   selectedFileKeys: [],
   openingStatement: "",
   refresh: false, // Initialize refresh state
-  setAppConfig: (config) => set(() => ({ appConfigDetails: config, refresh: true })), // Set refresh to true
+  setAppConfig: (config) =>
+    set(() => ({ appConfigDetails: config, refresh: true })), // Set refresh to true
   setCustomization: (customization) =>
     set(() => ({ appCustomization: customization, refresh: true })),
-  setSelectedFileKeys: (keys) => set(() => ({ selectedFileKeys: keys, refresh: true })),
+  setSelectedFileKeys: (keys) =>
+    set(() => ({ selectedFileKeys: keys, refresh: true })),
   setOpeningStatement: (statement) =>
     set(() => ({ openingStatement: statement, refresh: true })),
-  setRefresh: (refresh) => set(() => ({ refresh }))
-}))
+  setRefresh: (refresh) => set(() => ({ refresh })),
+}));

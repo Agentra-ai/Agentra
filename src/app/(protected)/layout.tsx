@@ -1,23 +1,27 @@
+// import { Navbar } from "./_components/navbar";
+// import { SidebarBody } from "@/components/ui/sidebar";
+import { redirect } from "next/navigation";
 
-import { redirect } from "next/navigation"
-import Navbar from "@/components/protected/navbar"
-import { validateRequest } from "@/lib/auth/get-session"
+import { DEFAULT_UNAUTHENTICATED_REDIRECT } from "@/config/defaults";
+
+import Navbar from "@/components/protected/navbar";
+import { auth } from "@/auth";
+
 interface ProtectedLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
-// const font = Inter({ subsets: ["latin"], weight: ["400"] });
-
 const ProtectedLayout = async ({ children }: ProtectedLayoutProps) => {
-  const { user } = await validateRequest()
+  const session = await auth();
 
-  if (!user) redirect('/auth/login')
+  if (!session) redirect(DEFAULT_UNAUTHENTICATED_REDIRECT);
+
   return (
     <div className={`flex h-screen w-full flex-col overflow-hidden`}>
       <Navbar />
       {children}
     </div>
-  )
-}
+  );
+};
 
-export default ProtectedLayout
+export default ProtectedLayout;

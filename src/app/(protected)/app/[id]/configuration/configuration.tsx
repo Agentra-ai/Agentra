@@ -1,30 +1,23 @@
-"use client"
+"use client";
 
-import React, { useEffect, useState } from "react"
-import { redirect, usePathname } from "next/navigation"
-import {
-  getAppConfigDetails,
-  updateAppConfig,
-} from "@/actions/app/app-config-action"
-import { getAppCustomization } from "@/actions/customization/customization-action"
-import { useAppStore } from "@/store/useAppStore"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Trash2Icon } from "lucide-react"
-import { useForm } from "react-hook-form"
-import { AiFillLike } from "react-icons/ai"
-import { BsFillChatLeftHeartFill } from "react-icons/bs"
-import { FaBook, FaEnvelopeOpenText, FaFileAlt } from "react-icons/fa"
-import { PiFoldersFill } from "react-icons/pi"
-import { z } from "zod"
-import { useShallow } from "zustand/react/shallow"
-
-import { AppConfig } from "@/lib/db/schema"
-
-import { useToast } from "@/hooks/use-toast"
-
-import { Button } from "@/components/ui/button"
-import { Switch } from "@/components/ui/switch"
-import AddDocsModal from "@/components/protected/Modals/add-docs-modal"
+import React, { useEffect, useState } from "react";
+import { redirect, usePathname } from "next/navigation";
+import { useAppConfig } from "@/app/services/apps/app-config-service";
+import { useAppStore } from "@/store/useAppStore";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Trash2Icon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { AiFillLike } from "react-icons/ai";
+import { BsFillChatLeftHeartFill } from "react-icons/bs";
+import { FaBook, FaEnvelopeOpenText, FaFileAlt } from "react-icons/fa";
+import { PiFoldersFill } from "react-icons/pi";
+import { z } from "zod";
+import { useShallow } from "zustand/react/shallow";
+import { AppConfig } from "@/drizzle/schema";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import AddDocsModal from "@/components/protected/Modals/add-docs-modal";
 
 // Update the schema to handle the nested fileKey structure
 const formSchema = z.object({
@@ -40,70 +33,68 @@ const formSchema = z.object({
           }),
         ]),
         docName: z.string(),
-      })
+      }),
     )
     .optional(),
   opener: z.string().optional(),
   followUp: z.boolean(),
   suggestions: z.array(z.string()).optional(),
-})
+});
 
-type FormData = z.infer<typeof formSchema>
+type FormData = z.infer<typeof formSchema>;
 
 // Move this check outside the component
 const getAppId = (pathname: string | null) => {
-  const id = pathname?.split("/")[2]
+  const id = pathname?.split("/")[2];
   if (!id) {
-    redirect("apps/studio")
+    redirect("apps/studio");
   }
-  return id
-}
+  return id;
+};
 
 const ConfigurationPage = () => {
-  const pathname = usePathname()
-  const appId = React.useMemo(() => getAppId(pathname), [pathname])
-  const { toast } = useToast()
+  const pathname = usePathname();
+  const appId = React.useMemo(() => getAppId(pathname), [pathname]);
+
+  const { config, isLoading, updateConfig } = useAppConfig(appId);
+  const { toast } = useToast();
 
   const [selectedFiles, setSelectedFiles] = useState<
     { fileKey: string; docName: string; isActive: boolean }[]
-  >([])
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [hasLoaded, setHasLoaded] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
-  const [submitSuccess, setSubmitSuccess] = useState(false)
-  const [isOpenerVisible, setIsOpenerVisible] = useState<boolean>(false)
+  >([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  const [isOpenerVisible, setIsOpenerVisible] = useState<boolean>(false);
 
   const {
     appConfigDetails,
     setAppConfig,
     setSelectedFileKeys,
     setOpeningStatement,
-    setCustomization,
   } = useAppStore(
     useShallow((state) => ({
       appConfigDetails: state.appConfigDetails,
       setAppConfig: state.setAppConfig,
       setSelectedFileKeys: state.setSelectedFileKeys,
       setOpeningStatement: state.setOpeningStatement,
-      appCustomization: state.appCustomization,
-      setCustomization: state.setCustomization,
-    }))
-  )
+    })),
+  );
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       instructions: appConfigDetails?.instructions || "",
       contextFiles: [],
-      opener: appConfigDetails?.openingStatement || undefined,
+      opener: appConfigDetails?.openingStatement || undefined,  
       followUp: appConfigDetails?.followUp || true,
       suggestions: Array.isArray(appConfigDetails?.suggestedQuestions)
         ? appConfigDetails.suggestedQuestions
         : [],
     },
-  })
+  });
 
   const {
     register,
@@ -111,134 +102,102 @@ const ConfigurationPage = () => {
     setValue,
     watch,
     formState: { errors },
-  } = form
+  } = form;
 
-  const formData = watch()
+  const formData = watch();
 
-  const fetchConfig = React.useCallback(async () => {
-    if (!hasLoaded) {
-      try {
-        setIsLoading(true)
-        const configResponse = await getAppConfigDetails(appId)
-        const constomizationResponse = await getAppCustomization(appId)
-        const configData: AppConfig = configResponse as AppConfig
-        console.log(configData, "-----configData")
-        if (configData) {
-          setAppConfig(configData)
-          setCustomization(constomizationResponse)
-          setOpeningStatement(configData?.openingStatement ?? "")
-        }
-
-        setValue("instructions", configData?.instructions || "")
-        setValue("opener", configData?.openingStatement || "")
-        setValue("followUp", configData.followUp)
-        setValue(
-          "suggestions",
-          Array.isArray(configData?.suggestedQuestions)
-            ? configData.suggestedQuestions
-            : []
-        )
-
-        const contextFileKeys = configData.contextFileKeys
-          ? typeof configData.contextFileKeys === "string"
-            ? JSON.parse(configData.contextFileKeys)
-            : configData.contextFileKeys
-          : []
-
-        setSelectedFileKeys(
-          Array.isArray(contextFileKeys) ? contextFileKeys : []
-        )
-        setSelectedFiles(contextFileKeys)
-        setValue("contextFiles", contextFileKeys)
-
-        if (configData?.openingStatement?.trim()) {
-          setIsOpenerVisible(true)
-        }
-
-        setHasLoaded(true)
-      } catch (error) {
-        console.error("Error fetching config:", error)
-      } finally {
-        setIsLoading(false)
+  useEffect(() => {
+    if (!isLoading && config && !hasLoaded) {
+      const configData: AppConfig = config as AppConfig;
+      console.log(configData, "-----configData");
+      if (configData) {
+        setAppConfig(configData);
+        setOpeningStatement(configData?.openingStatement ?? "");
       }
+
+      setValue("instructions", configData?.instructions || "");
+      setValue("opener", configData?.openingStatement || "");
+      setValue("followUp", configData.followUp);
+      setValue(
+        "suggestions",
+        Array.isArray(configData?.suggestedQuestions)
+          ? configData.suggestedQuestions
+          : [],
+      );
+
+      const contextFileKeys = configData.contextFileKeys
+        ? typeof configData.contextFileKeys === "string"
+          ? JSON.parse(configData.contextFileKeys)
+          : configData.contextFileKeys
+        : [];
+
+      setSelectedFileKeys(
+        Array.isArray(contextFileKeys) ? contextFileKeys : [],
+      );
+      setSelectedFiles(contextFileKeys);
+      setValue("contextFiles", contextFileKeys);
+
+      if (configData?.openingStatement?.trim()) {
+        setIsOpenerVisible(true);
+      }
+
+      setHasLoaded(true);
     }
   }, [
-    appId,
+    config,
+    isLoading,
     setValue,
     hasLoaded,
     setAppConfig,
-    setCustomization,
     setOpeningStatement,
     setSelectedFileKeys,
-  ])
-
-  useEffect(() => {
-    fetchConfig()
-  }, [fetchConfig])
+  ]);
 
   const handleAddSuggestion = () => {
     if (formData.suggestions && formData.suggestions.length < 4) {
-      setValue("suggestions", [...formData.suggestions, ""])
+      setValue("suggestions", [...formData.suggestions, ""]);
       setAppConfig({
         ...appConfigDetails,
         suggestedQuestions: [...formData.suggestions, ""],
-      })
+      });
     }
-  }
-  useEffect(() => {
-    setAppConfig({
-      ...appConfigDetails,
-      instructions: formData.instructions,
-      openingStatement: formData.opener || "",
-      followUp: formData.followUp,
-      suggestedQuestions: formData.suggestions,
-      contextFileKeys: JSON.stringify(formData.contextFiles || []),
-    })
-  }, [
-    appConfigDetails,
-    formData.contextFiles,
-    formData.followUp,
-    formData.instructions,
-    formData.opener,
-    formData.suggestions,
-    setAppConfig,
-  ])
+  };
 
   const handleSuggestionChange = (index: number, value: string) => {
-    const newSuggestions = [...(formData.suggestions || [])]
-    newSuggestions[index] = value
-    setValue("suggestions", newSuggestions)
+    const newSuggestions = [...(formData.suggestions || [])];
+    newSuggestions[index] = value;
+    setValue("suggestions", newSuggestions);
     setAppConfig({
       ...appConfigDetails,
       suggestedQuestions: newSuggestions,
-    })
-  }
+    });
+  };
 
   const handleRemoveSuggestion = (index: number) => {
     const newSuggestions = formData.suggestions
       ? formData.suggestions.filter((_, i) => i !== index)
-      : []
-    setValue("suggestions", newSuggestions)
+      : [];
+    setValue("suggestions", newSuggestions);
     setAppConfig({
       ...appConfigDetails,
       suggestedQuestions: newSuggestions,
-    })
-  }
+    });
+  };
 
   const handleFollowUpToggle = (checked: boolean) => {
-    setValue("followUp", checked)
+    setValue("followUp", checked);
     setAppConfig({
       ...appConfigDetails,
       followUp: checked,
-    })
-  }
+    });
+  };
 
   const onSubmit = async (data: FormData) => {
-    console.log("data:", data)
+    console.log("data:", data);
     try {
-      setIsSubmitting(true)
-      setSubmitError(null)
-      setSubmitSuccess(false)
+      setIsSubmitting(true);
+      setSubmitError(null);
+      setSubmitSuccess(false);
 
       const normalizedContextFiles = data.contextFiles?.map((file) => ({
         fileKey:
@@ -246,7 +205,7 @@ const ConfigurationPage = () => {
             ? file.fileKey.fileKey
             : file.fileKey,
         docName: file.docName,
-      }))
+      }));
 
       const newConfig: AppConfig = {
         ...appConfigDetails,
@@ -254,76 +213,72 @@ const ConfigurationPage = () => {
         appId: appId,
         instructions: data.instructions,
         openingStatement: data.opener || "",
-        followUp: data.followUp,
+        followUp: data.followUp,  
         suggestedQuestions: data.suggestions || [],
         contextFileKeys: JSON.stringify(normalizedContextFiles || []),
-      }
+      };
 
-      setAppConfig(newConfig)
+      setAppConfig(newConfig);
 
-      console.log("new Config", newConfig)
-      const response = await updateAppConfig(appId, newConfig)
-
-      if (!response) {
-        throw new Error("Failed to update configuration")
-      }
+      console.log("new Config", newConfig);
+      await updateConfig(newConfig);
 
       if (!data.opener?.trim()) {
-        setIsOpenerVisible(false)
-        setValue("opener", undefined)
+        setIsOpenerVisible(false);
+        setValue("opener", undefined);
       } else {
-        setIsOpenerVisible(true)
+        setIsOpenerVisible(true);
       }
 
-      setSubmitSuccess(true)
+      setSubmitSuccess(true);
       toast({
         title: "Success",
         description: "Configuration updated successfully",
         variant: "default",
-      })
-      setTimeout(() => setSubmitSuccess(false), 3000)
+      });
+      setTimeout(() => setSubmitSuccess(false), 3000);
     } catch (error) {
-      console.error("Error updating config:", error)
+      console.error("Error updating config:", error);
       setSubmitError(
         error instanceof Error
           ? error.message
-          : "Failed to update configuration"
-      )
+          : "Failed to update configuration",
+      );
       toast({
         title: "Error",
         description: "Failed to update configuration",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const handleFileSelection = (
-    files: { fileKey: string; docName: string; isActive: boolean }[]
+    files: { fileKey: string; docName: string; isActive: boolean }[],
   ) => {
-    const updatedFiles = [...selectedFiles, ...files]
-    setSelectedFiles(updatedFiles)
-    setValue("contextFiles", updatedFiles)
-    setSelectedFileKeys(files)
+    const updatedFiles = [...selectedFiles, ...files];
+    setSelectedFiles(updatedFiles);
+    setValue("contextFiles", updatedFiles);
+    setSelectedFileKeys(files);
     setAppConfig({
       ...appConfigDetails,
       contextFileKeys: JSON.stringify(updatedFiles),
-    })
-    setIsModalOpen(false)
-  }
+    });
+    setIsModalOpen(false);
+  };
 
   const handleRemoveFile = (fileKeyToRemove: string) => {
     const updatedFiles = selectedFiles.filter(
-      (file) => file.fileKey !== fileKeyToRemove
-    )
-    setSelectedFiles(updatedFiles)
-    setValue("contextFiles", updatedFiles)
+      (file) => file.fileKey !== fileKeyToRemove,
+    );
+    setSelectedFiles(updatedFiles);
+    setValue("contextFiles", updatedFiles);
     setAppConfig({
       ...appConfigDetails,
       contextFileKeys: JSON.stringify(updatedFiles),
-    })
-  }
+    });
+  };
 
   return (
     <section className="flex min-w-[50%] border-r">
@@ -350,11 +305,11 @@ const ConfigurationPage = () => {
                 rows={8}
                 placeholder="Enter your instructions here..."
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                  setValue("instructions", e.target.value)
+                  setValue("instructions", e.target.value);
                   setAppConfig({
                     ...appConfigDetails,
                     instructions: e.target.value,
-                  })
+                  });
                 }}
               />
               {errors.instructions && (
@@ -442,11 +397,11 @@ const ConfigurationPage = () => {
                 rows={3}
                 placeholder="Enter your opener text here..."
                 onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => {
-                  setValue("opener", e.target.value)
+                  setValue("opener", e.target.value);
                   setAppConfig({
                     ...appConfigDetails,
                     openingStatement: e.target.value,
-                  })
+                  });
                 }}
               />
             )}
@@ -546,7 +501,7 @@ const ConfigurationPage = () => {
         />
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ConfigurationPage
+export default ConfigurationPage;

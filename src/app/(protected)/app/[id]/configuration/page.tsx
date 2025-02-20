@@ -1,6 +1,6 @@
-import ConfigChat from "@/components/protected/chat/config-chat"
+import ConfigChat from "@/components/protected/chat/config-chat";
 
-import ConfigurationPage from "./configuration"
+import ConfigurationPage from "./configuration";
 
 const Configuration = () => {
   return (
@@ -10,7 +10,7 @@ const Configuration = () => {
         <ConfigChat />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Configuration
+export default Configuration;

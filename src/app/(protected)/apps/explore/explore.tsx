@@ -1,8 +1,8 @@
-'use client'
+"use client";
 
-import React from "react"
-import Image from "next/image"
-import {useState} from "react"
+import React from "react";
+import Image from "next/image";
+import { useState } from "react";
 
 const apps = [
   {
@@ -103,7 +103,6 @@ const apps = [
   },
 ];
 
-
 const ExploreApps = () => {
   const [selectedCategory, setSelectedCategory] = useState("Recommended");
 
@@ -124,7 +123,7 @@ const ExploreApps = () => {
 
   return (
     <div className="flex h-[calc(100vh-60px)] flex-col bg-gray-100">
-      <div className="flex flex-col px-4 py-3 md:px-6 md:py-4 bg-gradient-to-r from-gray-50 to-blue-50 mx-12 my-2 rounded-lg">
+      <div className="mx-12 my-2 flex flex-col rounded-lg bg-gradient-to-r from-gray-50 to-blue-50 px-4 py-3 md:px-6 md:py-4">
         <h1 className="mb-2 text-xl font-semibold text-blue-700">
           Explore pre-built Apps for your business
         </h1>
@@ -147,7 +146,7 @@ const ExploreApps = () => {
             <button
               key={name}
               onClick={() => setSelectedCategory(name)}
-              className={`rounded-full px-4 py-2 text-xs hover:bg-gray-50 bg-white ${
+              className={`rounded-full bg-white px-4 py-2 text-xs hover:bg-gray-50 ${
                 selectedCategory === name ? "!bg-blue-600 text-white" : ""
               }`}
             >
@@ -170,7 +169,7 @@ const ExploreApps = () => {
                 <div className="flex items-center">
                   {/* Image with dynamic background color */}
                   <span
-                    className={`mr-2 text-lg p-1 px-1.5 rounded-md ${
+                    className={`mr-2 rounded-md p-1 px-1.5 text-lg ${
                       categoryColors[app.category] || "bg-gray-100"
                     }`}
                   >

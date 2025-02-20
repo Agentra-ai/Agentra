@@ -1,9 +1,9 @@
-import React from "react"
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const CalenderBoard = (props: Props) => {
-  return <div>CalenderBoard</div>
-}
+  return <div>CalenderBoard</div>;
+};
 
-export default CalenderBoard
+export default CalenderBoard;

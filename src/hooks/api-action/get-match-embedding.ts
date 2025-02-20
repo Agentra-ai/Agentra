@@ -1,35 +1,35 @@
-"use server"
+"use server";
 
-import { getWorkspaceDetails } from "@/actions/workspace/workspace-action"
-import { Pinecone } from "@pinecone-database/pinecone"
+import { getWorkspaceDetails } from "@/actions/workspace/workspace-action";
+import { Pinecone } from "@pinecone-database/pinecone";
 
-import { convertToAscii } from "@/lib/utils"
+import { convertToAscii } from "@/lib/utils";
 
-import { getEmbeddings } from "./embedding"
+import { getEmbeddings } from "./embedding";
 
 export async function getMatchesFromEmbeddings(
   embeddings: number[],
   fileKeys: { fileKey: string; isActive: boolean }[],
-  topKvalue?: number
+  topKvalue?: number,
 ) {
-  console.log("fileKeys", fileKeys, embeddings)
-  const workspaceDetails = await getWorkspaceDetails()
-  const workspaceNamespace = workspaceDetails?.workspaceVectorDB
+  console.log("fileKeys", fileKeys, embeddings);
+  const workspaceDetails = await getWorkspaceDetails();
+  const workspaceNamespace = workspaceDetails?.workspaceVectorDB;
 
   if (!workspaceNamespace) {
-    throw new Error("Workspacenamespace not found in workspace details")
+    throw new Error("Workspacenamespace not found in workspace details");
   }
 
   const client = new Pinecone({
     apiKey: process.env.PINACONE_API_KEY!,
-  })
-  const pineconeIndex = await client.index("agentra-app-documents")
-  const nameSpaceName = convertToAscii(workspaceNamespace)
-  const namespace = pineconeIndex.namespace(nameSpaceName)
+  });
+  const pineconeIndex = await client.index("agentra-app-documents");
+  const nameSpaceName = convertToAscii(workspaceNamespace);
+  const namespace = pineconeIndex.namespace(nameSpaceName);
 
   const activeFileKeys = fileKeys
     .filter((file) => file.isActive)
-    .map((file) => file.fileKey)
+    .map((file) => file.fileKey);
 
   // console.log("activeFileKeys", activeFileKeys)
 
@@ -41,41 +41,41 @@ export async function getMatchesFromEmbeddings(
       file_key: { $in: activeFileKeys },
       isActive: true,
     },
-  })
-  return queryResult.matches || []
+  });
+  return queryResult.matches || [];
 }
 
 export async function getContext(
   query: string,
   fileKeys: { fileKey: string; isActive: boolean }[],
-  topKvalue?: number
+  topKvalue?: number,
 ) {
-  const queryEmbeddings = await getEmbeddings(query)
+  const queryEmbeddings = await getEmbeddings(query);
 
   const matches = await getMatchesFromEmbeddings(
     queryEmbeddings,
     fileKeys,
-    topKvalue
-  )
+    topKvalue,
+  );
 
   // console.log("matches", matches)
 
   // if(matches.length === 0) {
   //   return "no document found"}
   const qualifyingDocs = matches.filter(
-    (match) => match.score && match.score > 0.7
-  )
+    (match) => match.score && match.score > 0.7,
+  );
 
   type Metadata = {
-    text: string
-    pageNumber: number
-  }
+    text: string;
+    pageNumber: number;
+  };
 
-  let docs = qualifyingDocs.map((match) => (match.metadata as Metadata).text)
+  let docs = qualifyingDocs.map((match) => (match.metadata as Metadata).text);
 
   if (docs.length === 0) {
-    return []
+    return [];
   }
   // 5 vectors
-  return docs.join("\n").substring(0, 3000)
+  return docs.join("\n").substring(0, 3000);
 }

@@ -7,9 +7,9 @@
 // import { eq } from "drizzle-orm"
 
 // import { env } from "@/env.mjs"
-// import { db } from "@/lib/db"
+// import db from "@/drizzle"
 // import { resend } from "@/config/email"
-// import { users } from "@/lib/db/schema"
+// import { users } from "@/drizzle/schema"
 // import {
 //   checkIfEmailVerifiedSchema,
 //   contactFormSchema,

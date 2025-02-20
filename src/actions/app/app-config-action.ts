@@ -1,15 +1,15 @@
-'use server'
+"use server";
 
-import { eq } from "drizzle-orm"
+import { eq } from "drizzle-orm";
 
-import { db } from "@/lib/db"
-import { AppConfig, appConfigs } from "@/lib/db/schema"
+import db from "@/drizzle";
+import { AppConfig, appConfigs } from "@/drizzle/schema";
 
 export const getAppConfigDetails = async (appId: string) => {
   const appConfig = await db
     .select()
     .from(appConfigs)
-    .where(eq(appConfigs.appId, appId))
+    .where(eq(appConfigs.appId, appId));
 
   const appParsedFileKeyConfig = appConfig.map((config) => ({
     ...config,
@@ -17,22 +17,26 @@ export const getAppConfigDetails = async (appId: string) => {
     contextFileKeys: config.contextFileKeys
       ? JSON.parse(config.contextFileKeys)
       : null,
-  }))
+  }));
 
-  console.log("parsed appConfigs :;", appParsedFileKeyConfig)
+  console.log("parsed appConfigs :;", appParsedFileKeyConfig);
 
-  return appParsedFileKeyConfig[0]
-}
+  return appParsedFileKeyConfig[0];
+};
 
 export const updateAppConfig = async (appId: string, config: AppConfig) => {
-  // try {
-  const updatedConfig = await db
+  // Convert createAt and updateAt to Date instances if they are not already dates
+  if (!(config.createdAt instanceof Date)) {
+    config.createdAt = new Date(config.createdAt);
+  }
+  if (!(config.updatedAt instanceof Date)) {
+    config.updatedAt = new Date(config.updatedAt);
+  }
+  
+  await db
     .update(appConfigs)
     .set(config)
-    .where(eq(appConfigs.appId, appId))
-  return updatedConfig
-  // } catch (error) {
-  //   console.error('Error updating app config:', error);
-  //   throw error;
-  // }
-}
+    .where(eq(appConfigs.appId, appId));
+
+  return { success: true };
+};

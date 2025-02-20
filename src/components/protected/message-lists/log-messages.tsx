@@ -1,39 +1,23 @@
-import React from "react"
-import dayjs from "dayjs"
-import { PiUserCircleFill } from "react-icons/pi"
-import { RiChatSmile3Fill } from "react-icons/ri"
-import { MessagesType } from "@/lib/db/schema"
+import React from "react";
+import dayjs from "dayjs";
+import { PiUserCircleFill } from "react-icons/pi";
+import { RiChatSmile3Fill } from "react-icons/ri";
+import { MessagesType } from "@/drizzle/schema";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { ChatLoadingIcon } from "@/components/loading/chat-loading-icon"
-import { Markdown } from "../chat/use-markdown"
+} from "@/components/ui/tooltip";
+import { ChatLoadingIcon } from "@/components/loading/chat-loading-icon";
+import { Markdown } from "../chat/use-markdown";
 
 type Props = {
-  isLoading: boolean
-  messages: MessagesType[] | null
-}
+  isLoading: boolean;
+  messages: MessagesType[] | null;
+};
 
 const LogMessagesList = ({ messages, isLoading }: Props) => {
-  // const {
-  //   botLogo,
-  //   botName,
-  //   aiChatColor,
-  //   userChatColor,
-  //   botTextColor,
-  //   userTextColor,
-  //   botFontSize,
-  //   botFontWeight,
-  //   botFontFamily,
-  // } = useAppStore(useShallow((state) => state.appCustomization))
-
-  console.log(messages)
-  // const conversationOpener = useAppStore(
-  //   (app) => app.appConfigDetails.openingStatement
-  // )
-
+  console.log(messages);
   if (!messages || messages.length === 0)
     return (
       <div className="flex h-full items-center justify-center">
@@ -41,12 +25,12 @@ const LogMessagesList = ({ messages, isLoading }: Props) => {
           no message found. only session created.
         </span>
       </div>
-    )
+    );
 
-    if (isLoading) {
-      return <div>Loading messages...</div>;
-    }
-  
+  if (isLoading) {
+    return <div>Loading messages...</div>;
+  }
+
   return (
     <div className="relative flex h-full w-full flex-1 flex-col gap-2 overflow-y-auto rounded-lg bg-[#f3f5f7] px-2 py-4 text-[14px]">
       {messages &&
@@ -64,16 +48,14 @@ const LogMessagesList = ({ messages, isLoading }: Props) => {
                       className="h-8 w-8 rounded-full object-cover"
                     />
                   ) : ( */}
-                    <div className="mt-1 flex h-8 w-8 items-center justify-center  rounded-full bg-[#116be1]">
+                    <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-[#116be1]">
                       <RiChatSmile3Fill className="h-5 w-5 text-white" />
                     </div>
                   </div>
                   <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
-                      <div
-                        className="mb-4 max-w-[80%] items-center rounded-2xl bg-white p-4 py-3 cursor-pointer"
-                      >
-                        <div className="overflow-y-auto max-h-[1200px] prose prose-sm">
+                      <div className="mb-4 max-w-[80%] cursor-pointer items-center rounded-2xl bg-white p-4 py-3">
+                        <div className="prose prose-sm max-h-[1200px] overflow-y-auto">
                           <Markdown>{message.content}</Markdown>
                         </div>
                       </div>
@@ -91,7 +73,7 @@ const LogMessagesList = ({ messages, isLoading }: Props) => {
                 </>
               ) : (
                 <>
-                  <Tooltip  delayDuration={0}>
+                  <Tooltip delayDuration={0}>
                     <TooltipTrigger asChild>
                       <div className="mb-4 ml-auto flex max-w-[80%] cursor-pointer items-center justify-end gap-2 rounded-[8px] bg-blue-100 text-black">
                         <p
@@ -118,7 +100,7 @@ const LogMessagesList = ({ messages, isLoading }: Props) => {
                 </>
               )}
             </div>
-          )
+          );
         })}
       {isLoading && (
         <div className="loading">
@@ -126,7 +108,7 @@ const LogMessagesList = ({ messages, isLoading }: Props) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default LogMessagesList
+export default LogMessagesList;
