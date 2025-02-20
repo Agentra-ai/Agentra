@@ -1,9 +1,9 @@
-import AppsStudio from "./studio";
+import AppsStudio from "./studio"
 
-type Props = {};
+type Props = {}
 
 const Studio = () => {
-  return <AppsStudio />;
-};
+  return <AppsStudio />
+}
 
-export default Studio;
+export default Studio

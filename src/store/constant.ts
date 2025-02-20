@@ -1,3 +1,4 @@
+
 export const dummyDocs = [
   {
     id: 1,
@@ -82,7 +83,7 @@ export const dummyDocs = [
     imgUrl: "path/to/misc-image.jpg",
     icon: "📁", // Default icon
   },
-];
+]
 
 export const dummyChatArray = [
   {
@@ -109,7 +110,7 @@ export const dummyChatArray = [
     text: "You're welcome! Have a great day!",
     role: "system",
   },
-];
+]
 
 export const emojisArray = [
   "👍",
@@ -527,4 +528,4 @@ export const emojisArray = [
   "👥",
   "🫂",
   "👣",
-];
+]

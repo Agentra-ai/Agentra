@@ -1,6 +1,7 @@
 import useSWR from "swr";
-import { ConversationType, MessagesType } from "@/drizzle/schema";
-import fetcher from "../fetcher";
+import { ConversationType, MessagesType } from "@/lib/db/schema";
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 interface ConversationWithCount extends ConversationType {
   messageCount: number;
@@ -20,21 +21,20 @@ export interface ApiResponse {
   pagination: Pagination;
 }
 
-export const useFetchAppConversations = (
+const useGetAppConversation = (
   appId: string,
   page: number = 1, // Default to page 1
-  limit: number = 10, // Default to 10 conversations per page
+  limit: number = 10 // Default to 10 conversations per page
 ) => {
   const { data, error, isValidating, mutate } = useSWR<ApiResponse>(
     `/api/conversation/get-conversation?appId=${appId}&page=${page}&limit=${limit}`,
-    fetcher,
+    fetcher
   );
 
   // Sort conversations by createdAt date (newest first)
   if (data?.data) {
     data.data.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     );
   }
 
@@ -55,17 +55,20 @@ export const useFetchAppConversations = (
   };
 };
 
-export default useFetchAppConversations;
+export default useGetAppConversation;
+
 
 export const useConversationMessages = (conversationId: string) => {
-  const { data, error, isLoading } = useSWR<{ data: MessagesType[] }>(
+  const { data, error, isLoading } = useSWR<{ data : 
+    MessagesType[]
+  }>(
     `/api/conversation/get-messages?conversationId=${conversationId}`,
-    fetcher,
+    fetcher
   );
 
   return {
     messages: data?.data || [],
-    isLoading: isLoading && !data,
+    isLoading : isLoading && !data,
     isError: error,
   };
 };

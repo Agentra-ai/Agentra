@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useState } from "react"
 
-import { App, AppDocumentType } from "@/drizzle/schema";
+import { App, AppDocumentType } from "@/lib/db/schema"
 
-import { Button } from "@/components/ui/button";
-import Modal from "@/components/modal";
+import { Button } from "@/components/ui/button"
+import Modal from "@/components/modal"
 
 interface DeleteAppModalProps {
-  isDeleteModalOpen: boolean;
-  setIsDeleteModalOpen: (isOpen: boolean) => void;
-  confirmDeleteApp: () => Promise<void>;
-  documentsToDelete: AppDocumentType;
+  isDeleteModalOpen: boolean
+  setIsDeleteModalOpen: (isOpen: boolean) => void
+  confirmDeleteApp: () => Promise<void>
+  documentsToDelete: AppDocumentType
 }
 
 const DeleteAppDocsModal: React.FC<DeleteAppModalProps> = ({
@@ -18,17 +18,17 @@ const DeleteAppDocsModal: React.FC<DeleteAppModalProps> = ({
   confirmDeleteApp,
   // appToDelete,
 }) => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleDelete = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
     try {
-      await confirmDeleteApp();
+      await confirmDeleteApp()
     } finally {
-      setIsLoading(false);
-      setIsDeleteModalOpen(false);
+      setIsLoading(false)
+      setIsDeleteModalOpen(false)
     }
-  };
+  }
 
   return (
     <Modal
@@ -63,6 +63,6 @@ const DeleteAppDocsModal: React.FC<DeleteAppModalProps> = ({
         </Button>
       </div>
     </Modal>
-  );
-};
-export default DeleteAppDocsModal;
+  )
+}
+export default DeleteAppDocsModal

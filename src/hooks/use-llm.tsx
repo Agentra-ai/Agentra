@@ -6,14 +6,7 @@ import { ChatFireworks } from "@langchain/community/chat_models/fireworks";
 // import { AzureChatOpenAI } from "@langchain/openai";
 // import { encoding_for_model } from "@dqbd/tiktoken";
 
-export type TBaseModel =
-  | "openai"
-  | "anthropic"
-  | "gemini"
-  | "ollama"
-  | "groq"
-  | "fireworksAI"
-  | "AzureOpenAI";
+export type TBaseModel = "openai" | "anthropic" | "gemini" | "ollama" | "groq" | "fireworksAI" | "AzureOpenAI";
 
 export type TModelKey = string;
 
@@ -190,7 +183,7 @@ export const createInstance = async (model: TModel, apiKey: string) => {
 };
 
 export const countTokens = (text: string, model: TModel) => {
-  const encoder = model.key as any;
+  const encoder = (model.key as any);
   const tokens = encoder.encode(text);
   encoder.free();
   return tokens.length;

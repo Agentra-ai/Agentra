@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react"
 
-import AppCustomizationPanel from "@/components/protected/customization/customization-panel";
-import CustomizedChat from "@/components/protected/customization/customized-chat";
+import AppCustomizationPanel from "@/components/protected/customization/customization-panel"
+import CustomizedChat from "@/components/protected/customization/customized-chat"
 
-type Props = {};
+type Props = {}
 
 const Customization = (props: Props) => {
   return (
@@ -11,7 +11,7 @@ const Customization = (props: Props) => {
       <AppCustomizationPanel />
       <CustomizedChat />
     </div>
-  );
-};
+  )
+}
 
-export default Customization;
+export default Customization

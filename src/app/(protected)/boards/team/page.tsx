@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react"
 
-type Props = {};
+type Props = {}
 
 const TeamBoard = (props: Props) => {
-  return <div>TeamBoard</div>;
-};
+  return <div>TeamBoard</div>
+}
 
-export default TeamBoard;
+export default TeamBoard

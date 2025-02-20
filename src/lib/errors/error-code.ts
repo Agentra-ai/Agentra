@@ -60,4 +60,4 @@ export const ErrorCodes = {
     statusCode: 400,
     userMessage: "Some of the provided data is invalid.",
   },
-};
+}

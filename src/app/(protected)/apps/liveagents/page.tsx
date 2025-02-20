@@ -1,9 +1,9 @@
-import React from "react";
+import React from "react"
 
-type Props = {};
+type Props = {}
 
 const LiveAgents = (props: Props) => {
-  return <div>LiveAgents</div>;
-};
+  return <div>LiveAgents</div>
+}
 
-export default LiveAgents;
+export default LiveAgents

@@ -1,50 +1,49 @@
-"use server";
+"use server"
 
-import { getUserByEmail, getUserDetails } from "@/actions/user";
-import { desc, eq } from "drizzle-orm";
-import { v4 as uuidv4 } from "uuid";
-import {
-  BadRequestError,
-  DatabaseError,
-  UnauthorizedError,
-  NotFoundError,
-} from "@/lib/errors/errors";
+import { getUserDetails } from "@/actions/user"
+import { eq } from "drizzle-orm"
+import { v4 as uuidv4 } from "uuid"
 
-import db from "@/drizzle";
-import { appConfigs, appCustomizations, apps } from "@/drizzle/schema";
-import { auth } from "@/auth";
+import { db } from "@/lib/db"
+import { appConfigs, appCustomizations, apps } from "@/lib/db/schema"
+import { validateRequest } from "@/lib/auth/get-session"
+
 
 type AppDetails = {
-  name: string;
-  description: string;
-  icon: string;
-  tags: string[];
-  appType: string;
-  existingAppId: string | null;
-};
+  name: string
+  description: string
+  icon: string
+  tags: string[]
+  appType: string
+  existingAppId: string | null
+}
 
 export const createApp = async (appDetails: AppDetails) => {
+  console.log(appDetails)
   try {
-    const user = await getUserDetails();
-
+    const {user} = await validateRequest()
+    console.log(user)
+    console.log("exisiting id :", appDetails.existingAppId)
     if (!user) {
-      throw new UnauthorizedError("User not found");
+      console.log("cannot find user in app-action.tsx")
+      return
     }
-
     if (!user?.workspaceId) {
-      throw new BadRequestError("User does not have a workspace");
+      console.log("User does not have a workspace")
+      return
     }
-
-    const newAppId = uuidv4();
-    const newAppConfigId = uuidv4();
-    const newCustomizationId = uuidv4();
+    const newAppId = uuidv4()
+    const newAppConfigId = uuidv4()
+    const newCustomizationId = uuidv4()
 
     if (
-      appDetails?.existingAppId &&
+      appDetails &&
+      appDetails.existingAppId &&
       appDetails.existingAppId !== "" &&
       appDetails.existingAppId !== "null"
     ) {
-      // Update existing app logic
+      console.log("Updating existing app")
+      // Update existing app  
       await db
         .update(apps)
         .set({
@@ -55,14 +54,16 @@ export const createApp = async (appDetails: AppDetails) => {
           appType: appDetails.appType,
           updatedAt: new Date(),
         })
-        .where(eq(apps.id, appDetails.existingAppId));
+        .where(eq(apps.id, appDetails.existingAppId))
 
-      return appDetails.existingAppId;
+      return appDetails.existingAppId
     } else {
-      // Create new app logic
+      console.log("Creating new app")
+      // Insert into 'apps' first
+      console.log(appDetails)
       await db.insert(apps).values({
         id: newAppId,
-        workspaceId: user.workspaceId,
+        workspaceId: user.workspaceId!,
         userId: user.id!,
         description: appDetails.description,
         icon: appDetails.icon,
@@ -76,9 +77,9 @@ export const createApp = async (appDetails: AppDetails) => {
         appMode: "",
         createdAt: new Date(),
         updatedAt: new Date(),
-      });
+      })
 
-      // Insert configurations
+      // Then insert into 'appConfigs'
       await db.insert(appConfigs).values({
         id: newAppConfigId,
         appId: newAppId,
@@ -92,11 +93,13 @@ export const createApp = async (appDetails: AppDetails) => {
         textToSpeechVoice: "",
         textToSpeechLanguage: "",
         sensitiveWordAvoidanceEnabled: false,
+        // modelId: uuidv4(),
         contextFileKeys: "",
         embedLink: "",
         createdAt: new Date(),
-      });
+      })
 
+      // Then insert into 'appCustomizations'
       await db.insert(appCustomizations).values({
         id: newCustomizationId,
         appId: newAppId,
@@ -112,60 +115,54 @@ export const createApp = async (appDetails: AppDetails) => {
         botFontFamily: "Arial",
         createdAt: new Date(),
         updatedAt: new Date(),
-      });
+      })
 
-      return newAppId;
+      console.log(`App with id ${newAppId} created successfully`)
+      return newAppId
     }
   } catch (error) {
-    if (error) throw error;
-    throw new DatabaseError("Error creating or updating app");
+    console.error(error)
+    throw new Error("Error creating or updating app")
   }
-};
+}
 
 export const deleteApp = async (appId: string) => {
+  const {user} = await validateRequest()
   try {
-    const user = await getUserDetails();
-
     if (!user) {
-      throw new UnauthorizedError("User not found");
+      console.log("cannot find user in app-action.tsx")
+      return
     }
-
     if (!user?.workspaceId) {
-      throw new BadRequestError("User does not have a workspace");
+      console.log("User does not have a workspace")
+      return
     }
+    const app = await db.select().from(apps).where(eq(apps.id, appId)).limit(1)
 
-    const app = await db.select().from(apps).where(eq(apps.id, appId)).limit(1);
-
+    if (app.length) {
+      await db.delete(apps).where(eq(apps.id, appId))
+    }
+    console.log(app)
     if (!app.length) {
-      throw new NotFoundError(`App with id ${appId} not found`);
+      console.log(`App with id ${appId} not found`)
+      return
     }
-
-    await db.delete(apps).where(eq(apps.id, appId));
-    return true;
+    console.log(`App with id ${appId} deleted successfully`)
   } catch (error) {
-    if (error) throw error;
-    throw new DatabaseError("Error deleting app");
+    console.error(error)
+    throw new Error("Error deleting app")
   }
-};
+}
 
 export const getWorkspaceApps = async () => {
-  try {
-    const session = await auth();
-    const user = await getUserByEmail();
+  // await rateLimitByIp({ key: "getWorkspaceApps", limit: 10, window: 60000 })
+  const user = await getUserDetails()
+  if (user === null || !user.workspaceId) return null
+  
+  const workspaceApps = await db
+    .select()
+    .from(apps)
+    .where(eq(apps.workspaceId, user.workspaceId))
 
-    if (!user || !user.workspaceId) {
-      throw new UnauthorizedError("User not found or no workspace assigned");
-    }
-
-    const workspaceApps = await db
-      .select()
-      .from(apps)
-      .where(eq(apps.workspaceId, user.workspaceId))
-      .orderBy(desc(apps.createdAt));
-
-    return workspaceApps;
-  } catch (error) {
-    if (error) throw error;
-    throw new DatabaseError("Error fetching workspace apps");
-  }
-};
+    return workspaceApps
+}
