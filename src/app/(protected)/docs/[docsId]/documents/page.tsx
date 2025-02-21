@@ -1,29 +1,29 @@
-"use client"
+"use client";
 
-import React from "react"
-import { usePathname } from "next/navigation"
-import { Plus } from "lucide-react"
+import React from "react";
+import { usePathname } from "next/navigation";
+import { Plus } from "lucide-react";
 
-import { AppFileType } from "@/lib/db/schema"
+import { AppFileType } from "@/drizzle/schema";
 
-import { Button } from "@/components/ui/button"
-import LoadingIcon from "@/components/loading"
-import Table from "@/components/table"
-import { useAppFiles } from "@/app/services/app-docs/app-docs-service"
+import { Button } from "@/components/ui/button";
+import LoadingIcon from "@/components/loading";
+import Table from "@/components/table";
+import { useAppFiles } from "@/app/services/app-docs/app-docs-service";
 
 const Documents = () => {
-  const [appFileData, setAppfileData] = React.useState<AppFileType[]>([])
+  const [appFileData, setAppfileData] = React.useState<AppFileType[]>([]);
 
-  const pathname = usePathname()
-  const documentId = pathname?.split("/")[2] || ""
+  const pathname = usePathname();
+  const documentId = pathname?.split("/")[2] || "";
 
-  const { appFiles, isLoading, error } = useAppFiles(documentId)
+  const { appFiles, isLoading, error } = useAppFiles(documentId);
 
   React.useEffect(() => {
     if (appFiles && appFiles !== appFileData) {
-      setAppfileData(appFiles)
+      setAppfileData(appFiles);
     }
-  }, [appFileData, appFiles])
+  }, [appFileData, appFiles]);
 
   const headers = [
     "",
@@ -33,13 +33,15 @@ const Documents = () => {
     "UPLOAD TIME",
     "STATUS",
     "ACTION",
-  ]
+  ];
 
   return (
     <div className="w-full p-4 pt-2 text-sm">
       <h2 className="mb-2 border-b p-2 text-lg font-semibold">Documents</h2>
       <h2 className="px-2 text-gray-700">
-        Here you can find all the files associated with the Knowledge base. These files can be linked to Agentra and indexed for easy retrieval and reference.
+        Here you can find all the files associated with the Knowledge base.
+        These files can be linked to Agentra and indexed for easy retrieval and
+        reference.
       </h2>
       <div className="my-2 flex justify-between">
         <div className="flex items-center space-x-2 p-2 pl-0 text-gray-600">
@@ -76,7 +78,7 @@ const Documents = () => {
       )}
       {error && <p>Error loading documents: {error.message}</p>}
     </div>
-  )
-}
+  );
+};
 
-export default Documents
+export default Documents;

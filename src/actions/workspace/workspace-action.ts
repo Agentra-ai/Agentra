@@ -1,42 +1,42 @@
-import { eq } from "drizzle-orm"
-import { v4 as uuidv4 } from "uuid"
+import { eq } from "drizzle-orm";
+import { v4 as uuidv4 } from "uuid";
 
-import { db } from "@/lib/db"
-import { userTable, workspaces, workspaceUsers } from "@/lib/db/schema"
-import { validateRequest } from "@/lib/auth/get-session"
+import db from "@/drizzle";
+import { users, workspaces, workspaceUsers } from "@/drizzle/schema";
+import { getUserDetails } from "../user";
 
 export async function createWorkspace({
   name,
   userId,
 }: {
-  name: string
-  userId: string
+  name: string;
+  userId: string;
 }) {
   // Check if the user already exists in workspaceUsers
   const existingWorkspaceUser = await db
     .select()
     .from(workspaceUsers)
     .where(eq(workspaceUsers.userId, userId))
-    .limit(1)
+    .limit(1);
 
   if (existingWorkspaceUser.length > 0) {
     // User already associated with a workspace
-    const workspaceId = existingWorkspaceUser[0]?.workspaceId
+    const workspaceId = existingWorkspaceUser[0]?.workspaceId;
     // Update user's workspaceId in users table
     await updateUserWorkspaceInUserTable({
       id: userId,
       workspaceId: workspaceId!,
-    })
+    });
     // Retrieve and return the existing workspace
     const existingWorkspace = await db
       .select()
       .from(workspaces)
       .where(eq(workspaces.id, workspaceId!))
-      .limit(1)
-    return existingWorkspace[0]
+      .limit(1);
+    return existingWorkspace[0];
   } else {
-    const workspaceId = uuidv4()
-    const workspaceVectorDB = uuidv4()
+    const workspaceId = uuidv4();
+    const workspaceVectorDB = uuidv4();
     const newWorkspace = await db
       .insert(workspaces)
       .values({
@@ -45,24 +45,24 @@ export async function createWorkspace({
         workspaceVectorDB: workspaceVectorDB,
         createdAt: new Date(),
       })
-      .returning()
+      .returning();
 
-    console.log(newWorkspace)
+    console.log(newWorkspace);
 
     // Add user to workspace_users with role 'admin'
     await db.insert(workspaceUsers).values({
       userId,
       workspaceId: (newWorkspace[0]?.id as string) || "",
       role: "ADMIN",
-    })
+    });
 
     // Update user's workspaceId in users table
     await updateUserWorkspaceInUserTable({
       id: userId,
       workspaceId: newWorkspace[0]?.id || "",
-    })
+    });
 
-    return newWorkspace[0]
+    return newWorkspace[0];
   }
 }
 
@@ -70,31 +70,31 @@ export async function updateUserWorkspaceInUserTable({
   id,
   workspaceId,
 }: {
-  id: string
-  workspaceId: string
+  id: string;
+  workspaceId: string;
 }) {
   const updatedUserWorkspace = await db
-    .update(userTable)
+    .update(users)
     .set({ workspaceId })
-    .where(eq(userTable.id, id))
-    .returning()
+    .where(eq(users.id, id))
+    .returning();
 
-  console.log(updatedUserWorkspace)
+  console.log(updatedUserWorkspace);
 
-  return updatedUserWorkspace[0]
+  return updatedUserWorkspace[0];
 }
 
 export async function getWorkspaceDetails() {
   // const userDetails = await getUserDetails()
-  const session = await validateRequest()
-  const workspaceId = session?.user?.workspaceId
+  const user = await getUserDetails();
+  const workspaceId = user?.workspaceId;
   if (!workspaceId) {
-    throw new Error("Workspace ID is undefined")
+    throw new Error("Workspace ID is undefined");
   }
   const workspaceArray = await db
     .select()
     .from(workspaces)
     .where(eq(workspaces.id, workspaceId))
-    .limit(1)
-  return workspaceArray[0]
+    .limit(1);
+  return workspaceArray[0];
 }

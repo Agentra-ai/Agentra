@@ -1,25 +1,25 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 
-import { SettingPopup } from "./setting-popup"
-import { LogoutButton } from "../auth/LogoutButton"
-import Image from "next/image"
+import { SettingPopup } from "./setting-popup";
+import Image from "next/image";
+import { SignoutButton } from "../signout-button";
 
 // import { auth } from '@/auth'
 // import { currentUser } from '@/lib/auth'
 // import { getAccountByUserId } from '@/data/account'
 
-type Props = {}
+type Props = {};
 
 const Profile = (props: Props) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const open = () => setIsOpen(true)
-  const close = () => setIsOpen(false)
+  const [isOpen, setIsOpen] = useState(false);
+  const open = () => setIsOpen(true);
+  const close = () => setIsOpen(false);
 
   // console.log(a)
   return (
@@ -53,7 +53,7 @@ const Profile = (props: Props) => {
           </p>
           <p
             onClick={() => setIsOpen(true)}
-            className="p-2 text-sm cursor-pointer hover:bg-gray-100 hover:text-black"
+            className="cursor-pointer p-2 text-sm hover:bg-gray-100 hover:text-black"
           >
             Settings
           </p>
@@ -75,13 +75,13 @@ const Profile = (props: Props) => {
               About
             </p>
             <hr className="my-1" />
-            <LogoutButton />
+            <SignoutButton />
           </div>
         </PopoverContent>
       </Popover>
       {<SettingPopup isOpen={isOpen} onClose={close} />}
     </>
-  )
-}
+  );
+};
 
-export default Profile
+export default Profile;

@@ -1,16 +1,16 @@
-import { ReactNode } from "react"
+import { ReactNode } from "react";
 import {
-  Bot,
+  BotMessageSquareIcon,
   CalendarDaysIcon,
   KanbanSquareIcon,
   LayoutGridIcon,
   UsersIcon,
-} from "lucide-react"
+} from "lucide-react";
 
-import Sidebar from "@/components/protected/sidebar"
+import Sidebar from "@/components/protected/sidebar";
 
 interface LayoutProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 const boardsLinks = [
@@ -22,7 +22,7 @@ const boardsLinks = [
   {
     href: "/boards/aiboard",
     label: "AiBoard",
-    icons: <Bot size={20} strokeWidth={1.5} />,
+    icons: <BotMessageSquareIcon size={20} strokeWidth={1.5} />,
   },
   {
     href: "/boards/calender",
@@ -41,7 +41,7 @@ const boardsLinks = [
   },
   // { href: '/boards', label: 'Settings', icons: <setting className="w-5 h-5" /> },
   // Add more links as needed
-]
+];
 
 const BoardLayout = ({ children }: LayoutProps) => {
   return (
@@ -51,7 +51,7 @@ const BoardLayout = ({ children }: LayoutProps) => {
         <main className="flex-1 p-4">{children}</main>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default BoardLayout
+export default BoardLayout;

@@ -1,90 +1,91 @@
-"use client"
+"use client";
 
-import React, { useState } from "react"
-import {  useRouter, useSearchParams } from "next/navigation"
-import { getUserDetails } from "@/actions/user"
-import { HiAdjustmentsHorizontal } from "react-icons/hi2"
-import { IoEarth } from "react-icons/io5"
-import { v4 as uuidv4 } from "uuid"
+import React, { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { getUserDetails } from "@/actions/user";
+import { FaFileAlt } from "react-icons/fa";
+import { HiAdjustmentsHorizontal } from "react-icons/hi2";
+import { IoEarth } from "react-icons/io5";
+import { v4 as uuidv4 } from "uuid";
 
-import { EmbeddingModal, User } from "@/lib/db/schema" // I
+import { AppDocuments, Appfile, EmbeddingModal, User } from "@/drizzle/schema"; // I
 
-import { loadFilesIntoPinecone } from "@/hooks/api-action/pinacone"
-import { uploadToS3 } from "@/hooks/api-action/s3"
-import { toast } from "@/hooks/use-toast"
+import { loadFilesIntoPinecone } from "@/hooks/api-action/pinacone";
+import { getS3Url, uploadToS3 } from "@/hooks/api-action/s3";
+import { toast } from "@/hooks/use-toast";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import LoadingIcon from "@/components/loading"
-import FileUpload from "@/components/protected/file-upload"
-import { CreateNewDocs } from "@/components/protected/file-upload/create-new-docs"
-import { FaFileAlt } from "react-icons/fa"
+} from "@/components/ui/select";
+import LoadingIcon from "@/components/loading";
+import FileUpload from "@/components/protected/file-upload";
+import { CreateNewDocs } from "@/components/protected/file-upload/create-new-docs";
 
-type Props = {}
+type Props = {};
 
 const CreateAppDocument = (props: Props) => {
-  const [currentStep, setCurrentStep] = useState<number>(1)
-  const [documentName, setDocumentName] = useState<string>("New documents")
-  const [uploadProgress, setUploadProgress] = useState<number>(0)
-  const [uploadComplete, setUploadComplete] = useState<boolean>(false)
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [documentName, setDocumentName] = useState<string>("New documents");
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [uploadComplete, setUploadComplete] = useState<boolean>(false);
   const [embeddingModal, setEmbeddingModal] = useState<EmbeddingModal>(
-    EmbeddingModal.TEXT_EMBEDDING_ADA_002
-  )
-  const [selectedFile, setSelectedFile] = useState<File | null>(null)
-  const [customDelimiter, setCustomDelimiter] = useState<string>("\\n\\n")
-  const [maxChunkLength, setMaxChunkLength] = useState<number>(500)
-  const [chunkOverlap, setChunkOverlap] = useState<number>(50)
-  const [fileName, setFileName] = useState<string | null>(null)
-  const [uploading, setUploading] = React.useState(false)
-  const navigate = useRouter()
- 
-  const searchParams = useSearchParams()
+    EmbeddingModal.TEXT_EMBEDDING_ADA_002,
+  );
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [customDelimiter, setCustomDelimiter] = useState<string>("\\n\\n");
+  const [maxChunkLength, setMaxChunkLength] = useState<number>(500);
+  const [chunkOverlap, setChunkOverlap] = useState<number>(50);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [uploading, setUploading] = React.useState(false);
+  const navigate = useRouter();
+
+  const searchParams = useSearchParams();
+
   // /apps/documents/create?isDocshub=true&_rsc=jigap
-  const isDocshub = searchParams?.get('isDocshub') === 'true';
+  const isDocshub = searchParams?.get("isDocshub") === "true";
 
-  console.log("isDocsHub", isDocshub)
+  console.log("isDocsHub", isDocshub);
 
-  const newDocumentId = uuidv4()  
-  const newFileId = uuidv4()
+  const newDocumentId = uuidv4();
+  const newFileId = uuidv4();
 
   const steps = [
     "Choose data source",
     "Text Preprocessing",
     "Execute and finish",
-  ]
+  ];
 
   const handleFileSelected = (file: File | null) => {
-    setSelectedFile(file)
+    setSelectedFile(file);
     if (file) {
-      setFileName(file.name)
+      setFileName(file.name);
     }
-  }
+  };
 
   const handleNextStep = async () => {
     if (currentStep === 2) {
-      setCurrentStep(currentStep + 1)
+      setCurrentStep(currentStep + 1);
       try {
-        await uploadAndEmbedFile()
-        setUploadProgress(100)
-        setUploadComplete(true)
+        await uploadAndEmbedFile();
+        setUploadProgress(100);
+        setUploadComplete(true);
       } catch (error) {
-        console.error(error)
+        console.error(error);
       }
     } else {
-      setCurrentStep(currentStep + 1)
+      setCurrentStep(currentStep + 1);
     }
-  }
+  };
 
   const handlePreviousStep = () => {
-    setCurrentStep(currentStep - 1)
-  }
+    setCurrentStep(currentStep - 1);
+  };
 
   // const handleFinish = () => {
   //   console.log("Document Name:", documentName)
@@ -93,18 +94,18 @@ const CreateAppDocument = (props: Props) => {
   // }
 
   const simulateProgress = () => {
-    setUploadProgress(0)
+    setUploadProgress(0);
     const interval = setInterval(() => {
       setUploadProgress((prev) => {
         if (prev >= 90) {
-          clearInterval(interval)
-          return 90
+          clearInterval(interval);
+          return 90;
         }
-        return prev + Math.random() * 3
-      })
-    }, 500)
-    return interval
-  }
+        return prev + Math.random() * 3;
+      });
+    }, 500);
+    return interval;
+  };
 
   const uploadAndEmbedFile = async () => {
     if (!selectedFile || selectedFile.size === 0 || selectedFile === null) {
@@ -112,22 +113,33 @@ const CreateAppDocument = (props: Props) => {
         title: "Error",
         description: "No file selected",
         variant: "destructive",
-      })
-      return
+      });
+      return;
     }
 
-    const AWSS3data = await uploadToS3(selectedFile as File)
     try {
-      const user = await getUserDetails()
-      setUploading(true)
-      const progressInterval = simulateProgress()
+      setUploading(true);
+      const progressInterval = simulateProgress();
 
-      
-      const fileSizeInMB = (selectedFile.size / (1024 * 1024)).toFixed(2)
+      // Create FormData and upload using the API endpoint
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const res = await fetch("/api/s3upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const S3Data = await res.json();
+
+      const fileSizeInMB = (selectedFile.size / (1024 * 1024)).toFixed(2);
+
       await CreateNewDocs(
-        user as User,
-        AWSS3data,
-        toast,
+        S3Data,
         newDocumentId,
         newFileId,
         fileSizeInMB,
@@ -135,60 +147,42 @@ const CreateAppDocument = (props: Props) => {
         documentName,
         maxChunkLength,
         chunkOverlap,
-        isDocshub
-      )
+        isDocshub || false,
+      );
 
-      await new Promise((resolve) => setTimeout(resolve, 3000))
+      await new Promise((resolve) => setTimeout(resolve, 3000));
 
       await loadFilesIntoPinecone(
-        AWSS3data.file_key,
+        S3Data.file_key,
         embeddingModal,
         chunkOverlap,
         maxChunkLength,
         newFileId,
-        isDocshub
-      )
+        isDocshub,
+      );
 
-      // try {
-      //   await loadFilesIntoPinecone(
-      //     AWSS3data.file_key,
-      //     embeddingModal,
-      //     chunkOverlap,
-      //     maxChunkLength,
-      //     newFileId,
-      //   )
-      // } catch (error) {
-        //   console.error(error)
-        //   toast({
-          //     title: "Error",
-      //     description: "Failed to load into Pinecone",
-      //     variant: "destructive",
-      //   })
-      //   return
-      // }
-
-      setUploading(false)
-      setUploadComplete(true)
-      setUploadProgress(100)
-      setSelectedFile(null)
-      clearInterval(progressInterval)
+      setUploading(false);
+      setUploadComplete(true);
+      setUploadProgress(100);
+      setSelectedFile(null);
+      clearInterval(progressInterval);
 
       toast({
         title: "Success",
         description: "File uploaded successfully!",
         variant: "default",
-      })
+      });
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast({
         title: "Error",
         description: "File upload failed",
         variant: "destructive",
-      })
+      });
     } finally {
-      setUploading(false)
+      setUploading(false);
     }
-  }
+  };
 
   return (
     <div className="flex size-full bg-white p-6 text-[13px]">
@@ -202,7 +196,7 @@ const CreateAppDocument = (props: Props) => {
                   <div
                     className={`z-10 flex h-8 w-8 items-center justify-center rounded-full transition-all duration-300 ${
                       currentStep > index
-                        ? "bg-blue-600 text-white"
+                        ? "bg-[#1155ff] text-white"
                         : "bg-gray-100 text-gray-600"
                     }`}
                   >
@@ -211,7 +205,7 @@ const CreateAppDocument = (props: Props) => {
                   {
                     <div
                       className={`absolute left-4 top-4 -z-10 h-12 w-2 transition-all duration-300 ${
-                        currentStep > index ? "bg-blue-600" : "bg-gray-300"
+                        currentStep > index ? "bg-[#1155ff]" : "bg-gray-300"
                       }`}
                     ></div>
                   }
@@ -241,8 +235,8 @@ const CreateAppDocument = (props: Props) => {
             <h2 className="mb-4 text-xl font-bold">Choose data source</h2>
             {/* Options for data source selection */}
             <div className="flex gap-3">
-              <button className="mb-2 mr-2 flex items-center rounded-lg border border-blue-600 bg-blue-50 p-2 py-3 text-black">
-                <FaFileAlt className="text-blue-600" /> Import from file
+              <button className="mb-2 mr-2 flex items-center rounded-lg border border-[#1155ff] bg-blue-50 p-2 py-3 text-black">
+                <FaFileAlt className="text-[#1155ff]" /> Import from file
               </button>
               <button className="mb-2 mr-2 flex items-center rounded-lg border bg-white p-2 text-black">
                 <IoEarth /> Sync from website
@@ -271,8 +265,8 @@ const CreateAppDocument = (props: Props) => {
             {/* Left side: Embedding model selection and custom settings */}
             <div className="w-[60%] pr-4">
               {/* Custom settings interface */}
-              <div className="rounded-lg border-[1.5px] border-blue-600 bg-white p-6 pb-8">
-                <h3 className="mb-2 flex items-center text-lg font-semibold  text-black">
+              <div className="rounded-lg border-[1.5px] border-[#1155ff] bg-white p-6 pb-8">
+                <h3 className="mb-2 flex items-center text-lg font-semibold text-black">
                   <span className="mr-2 flex items-center justify-center rounded-lg bg-blue-500/10 p-2">
                     <HiAdjustmentsHorizontal className="text-[#1a55ff]" />
                   </span>
@@ -337,7 +331,7 @@ const CreateAppDocument = (props: Props) => {
 
                   {/* Maximum chunk length */}
                   <div>
-                    <label className="mb-1 block font-medium  text-black">
+                    <label className="mb-1 block font-medium text-black">
                       Maximum chunk length
                     </label>
                     <Input
@@ -352,7 +346,7 @@ const CreateAppDocument = (props: Props) => {
 
                   {/* Chunk overlap */}
                   <div>
-                    <label className="mb-1 block font-medium  text-black">
+                    <label className="mb-1 block font-medium text-black">
                       Chunk overlap
                     </label>
                     <Input
@@ -434,7 +428,7 @@ const CreateAppDocument = (props: Props) => {
             <div className="mb-4 w-full">
               <div className="h-2 w-full rounded-full bg-gray-200">
                 <div
-                  className="h-2 rounded-full bg-blue-600 transition-all duration-500"
+                  className="h-2 rounded-full bg-[#1155ff] transition-all duration-500"
                   style={{ width: `${Math.round(uploadProgress)}%` }}
                 />
               </div>
@@ -455,7 +449,7 @@ const CreateAppDocument = (props: Props) => {
                   </Button>
                   <Button
                     onClick={() => {
-                      navigate.push(`/docs/${newDocumentId}/documents`)
+                      navigate.push(`/docs/${newDocumentId}/documents`);
                     }}
                   >
                     Go to File
@@ -467,7 +461,7 @@ const CreateAppDocument = (props: Props) => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CreateAppDocument
+export default CreateAppDocument;

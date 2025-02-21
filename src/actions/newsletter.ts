@@ -2,10 +2,10 @@
 
 // import { unstable_noStore as noStore } from "next/cache"
 
-// import { db } from "@/lib/db"
+// import db from "@/drizzle"
 // import { resend } from "@/config/email"
 // import { psGetNewsletterSubscriberByEmail } from "@/db/prepared/statements"
-// import { newsletterSubscribers } from "@/lib/db/schema"
+// import { newsletterSubscribers } from "@/drizzle/schema"
 // import {
 //   checkIfSubscribedToNewsletterSchema,
 //   newsletterSignUpSchema,

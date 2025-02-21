@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 const LoadingIcon = () => {
   return (
@@ -13,7 +13,7 @@ const LoadingIcon = () => {
         <div className="absolute left-0 top-1/2 h-[8px] w-[8px] -translate-y-1/2 transform rounded-full bg-blue-200"></div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default LoadingIcon
+export default LoadingIcon;

@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
-import { ArrowLeftFromLineIcon, ArrowRightFromLineIcon } from "lucide-react"
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { motion } from "framer-motion";
+import { ArrowLeftFromLineIcon, ArrowRightFromLineIcon } from "lucide-react";
 
 interface SidebarLinkProps {
-  href: string
-  label: string
-  icons: React.ReactNode
+  href: string;
+  label: string;
+  icons: React.ReactNode;
 }
 
 interface SidebarProps {
-  links: SidebarLinkProps[]
+  links: SidebarLinkProps[];
 }
 
 const Sidebar = ({ links }: SidebarProps) => {
-  const [isOpen, setIsOpen] = useState(false)
-  const pathname = usePathname() // Get current path to determine active link
+  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname(); // Get current path to determine active link
 
   const toggleSidebar = () => {
-    setIsOpen((prev) => !prev)
-  }
+    setIsOpen((prev) => !prev);
+  };
 
   return (
     <div className="flex h-full flex-col rounded-l-md">
@@ -47,7 +47,7 @@ const Sidebar = ({ links }: SidebarProps) => {
 
         <ul className="p-3">
           {links.map((link) => {
-            const isActive = pathname === link.href
+            const isActive = pathname === link.href;
 
             return (
               <li
@@ -68,12 +68,12 @@ const Sidebar = ({ links }: SidebarProps) => {
                   {isOpen && <span>{link.label}</span>}
                 </Link>
               </li>
-            )
+            );
           })}
         </ul>
       </motion.aside>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

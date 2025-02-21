@@ -1,10 +1,10 @@
-import React from "react"
-import { redirect } from "next/navigation"
+import React from "react";
+import { redirect } from "next/navigation";
 
-type Props = {}
+type Props = {};
 
 const page = (props: Props) => {
-  return redirect("/boards/dashboard")
-}
+  return redirect("/boards/dashboard");
+};
 
-export default page
+export default page;

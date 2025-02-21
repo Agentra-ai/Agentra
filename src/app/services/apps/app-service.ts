@@ -1,25 +1,21 @@
-import useSWR, { mutate } from "swr"
-import useSWRMutation from "swr/mutation"
-
-import { App } from "@/lib/db/schema" // Ensure this matches your actual type definition.
-
-import fetcher, { axiosInstance } from "@/app/services/fetcher"
-
+import useSWR, { mutate } from "swr";
+import useSWRMutation from "swr/mutation";
+import { App } from "@/drizzle/schema"; // Ensure this matches your actual type definition.
+import { axiosInstance } from "@/app/services/fetcher";
+import { useState, useEffect } from "react";
 export function useWorkspaceApps() {
-  const { data, error, isValidating } = useSWR<{ data: App[] }>(
-    "/api/app/get-apps", fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  )
+  const { data, error, isLoading } = useSWR(
+    "/api/app/get-apps",
+    async (url) => {
+      const response = await axiosInstance.get(url);
+      if (!response) {
+        throw new Error("Failed to fetch apps");
+      }
+      return response.data.workspaceApps || [];
+    },
+  );
 
-  // console.log(data)
-  // If the API returns `undefined`, fallback to an empty array
-  const workspaceApps = data?.data || []
-
-  console.log('api called',workspaceApps)
-  
-  return { workspaceApps, error, isLoading: isValidating && !data }
+  return { workspaceApps: data, error, isLoading: isLoading && !data };
 }
 
 export function useDeleteApp() {
@@ -30,22 +26,22 @@ export function useDeleteApp() {
   } = useSWRMutation(
     "/api/app/delete-app",
     async (url, { arg: appId }: { arg: App["id"] }) => {
-      console.log("App ID:", appId)
-      await axiosInstance.delete(url, { data: { appId } })
-      mutate("/api/app/get-apps")
+      console.log("App ID:", appId);
+      await axiosInstance.delete(url, { data: { appId } });
+      mutate("/api/app/get-apps");
     },
     {
       onError: (error) => {
-        console.log(error)
+        console.log(error);
       },
       onSuccess(data, key) {
-        console.log("Data:", data)
-        console.log("Key:", key)
+        console.log("Data:", data);
+        console.log("Key:", key);
       },
-    }
-  )
+    },
+  );
 
-  return { deleteApp, isLoading: isMutating, error }
+  return { deleteApp, isLoading: isMutating, error };
 }
 
 export function useUpdateApp() {
@@ -61,39 +57,39 @@ export function useUpdateApp() {
         arg: appDetails,
       }: {
         arg: {
-          name: string
-          description: string
-          icon: string
-          tags: string[]
-          appType: string
-          existingAppId: string | null
-        }
-      }
+          name: string;
+          description: string;
+          icon: string;
+          tags: string[];
+          appType: string;
+          existingAppId: string | null;
+        };
+      },
     ) => {
-      console.log("service app", appDetails)
-      let res
+      console.log("service app", appDetails);
+      let res;
       if (appDetails.existingAppId) {
-        res = await axiosInstance.put(url, appDetails)
+        res = await axiosInstance.put(url, appDetails);
       } else {
-        res = await axiosInstance.post(url, appDetails)
+        res = await axiosInstance.post(url, appDetails);
       }
       // console.log(res.data)
       // mutate("/api/app/get-apps")
-      return res.data as { appId: string; message: string }
+      return res.data as { appId: string; message: string };
     },
     {
       onError: (error) => {
-        console.log(error)
+        console.log(error);
       },
       onSuccess(data, key) {
         // console.log("App ID:", data.appId)
-        console.log("Data:", data)
-        console.log("Key:", key)
-        mutate("/api/app/get-apps")
+        console.log("Data:", data);
+        console.log("Key:", key);
+        mutate("/api/app/get-apps");
         // return res
       },
-    }
-  )
+    },
+  );
 
-  return { updateApp, isLoading: isMutating, error }
+  return { updateApp, isLoading: isMutating, error };
 }

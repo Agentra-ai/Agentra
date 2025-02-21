@@ -1,26 +1,26 @@
-'use client'
+"use client";
 
-import React, { useCallback } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { useToast } from '@/hooks/use-toast';
-import { useChat } from '@/hooks/use-chat';
-import { useAppStore } from '@/store/useAppStore';
-import { BsArrowRepeat } from 'react-icons/bs';
-import { RiSendPlaneFill } from 'react-icons/ri';
-import { Button } from '@/components/ui/button';
-import { TextArea } from '@/components/ui/textarea';
-import { useMessageScroll } from './chat-components';
-import MessageList from './message-list';
-import ModalSelect from './modal-select';
-import { useShallow } from 'zustand/react/shallow';
-import Cookies from 'js-cookie';
-import { updateAppConfig } from '@/actions/app/app-config-action';
-import { useChatStore } from '@/store/useChatStore';
+import React, { useCallback } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
+import { useChat } from "@/hooks/use-chat";
+import { useAppStore } from "@/store/useAppStore";
+import { BsArrowRepeat } from "react-icons/bs";
+import { RiSendPlaneFill } from "react-icons/ri";
+import { Button } from "@/components/ui/button";
+import { TextArea } from "@/components/ui/textarea";
+import { useMessageScroll } from "./chat-components";
+import MessageList from "./message-list";
+import ModalSelect from "./modal-select";
+import { useShallow } from "zustand/react/shallow";
+import Cookies from "js-cookie";
+import { useAppConfig } from "@/app/services/apps/app-config-service";
+import { useChatStore } from "@/store/useChatStore";
 
 const ConfigChat = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const appId = pathname?.split('/')[2] || '';
+  const appId = pathname?.split("/")[2] || "";
   const { toast } = useToast();
 
   const {
@@ -36,14 +36,10 @@ const ConfigChat = () => {
       openingStatement: state.openingStatement,
       refresh: state.refresh,
       setRefresh: state.setRefresh,
-    }))
+    })),
   );
 
-  const {
-      setConversationId,
-    setSelectedModel,
-    setMessages
-  } = useChatStore();
+  const { setConversationId, setSelectedModel, setMessages } = useChatStore();
 
   const {
     messages,
@@ -56,39 +52,49 @@ const ConfigChat = () => {
 
   useMessageScroll(messages);
 
+  const { updateConfig } = useAppConfig(appId);
+
   const handleRefresh = useCallback(async () => {
     try {
-      await updateAppConfig(appId, {
+      await updateConfig({
         ...appConfigDetails,
         contextFileKeys: selectedFileKeys.toString(),
       });
       toast({
-        title: 'Config Updated',
-        description: 'Start new conversation...',
-        variant: 'success',
+        title: "Config Updated",
+        description: "Start new conversation...",
+        variant: "success",
       });
     } catch (error) {
-      console.error('Update error:', error);
+      console.error("Update error:", error);
     }
     Cookies.remove(`conversationIdFor${appId}`);
     setMessages([]);
     setConversationId(null);
     setRefresh(false);
-  // }, [appConfigDetails, appId, selectedFileKeys, toast, setRefresh, setConversationId, setMessages]);
-  }, []);
+  }, [
+    appConfigDetails,
+    appId,
+    selectedFileKeys,
+    setConversationId,
+    setMessages,
+    setRefresh,
+    toast,
+    updateConfig,
+  ]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
+      if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         handleSendMessage();
       }
     },
-    [handleSendMessage]
+    [handleSendMessage],
   );
 
   if (!appId) {
-    router.push('apps/studio');
+    router.push("apps/studio");
     return null;
   }
 
@@ -101,7 +107,7 @@ const ConfigChat = () => {
       <div className="flex h-full w-full flex-col items-center justify-between rounded-[8px]">
         <div
           className={`flex h-[calc(100vh-100px)] w-full flex-col gap-2 bg-[#f1f3f7] ${
-            refresh ? '' : 'overflow-y-auto'
+            refresh ? "" : "overflow-y-auto"
           } relative z-0 rounded-b-[8px] border`}
           id="message-container"
         >

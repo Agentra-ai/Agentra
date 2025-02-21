@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { ReactNode } from "react"
-import { SWRConfig } from "swr"
+import { ReactNode } from "react";
+import { SWRConfig } from "swr";
 
-import fetcher from "@/app/services/fetcher"
+import fetcher from "@/app/services/fetcher";
 
 export default function SWRProviders({ children }: { children: ReactNode }) {
   return (
@@ -11,12 +11,12 @@ export default function SWRProviders({ children }: { children: ReactNode }) {
       value={{
         fetcher,
         // refreshInterval: 3000,
-        // revalidateIfStale: false,
+        revalidateIfStale: false,
         revalidateOnFocus: false,
-        // revalidateOnReconnect: false,
+        revalidateOnReconnect: false,
       }}
     >
       {children}
     </SWRConfig>
-  )
+  );
 }
