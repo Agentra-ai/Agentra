@@ -1,8 +1,6 @@
 import { getAppConfigDetails } from "@/actions/app/app-config-action";
 import { NextRequest, NextResponse } from "next/server";
 
-// ...existing code...
-
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const appId = searchParams.get("appId");

@@ -20,7 +20,6 @@ import { siteConfig } from "@/lib/site";
 import { ThemeProvider } from "@/provider/theme-provider";
 import SWRProviders from "@/lib/swr-provider";
 import { cn } from "@/lib/utils";
-import { Navbar } from "@/components/navbar";
 import { Toaster } from "@/components/ui/toaster";
 import { Tooltip } from "@/components/ui/tooltip";
 import { Providers } from "@/components/providers";
