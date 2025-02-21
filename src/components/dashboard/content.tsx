@@ -1,19 +1,19 @@
-import { type ReactNode } from "react"
+import { type ReactNode } from "react";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
-import { PageTitle } from "./page-title"
+import { PageTitle } from "./page-title";
 
 export function DashboardContent(
   props: Readonly<{
-    action?: ReactNode
-    children: ReactNode
-    className?: string
-    subtitle?: ReactNode
-    title?: ReactNode
-  }>
+    action?: ReactNode;
+    children: ReactNode;
+    className?: string;
+    subtitle?: ReactNode;
+    title?: ReactNode;
+  }>,
 ) {
-  const { action, className, subtitle, children, title } = props
+  const { action, className, subtitle, children, title } = props;
 
   return (
     <div className="size-full overflow-y-auto py-10">
@@ -24,10 +24,10 @@ export function DashboardContent(
           </PageTitle>
         ) : null}
 
-        <div className="prose-code:bg-primary-50 prose-code:text-primary-600 prose prose-sm max-w-full text-inherit prose-headings:text-balance prose-headings:font-normal prose-p:max-w-prose prose-p:text-pretty prose-a:font-normal prose-a:text-primary prose-code:rounded prose-code:px-1 prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none">
+        <div className="prose-code:bg-primary-50 prose-code:text-primary-600 prose prose-sm prose-headings:text-balance prose-headings:font-normal prose-p:max-w-prose prose-p:text-pretty prose-a:font-normal prose-a:text-primary prose-code:rounded prose-code:px-1 prose-code:text-sm prose-code:font-normal prose-code:before:content-none prose-code:after:content-none max-w-full text-inherit">
           {children}
         </div>
       </main>
     </div>
-  )
+  );
 }

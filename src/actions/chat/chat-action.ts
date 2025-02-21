@@ -1,22 +1,22 @@
-import { desc, eq } from "drizzle-orm"
-import { v4 as uuidv4, validate as validateUUID } from "uuid"
+import { desc, eq } from "drizzle-orm";
+import { v4 as uuidv4, validate as validateUUID } from "uuid";
 
-import { db } from "@/lib/db"
-import { conversations, messages } from "@/lib/db/schema"
+import db from "@/drizzle";
+import { conversations, messages } from "@/drizzle/schema";
 
-import { getUserDetails } from "../user"
+import { getUserDetails } from "../user";
 
 type FileKey = {
-  fileKey: string
-  docName: string
-}
+  fileKey: string;
+  docName: string;
+};
 
 type CreateConversationProps = {
-  appId: string
-  fileKeys: FileKey[]
-  newConversationId: string
-  openingStatement: string
-}
+  appId: string;
+  fileKeys: FileKey[];
+  newConversationId: string;
+  openingStatement: string;
+};
 
 export const createConversation = async ({
   appId,
@@ -30,17 +30,17 @@ export const createConversation = async ({
       appId,
       fileKeys,
       newConversationId,
-      openingStatement
-    )
-    const users = await getUserDetails()
-    if (users === null || !users.workspaceId) return null
+      openingStatement,
+    );
+    const users = await getUserDetails();
+    if (users === null || !users.workspaceId) return null;
 
     // Validate UUIDs
     if (!validateUUID(appId)) {
-      throw new Error("Invalid appId UUID format")
+      throw new Error("Invalid appId UUID format");
     }
     if (!validateUUID(newConversationId)) {
-      throw new Error("Invalid conversationId UUID format")
+      throw new Error("Invalid conversationId UUID format");
     }
 
     const newCon = await db.insert(conversations).values({
@@ -49,10 +49,10 @@ export const createConversation = async ({
       fileKeys: JSON.stringify(fileKeys),
       name: "New conversation",
       userId: users.id || "", // Use user's ID if available
-    })
+    });
 
     if (openingStatement) {
-      const messagesId = uuidv4()
+      const messagesId = uuidv4();
       const newMessanges = await db.insert(messages).values({
         id: messagesId,
         conversationId: newConversationId,
@@ -61,47 +61,47 @@ export const createConversation = async ({
         messageType: "text",
         timestamp: String(0),
         completionToken: String(0),
-      })
-      console.log("new message created", newMessanges)
+      });
+      console.log("new message created", newMessanges);
     }
 
-    console.log("new conversation created", newCon)
-    
-    return newConversationId
+    console.log("new conversation created", newCon);
+
+    return newConversationId;
   } catch (error) {
-    console.error("Error creating conversation:", error)
-    throw error
+    console.error("Error creating conversation:", error);
+    throw error;
   }
-}
+};
 
 export const getChatMessagesByConvId = async (conversationId: string) => {
   try {
     const messanges = await db
       .select()
       .from(messages)
-      .where(eq(messages.conversationId, conversationId))
+      .where(eq(messages.conversationId, conversationId));
 
-    return messanges
+    return messanges;
   } catch (error) {
-    console.error("Error getting conversation:", error)
-    throw error
+    console.error("Error getting conversation:", error);
+    throw error;
   }
-}
+};
 
 export const getConversation = async (conversationId: string) => {
   try {
     const conversation = await db
       .select()
       .from(conversations)
-      .where(eq(conversations.id, conversationId))
+      .where(eq(conversations.id, conversationId));
     // .orderBy(desc(conversations.createdAt))
 
-    return conversation
+    return conversation;
   } catch (error) {
-    console.error("Error getting conversation:", error)
-    throw error
+    console.error("Error getting conversation:", error);
+    throw error;
   }
-}
+};
 
 export const getConversationsByIdAction = async (appId: string) => {
   try {
@@ -109,11 +109,11 @@ export const getConversationsByIdAction = async (appId: string) => {
       .select()
       .from(conversations)
       .where(eq(conversations.appId, appId))
-      .orderBy(desc(conversations.createdAt))
+      .orderBy(desc(conversations.createdAt));
 
-    return _conversations
+    return _conversations;
   } catch (error) {
-    console.error("Error getting conversations:", error)
-    throw error
+    console.error("Error getting conversations:", error);
+    throw error;
   }
-}
+};

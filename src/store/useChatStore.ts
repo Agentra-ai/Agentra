@@ -1,8 +1,8 @@
 // store/useChatStore.ts
-import { create } from 'zustand';
-import { MessagesType } from '@/lib/db/schema';
-import { TokenUsage } from '@langchain/core/language_models/base';
-import { TModelKey } from '@/hooks/use-llm';
+import { create } from "zustand";
+import { MessagesType } from "@/drizzle/schema";
+import { TokenUsage } from "@langchain/core/language_models/base";
+import { TModelKey } from "@/hooks/use-llm";
 
 interface ChatState {
   messages: MessagesType[];
@@ -15,16 +15,30 @@ interface ChatState {
   setInput: (input: string) => void;
   setConversationId: (conversationId: string | null) => void;
   setSelectedModel: (selectedModel: TModelKey) => void;
-  appendMessage: (message: MessagesType & { isLoading?: boolean; stop?: boolean; stopReason?: 'cancel' | 'error' }) => void;
-  updateLastMessage: (updates: Partial<MessagesType & { isLoading?: boolean; stop?: boolean; stopReason?: 'cancel' | 'error' }>) => void;
+  appendMessage: (
+    message: MessagesType & {
+      isLoading?: boolean;
+      stop?: boolean;
+      stopReason?: "cancel" | "error";
+    },
+  ) => void;
+  updateLastMessage: (
+    updates: Partial<
+      MessagesType & {
+        isLoading?: boolean;
+        stop?: boolean;
+        stopReason?: "cancel" | "error";
+      }
+    >,
+  ) => void;
 }
 
 export const useChatStore = create<ChatState>((set) => ({
   messages: [],
   isLoading: false,
-  input: '',
+  input: "",
   conversationId: null,
-  selectedModel: 'gpt-4o-mini',
+  selectedModel: "gpt-4o-mini",
 
   // Actions
   setMessages: (messages) => set({ messages }),
@@ -37,7 +51,6 @@ export const useChatStore = create<ChatState>((set) => ({
   appendMessage: (message) =>
     set((state) => ({
       messages: [...state.messages, message],
-      
     })),
 
   // Update the last message in the list

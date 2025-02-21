@@ -1,49 +1,50 @@
-"use client"
+"use client";
 
-import React from "react"
-import { Inbox, Loader2, X } from "lucide-react" // Import close icon
-import { useDropzone } from "react-dropzone"
+import React from "react";
+import { Inbox, Loader2, X } from "lucide-react"; // Import close icon
+import { useDropzone } from "react-dropzone";
 
-import { useToast } from "@/hooks/use-toast"
+import { useToast } from "@/hooks/use-toast";
 
 type FileUploadProps = {
-  onFileSelected: (file: File | null) => void
-  setFileName: (fileName: string | null) => void
-  fileName: string | null
-}
+  onFileSelected: (file: File | null) => void;
+  setFileName: (fileName: string | null) => void;
+  fileName: string | null;
+};
 
 const FileUpload = ({
   onFileSelected,
   fileName,
   setFileName,
 }: FileUploadProps) => {
-  const [uploading, setUploading] = React.useState(false)
-  const { toast } = useToast()
+  const [uploading, setUploading] = React.useState(false);
+  const { toast } = useToast();
 
   React.useEffect(() => {
-    setFileName(fileName || null)
-  }, [fileName, setFileName])
+    setFileName(fileName || null);
+  }, [fileName, setFileName]);
 
   const handleRemoveFile = (event: React.MouseEvent) => {
-    event.stopPropagation() // Prevent the file input from opening
-    setFileName(null)
+    event.stopPropagation(); // Prevent the file input from opening
+    setFileName(null);
     if (onFileSelected) {
-      onFileSelected(null)
+      onFileSelected(null);
     }
-  }
+  };
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const { getRootProps, getInputProps, open } = useDropzone({
     accept: {
       "application/pdf": [".pdf"],
     },
     maxFiles: 1,
+    noClick: true, // disable default click behavior
     onDrop: async (acceptedFiles) => {
-      const file = acceptedFiles[0]
+      const file = acceptedFiles[0];
       if (onFileSelected && file) {
-        onFileSelected(file)
+        onFileSelected(file);
       }
       if (!file) {
-        return
+        return;
       }
 
       if (file.size > 10 * 1024 * 1024) {
@@ -52,18 +53,19 @@ const FileUpload = ({
           title: "Error",
           description: "File size should be less than 10MB.",
           variant: "destructive",
-        })
-        return
+        });
+        return;
       }
 
-      setFileName(file.name) // Set the file name
+      setFileName(file.name); // Set the file name
     },
-  })
+  });
 
   return (
     <div className="rounded-xl bg-white py-2">
       <div
         {...getRootProps({
+          onClick: open, // trigger file selection on click
           className:
             "border rounded-xl cursor-pointer bg-gray-50 py-8 flex justify-center items-center flex-col",
         })}
@@ -100,7 +102,7 @@ const FileUpload = ({
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default FileUpload
+export default FileUpload;

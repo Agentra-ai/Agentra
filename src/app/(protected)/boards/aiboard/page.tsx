@@ -1,9 +1,9 @@
-import React from "react"
+import React from "react";
 
-type Props = {}
+type Props = {};
 
 const AiBoard = (props: Props) => {
-  return <div>AiBoard</div>
-}
+  return <div>AiBoard</div>;
+};
 
-export default AiBoard
+export default AiBoard;

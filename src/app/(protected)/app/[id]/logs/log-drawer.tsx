@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ConversationType } from "@/lib/db/schema";
+import { ConversationType } from "@/drizzle/schema";
 import { Button } from "@/components/ui/button";
 import {
   Drawer,
@@ -26,7 +26,7 @@ export const LogDrawer = ({
 }: LogDrawerProps) => {
   // Use the custom hook to fetch messages
   const { messages, isLoading, isError } = useConversationMessages(
-    selectedLog?.id || ""
+    selectedLog?.id || "",
   );
 
   const handleClose = () => {
@@ -47,7 +47,7 @@ export const LogDrawer = ({
             </div>
             <div className="flex items-center space-x-2"></div>
             <span className="rounded-md border bg-gray-100 p-2 text-[14px]">
-              openai-4o-mini{" "}
+              {selectedLog?.modal}
             </span>
             <Button variant="outline" onClick={handleClose}>
               Close
@@ -55,10 +55,7 @@ export const LogDrawer = ({
           </div>
           <div className="flex-1 overflow-y-auto">
             {/* Render messages using LogMessagesList */}
-            <LogMessagesList
-              messages={messages}
-              isLoading={isLoading}
-            />
+            <LogMessagesList messages={messages} isLoading={isLoading} />
           </div>
         </DrawerHeader>
       </DrawerContent>

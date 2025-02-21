@@ -1,9 +1,9 @@
-import AppFilesPage from "./file-page"
+import AppFilesPage from "./file-page";
 
-type Props = {}
+type Props = {};
 
 const FilePage = () => {
-  return <AppFilesPage />
-}
+  return <AppFilesPage />;
+};
 
-export default FilePage
+export default FilePage;

@@ -15,7 +15,7 @@ export const OpenAISettings = () => {
   return (
     <Flex direction={"col"} gap="sm">
       <div className="flex flex-row items-end justify-between">
-        <p className="text-xs md:text-sm  text-zinc-500">Open AI API Key</p>
+        <p className="text-xs text-zinc-500 md:text-sm">Open AI API Key</p>
       </div>
       <Input
         placeholder="Sk-xxxxxxxxxxxxxxxxxxxxxxxx"
@@ -33,12 +33,13 @@ export const OpenAISettings = () => {
           onClick={() => {
             window.open(
               "https://platform.openai.com/account/api-keys",
-              "_blank"
+              "_blank",
             );
           }}
         >
-          Get your API key here <ArrowRight size={16} className="font-semibold" />
-          </Button>
+          Get your API key here{" "}
+          <ArrowRight size={16} className="font-semibold" />
+        </Button>
         {/* {key &&
           key !== apiKeys?.openai &&
           renderSaveApiKeyButton("openai", key, () => {
@@ -59,8 +60,8 @@ export const OpenAISettings = () => {
       </div>
 
       <div className="flex flex-row items-center gap-1 py-2 text-zinc-500">
-      <Info size={16} className="font-semibold" />
-      <p className="text-xs">
+        <Info size={16} className="font-semibold" />
+        <p className="text-xs">
           Your API Key is stored locally on your browser and never sent anywhere
           else.
         </p>

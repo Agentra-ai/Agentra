@@ -1,40 +1,36 @@
-import useSWR from "swr"
-
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
-
+import useSWR from "swr";
 
 type MonitoringChartValuesType = {
-  title : string
+  title: string;
   values: {
-    x_axis: string
-    y_axis: string
-  }[]
-  totalValue: number
-}
+    x_axis: string;
+    y_axis: string;
+  }[];
+  totalValue: number;
+};
 
 export type MonitoringDataType = {
   chartData: {
-    conversations:  MonitoringChartValuesType
-    messages: MonitoringChartValuesType
-    totalTokens: MonitoringChartValuesType
-    completionTokens: MonitoringChartValuesType
-    promptTokens: MonitoringChartValuesType
-    tokenSpeed: MonitoringChartValuesType
-  }
-}
+    conversations: MonitoringChartValuesType;
+    messages: MonitoringChartValuesType;
+    totalTokens: MonitoringChartValuesType;
+    completionTokens: MonitoringChartValuesType;
+    promptTokens: MonitoringChartValuesType;
+    tokenSpeed: MonitoringChartValuesType;
+  };
+};
 
 const useGetAppMonitering = (appId: string) => {
   const { data, error, isValidating } = useSWR<{ data: MonitoringDataType }>(
     `/api/monitoring/get-app-monitoring?appId=${appId}`,
-    fetcher
-  )
+  );
 
-  console.log("data in monitoring service", data?.data)
+  console.log("data in monitoring service", data?.data);
   return {
     appMonitoringData: data?.data || [],
     error,
     isLoading: isValidating && !data,
-  }
-}
+  };
+};
 
-export default useGetAppMonitering
+export default useGetAppMonitering;

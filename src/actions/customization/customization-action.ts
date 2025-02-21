@@ -1,28 +1,47 @@
-import { eq } from "drizzle-orm"
+import { eq } from "drizzle-orm";
 
-import { db } from "@/lib/db"
-import { AppCustomization, appCustomizations } from "@/lib/db/schema"
+import db from "@/drizzle";
+import { AppCustomization, appCustomizations } from "@/drizzle/schema";
 
 export const getAppCustomization = async (appId: string) => {
   const appCustomizationsData = await db
     .select()
     .from(appCustomizations)
     .where(eq(appCustomizations.appId, appId))
-    .execute()
+    .execute();
 
-  console.log("parsed appConfigs :;", appCustomizationsData)
-  return appCustomizationsData[0] as AppCustomization
-}
+  console.log("fetch server action", appCustomizationsData, appId);
+
+  return appCustomizationsData[0] as AppCustomization;
+};
 
 export const updateAppCustomization = async (
   appId: string,
-  customisedData: AppCustomization
+  customisedData: Partial<AppCustomization>,
 ) => {
-  console.log("customisedData :;", customisedData, appId)
+  // console.log("update server action", customisedData, "appId", appId);
+
+  // Create a new object with properly formatted dates
+  const dataToUpdate = {
+    ...customisedData,
+    createdAt: customisedData.createdAt
+      ? new Date(customisedData.createdAt)
+      : undefined,
+    updatedAt: new Date(),
+  };
+
+  // Remove undefined values
+  Object.keys(dataToUpdate).forEach((key) => {
+    const typedKey = key as keyof typeof dataToUpdate;
+    dataToUpdate[typedKey] === undefined && delete dataToUpdate[typedKey];
+  });
+
+  console.log("update server action", dataToUpdate, dataToUpdate.botLogo);
+
   const updatedConfig = await db
     .update(appCustomizations)
-    .set(customisedData)
-    .where(eq(appCustomizations.appId, appId))
+    .set(dataToUpdate)
+    .where(eq(appCustomizations.appId, appId));
 
-  return updatedConfig
-}
+  return updatedConfig;
+};

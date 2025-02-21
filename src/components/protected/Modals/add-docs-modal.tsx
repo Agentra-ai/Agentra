@@ -1,49 +1,49 @@
-import React, { useCallback } from "react"
-import { PiFoldersFill } from "react-icons/pi"
+import React, { useCallback } from "react";
+import { PiFoldersFill } from "react-icons/pi";
 
-import { AppDocumentType } from "@/lib/db/schema"
+import { AppDocumentType } from "@/drizzle/schema";
 
-import { Button } from "@/components/ui/button"
-import LoadingIcon from "@/components/loading"
-import Modal from "@/components/modal"
-import { useAppDocs } from "@/app/services/app-docs/app-docs-service"
+import { Button } from "@/components/ui/button";
+import LoadingIcon from "@/components/loading";
+import Modal from "@/components/modal";
+import { useAppDocs } from "@/app/services/app-docs/app-docs-service";
 
 type Props = {
-  isOpen: boolean
-  onClose: () => void
+  isOpen: boolean;
+  onClose: () => void;
   onSelectFile: (
-    fileKeys: { fileKey: string; docName: string; isActive: boolean }[]
-  ) => void
-}
+    fileKeys: { fileKey: string; docName: string; isActive: boolean }[],
+  ) => void;
+};
 
 const AddDocsModal = React.memo(
   ({ isOpen, onClose, onSelectFile }: Props) => {
     const [appDocumentFolder, setAppDocumentFolder] = React.useState<
       AppDocumentType[]
-    >([])
-    const { appDocs, isLoading, error: fetchError } = useAppDocs()
+    >([]);
+    const { appDocs, isLoading, error: fetchError } = useAppDocs();
 
     React.useEffect(() => {
       if (isOpen && appDocs && !isLoading) {
-        setAppDocumentFolder(appDocs)
+        setAppDocumentFolder(appDocs);
       }
-    }, [isOpen, appDocs, isLoading])
+    }, [isOpen, appDocs, isLoading]);
 
     const handleSelectFile = useCallback(
       (fileKeys: { fileKey: string; docName: string; isActive: boolean }[]) => {
-        console.log("Selected fileKeys :::::", fileKeys)
-        onSelectFile(fileKeys)
+        console.log("Selected fileKeys :::::", fileKeys);
+        onSelectFile(fileKeys);
       },
-      [onSelectFile]
-    )
+      [onSelectFile],
+    );
 
     return (
-      <Modal isShow={isOpen} onClose={onClose} className="min-w-[350px] z-50">
-        <div className="gap-2 mb-3 z-50">
+      <Modal isShow={isOpen} onClose={onClose} className="z-50 min-w-[350px]">
+        <div className="z-50 mb-3 gap-2">
           <h2>Select a Document</h2>
 
           {/* Loading state */}
-          {isLoading && ( 
+          {isLoading && (
             <p>
               <LoadingIcon />
             </p>
@@ -59,7 +59,7 @@ const AddDocsModal = React.memo(
             )}
 
             {appDocumentFolder && appDocumentFolder.length > 0 && (
-              <ul className="flex w-full flex-col gap-2 rounded-lg px-2 py-1 overflow-y-auto h-[400px] p-3 my-2">
+              <ul className="my-2 flex h-[400px] w-full flex-col gap-2 overflow-y-auto rounded-lg p-3 px-2 py-1">
                 {appDocumentFolder.map((file: AppDocumentType) => (
                   <li
                     className="flex cursor-pointer items-center gap-4 rounded border border-gray-100 p-1"
@@ -71,7 +71,7 @@ const AddDocsModal = React.memo(
                           fileKey: fileKey.fileKey,
                           docName: file.name,
                           isActive: fileKey.isActive,
-                        }))
+                        })),
                       )
                     }
                   >
@@ -101,11 +101,11 @@ const AddDocsModal = React.memo(
           </div>
         </div>
       </Modal>
-    )
+    );
   },
   (prevProps, nextProps) => {
-    return prevProps.isOpen === nextProps.isOpen
-  }
-)
+    return prevProps.isOpen === nextProps.isOpen;
+  },
+);
 
-export default AddDocsModal
+export default AddDocsModal;

@@ -1,18 +1,18 @@
-import { Fragment } from "react"
-import { Listbox, Transition } from "@headlessui/react"
-import clsx from "clsx"
-import { ArrowDown } from "lucide-react"
+import { Fragment } from "react";
+import { Listbox, Transition } from "@headlessui/react";
+import clsx from "clsx";
+import { ArrowDown } from "lucide-react";
 
 interface Option {
-  label: string
+  label: string;
 }
 
 interface MultiSelectProps {
-  options: Option[]
-  selected: Option[]
-  onChange: (value: Option[]) => void
-  className?: string
-  disabled?: boolean
+  options: Option[];
+  selected: Option[];
+  onChange: (value: Option[]) => void;
+  className?: string;
+  disabled?: boolean;
 }
 
 const MultiSelect = ({
@@ -26,18 +26,18 @@ const MultiSelect = ({
   const handleChange = (newSelection: Option[]) => {
     const uniqueSelection = newSelection.filter(
       (item, index, self) =>
-        index === self.findIndex((t) => t.label === item.label)
-    )
-    onChange(uniqueSelection)
-  }
+        index === self.findIndex((t) => t.label === item.label),
+    );
+    onChange(uniqueSelection);
+  };
 
   // Add handler for removing individual items
   const handleRemoveItem = (itemToRemove: Option) => {
     const newSelection = selected.filter(
-      (item) => item.label !== itemToRemove.label
-    )
-    onChange(newSelection)
-  }
+      (item) => item.label !== itemToRemove.label,
+    );
+    onChange(newSelection);
+  };
 
   return (
     <div className={`relative w-full ${className}`}>
@@ -53,7 +53,7 @@ const MultiSelect = ({
             {
               "pointer-events-none cursor-not-allowed bg-gray-50 text-gray-400":
                 disabled,
-            }
+            },
           )}
         >
           <div className="flex flex-wrap gap-1">
@@ -63,13 +63,13 @@ const MultiSelect = ({
               selected.map((item) => (
                 <span
                   key={item.label}
-                  className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-sm "
+                  className="inline-flex items-center rounded-md bg-gray-100 px-2 py-0.5 text-sm"
                 >
                   {item.label}
                   <span
                     onClick={(e) => {
-                      e.stopPropagation() // Prevent Listbox from opening
-                      handleRemoveItem(item)
+                      e.stopPropagation(); // Prevent Listbox from opening
+                      handleRemoveItem(item);
                     }}
                     className="ml-1 block cursor-pointer hover:text-red-500"
                   >
@@ -84,7 +84,7 @@ const MultiSelect = ({
               "fill-dark-800 absolute right-[16px] top-[16px] w-[6px] rotate-90",
               {
                 "fill-gray-400": disabled,
-              }
+              },
             )}
           />
         </Listbox.Button>
@@ -123,7 +123,7 @@ const MultiSelect = ({
         </Transition>
       </Listbox>
     </div>
-  )
-}
+  );
+};
 
-export default MultiSelect
+export default MultiSelect;

@@ -1,58 +1,56 @@
-"use client"
+"use client";
 
-import React from "react"
-import { redirect, usePathname } from "next/navigation"
-import { uploadImageToS3 } from "@/actions/aws/s3-action"
+import React from "react";
+import { redirect, usePathname } from "next/navigation";
 import {
-  getAppCustomization,
-  updateAppCustomization,
-} from "@/actions/customization/customization-action"
-import { useAppStore } from "@/store/useAppStore"
-import { RiChatSmile3Fill } from "react-icons/ri"
-import { useShallow } from "zustand/react/shallow"
-
-import { getS3Url } from "@/hooks/api-action/s3"
-import { useToast } from "@/hooks/use-toast"
-
-import { Button } from "@/components/ui/button"
+  fetchAppCustomization,
+  saveAppCustomization,
+  uploadFileToS3,
+} from "@/app/services/apps/app-custom-service";
+import { useAppStore } from "@/store/useAppStore";
+import { RiChatSmile3Fill } from "react-icons/ri";
+import { useShallow } from "zustand/react/shallow";
+import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-
-import AddImageModal from "../Modals/add-image-modal"
-import Image from "next/image"
+} from "@/components/ui/select";
+import AddImageModal from "../Modals/add-image-modal";
+import Image from "next/image";
+import { getS3Url } from "@/hooks/api-action/s3";
+import { AppCustomization } from "@/drizzle/schema";
 
 // Move this check outside the component
 const getAppId = (pathname: string | null) => {
-  const id = pathname?.split("/")[2]
+  const id = pathname?.split("/")[2];
   if (!id) {
-    redirect("apps/studio")
+    redirect("apps/studio");
   }
-  return id
-}
+  return id;
+};
 
 const AppCustomizationPanel = () => {
-  const pathname = usePathname()
-  const appId = React.useMemo(() => getAppId(pathname), [pathname])
-  const { toast } = useToast()
+  const pathname = usePathname();
+  const appId = React.useMemo(() => getAppId(pathname), [pathname]);
+  const { toast } = useToast();
 
   const { appCustomization, setCustomization } = useAppStore(
     useShallow((state) => ({
       appCustomization: state.appCustomization,
       setCustomization: state.setCustomization,
-    }))
-  )
+    })),
+  );
 
-  const [selectedFile, setSelectedFile] = React.useState<File | null>(null)
+  const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
   const [localImageUrl, setLocalImageUrl] = React.useState<string | undefined>(
-    undefined
-  )
-  const [appIcon, setAppIcon] = React.useState<string | undefined>(undefined)
-  const [isAddImageModalOpen, setIsAddImageModalOpen] = React.useState(false)
+    undefined,
+  );
+  const [appIcon, setAppIcon] = React.useState<string | undefined>(undefined);
+  const [isAddImageModalOpen, setIsAddImageModalOpen] = React.useState(false);
 
   const {
     botLogo,
@@ -65,109 +63,112 @@ const AppCustomizationPanel = () => {
     botFontSize,
     botFontWeight,
     botFontFamily,
-  } = appCustomization
+  } = appCustomization;
 
   const fetchCustom = React.useCallback(async () => {
-    const constomizationResponse = await getAppCustomization(appId)
-    setCustomization({
-      ...appCustomization,
-      botLogo: constomizationResponse.botLogo,
-      botName: constomizationResponse.botName,
-      bgColor: constomizationResponse.bgColor,
-      aiChatColor: constomizationResponse.aiChatColor,
-      userChatColor: constomizationResponse.userChatColor,
-      botTextColor: constomizationResponse.botTextColor,
-      userTextColor: constomizationResponse.userTextColor,
-      botFontSize: constomizationResponse.botFontSize,
-      botFontWeight: constomizationResponse.botFontWeight,
-      botFontFamily: constomizationResponse.botFontFamily,
-    })
-    if ((constomizationResponse.botLogo?.length ?? 0) > 10) {
-      if (selectedFile) {
-        const { file_key } = await uploadImageToS3(selectedFile)
-        const presignedUrl = await getS3Url(file_key)
-      }
-      setLocalImageUrl(constomizationResponse.botLogo ?? "")
+    const customizationResponse = await fetchAppCustomization(appId);
+    console.log("Fetched data:", customizationResponse);
+
+    // Ensure we have default values and proper date objects for all fields
+    const defaultValues = {
+      ...customizationResponse,
+      botLogo: customizationResponse.botLogo ?? "",
+      createdAt: new Date(customizationResponse.createdAt),
+      updatedAt: new Date(customizationResponse.updatedAt),
+    };
+
+    setCustomization(defaultValues);
+
+    if ((defaultValues.botLogo?.length ?? 0) > 10) {
+      setLocalImageUrl(defaultValues.botLogo);
     } else {
-      setCustomization({
-        ...appCustomization,
-        botLogo: constomizationResponse.botLogo,
-      })
-      setAppIcon(constomizationResponse.botLogo ?? "")
+      setAppIcon(defaultValues.botLogo);
     }
-  }, [appId, appCustomization, selectedFile, setCustomization])
+  }, [appId, setCustomization]);
 
   React.useEffect(() => {
-    fetchCustom()
-  }, [fetchCustom])
+    fetchCustom();
+  }, []);
 
   const updateCustomization = (key: string, value: any) => {
     setCustomization({
       ...appCustomization,
       [key]: value,
-    })
-    // if (key === "botLogo") {
-    //   setCustomization({
-    //     ...appCustomization,
-    //     botLogo: value,
-    //   })
-    // }
-  }
+    });
+    console.log("saving in zustand", key, value);
+  };
 
   const handleInputChange =
     (key: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      updateCustomization(key, event.target.value)
-    }
+      updateCustomization(key, event.target.value);
+    };
 
   const handleSaveCustomizations = async () => {
     try {
-      console.log("Saving customizations...", appCustomization)
-      let uploadedIconUrl = null
+      let uploadedIconUrl = appCustomization.botLogo;
       if (selectedFile && appIcon !== localImageUrl) {
         try {
-          const { file_key } = await uploadImageToS3(selectedFile)
-          const s3ImagUrl = await getS3Url(file_key)
-          uploadedIconUrl = s3ImagUrl
-          updateCustomization("botLogo", file_key)
-          console.log("image saved")
+          const { file_key } = await uploadFileToS3(selectedFile);
+          const s3ImagUrl = await getS3Url(file_key);
+          uploadedIconUrl = s3ImagUrl;
+          updateCustomization("botLogo", uploadedIconUrl);
+          console.log("image saved");
         } catch (error) {
           toast({
             title: "Failed",
             description: "Error saving customizations",
             variant: "destructive",
-          })
-          console.error("Error saving customizations:", error)
-          return
+          });
+          console.error("Error saving customizations:", error);
+          return;
         }
       } else if (appIcon) {
-        uploadedIconUrl = appIcon
-        updateCustomization("botLogo", appIcon)
-        console.log("icon saved")
+        uploadedIconUrl = appIcon;
+        updateCustomization("botLogo", appIcon);
+        console.log("icon saved");
       }
 
-      await updateAppCustomization(appId, {
-        ...appCustomization,
+      // Create updated data with all required fields and proper date handling
+      const updatedData = {
         id: appCustomization.id,
-        createdAt: new Date(),
+        createdAt:
+          appCustomization.createdAt instanceof Date
+            ? appCustomization.createdAt
+            : new Date(appCustomization.createdAt),
         updatedAt: new Date(),
         appId: appId,
-        botLogo: uploadedIconUrl ? uploadedIconUrl : appCustomization.botLogo,
-      })
+        botLogo: uploadedIconUrl,
+        botName: appCustomization.botName || "Agent Bot",
+        bgColor: appCustomization.bgColor || "#ffffff",
+        aiChatColor: appCustomization.aiChatColor || "#f5f5fa",
+        userChatColor: appCustomization.userChatColor || "#ebf5ff",
+        botTextColor: appCustomization.botTextColor || "#000000",
+        userTextColor: appCustomization.userTextColor || "#000000",
+        botFontSize: appCustomization.botFontSize || 14,
+        botFontWeight: appCustomization.botFontWeight || 400,
+        botFontFamily: appCustomization.botFontFamily || "Arial",
+      };
+
+      console.log("Saving data:", updatedData);
+      await saveAppCustomization(appId, updatedData);
+
+      // Update local state
+      setCustomization(updatedData);
 
       toast({
         title: "Success",
         description: "Customizations saved successfully",
         variant: "default",
-      })
+      });
     } catch (error) {
       toast({
         title: "Failed",
         description: "Error saving customizations",
         variant: "destructive",
-      })
-      console.error("Error saving customizations:", error)
+      });
+      console.error("Error saving customizations:", error);
     }
-  }
+  };
 
   return (
     <div className="flex w-full flex-col border-r">
@@ -240,9 +241,9 @@ const AppCustomizationPanel = () => {
               {(appIcon || selectedFile || localImageUrl) && (
                 <Button
                   onClick={() => {
-                    updateCustomization("botLogo", null)
-                    setAppIcon(undefined)
-                    setLocalImageUrl(undefined)
+                    updateCustomization("botLogo", null);
+                    setAppIcon(undefined);
+                    setLocalImageUrl(undefined);
                   }}
                   variant="gray"
                   className="min-w-[140px]"
@@ -338,7 +339,7 @@ const AppCustomizationPanel = () => {
                   onChange={handleInputChange("botTextColor")}
                   className="h-12 w-12 min-w-12 cursor-pointer rounded-md border-2 border-gray-200 p-1 transition hover:border-blue-500"
                   placeholder={botTextColor}
-                  />
+                />
                 <input
                   type="text"
                   value={botTextColor}
@@ -457,28 +458,28 @@ const AppCustomizationPanel = () => {
         isOpen={isAddImageModalOpen}
         onClose={(e) => {
           if (e) {
-            e.preventDefault()
-            e.stopPropagation()
+            e.preventDefault();
+            e.stopPropagation();
           }
-          setIsAddImageModalOpen(false)
+          setIsAddImageModalOpen(false);
         }}
         onSelect={(icon) => {
-          setLocalImageUrl("")
-          setAppIcon(icon)
-          setSelectedFile(null)
-          setIsAddImageModalOpen(false)
-          console.log(icon)
+          setLocalImageUrl("");
+          setAppIcon(icon);
+          setSelectedFile(null);
+          setIsAddImageModalOpen(false);
+          console.log(icon);
         }}
         onFileSelect={(file) => {
-          setAppIcon("")
-          setSelectedFile(file)
-          setLocalImageUrl(URL.createObjectURL(file))
-          setIsAddImageModalOpen(false)
-          console.log(file)
+          setAppIcon("");
+          setSelectedFile(file);
+          setLocalImageUrl(URL.createObjectURL(file));
+          setIsAddImageModalOpen(false);
+          console.log(file);
         }}
       />
     </div>
-  )
-}
+  );
+};
 
-export default AppCustomizationPanel
+export default AppCustomizationPanel;

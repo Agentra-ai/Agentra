@@ -41,10 +41,10 @@ export const ModelIcon = ({ type, size }: TModelIcon) => {
     return (
       <div
         className={cn(
-          "min-w-6 h-6 bg-teal-500 text-white rounded-lg flex items-center justify-center",
-          size === "sm" && "min-w-6 h-6",
-          size === "md" && "min-w-8 h-8",
-          size === "lg" && "min-w-10 h-10"
+          "flex h-6 min-w-6 items-center justify-center rounded-lg bg-teal-500 text-white",
+          size === "sm" && "h-6 min-w-6",
+          size === "md" && "h-8 min-w-8",
+          size === "lg" && "h-10 min-w-10",
         )}
       >
         <SparklesIcon size={16} strokeWidth={1.5} />
@@ -59,10 +59,10 @@ export const ModelIcon = ({ type, size }: TModelIcon) => {
       height={0}
       alt={type}
       className={cn(
-        "object-cover rounded-[6px]",
-        size === "sm" && "min-w-6 h-6",
-        size === "md" && "min-w-8 h-8",
-        size === "lg" && "min-w-10 h-10"
+        "rounded-[6px] object-cover",
+        size === "sm" && "h-6 min-w-6",
+        size === "md" && "h-8 min-w-8",
+        size === "lg" && "h-10 min-w-10",
       )}
       sizes="100vw"
     />

@@ -1,27 +1,27 @@
-import { getUserSubscriptions } from "@/actions/subscription-action"
+import { getUserSubscriptions } from "@/actions/subscription-action";
 
-import { db } from "@/lib/db"
+import db from "@/drizzle";
 import {
   pricingPlans,
   TypeSubscription,
   type SubscriptionStatusType,
-} from "@/lib/db/schema"
+} from "@/drizzle/schema";
 
-import { cn, isValidSubscription } from "@/lib/utils"
+import { cn, isValidSubscription } from "@/lib/utils";
 
-import { Section } from "../../section"
-import { ChangePlan } from "../plans/change-plan-button"
-import { SubscriptionActions } from "./actions"
-import { SubscriptionDate } from "./date"
-import { SubscriptionPrice } from "./price"
-import { SubscriptionStatus } from "./status"
+import { Section } from "../../section";
+import { ChangePlan } from "../plans/change-plan-button";
+import { SubscriptionActions } from "./actions";
+import { SubscriptionDate } from "./date";
+import { SubscriptionPrice } from "./price";
+import { SubscriptionStatus } from "./status";
 
 export async function Subscriptions() {
   try {
-    const userSubscriptions = await getUserSubscriptions()
-    const allPlans = await db.select().from(pricingPlans)
+    const userSubscriptions = await getUserSubscriptions();
+    const allPlans = await db.select().from(pricingPlans);
 
-    console.log("userSubscriptions", userSubscriptions, "allPlans", allPlans)
+    console.log("userSubscriptions", userSubscriptions, "allPlans", allPlans);
 
     if (userSubscriptions.length === 0) {
       return (
@@ -29,31 +29,31 @@ export async function Subscriptions() {
           It appears that you do not have any subscriptions. Please sign up for
           a plan below.
         </p>
-      )
+      );
     }
 
     // Show active subscriptions first, then paused, then canceled
     const sortedSubscriptions = userSubscriptions.sort((a, b) => {
       if (a.status === "active" && b.status !== "active") {
-        return -1
+        return -1;
       }
 
       if (a.status === "paused" && b.status === "cancelled") {
-        return -1
+        return -1;
       }
 
-      return 0
-    })
+      return 0;
+    });
 
     return (
       <Section className="not-prose relative">
         {sortedSubscriptions.map(
           (subscription: TypeSubscription, index: number) => {
-            const plan = allPlans.find((p) => p.id === subscription.planId)
-            const status = subscription.status as SubscriptionStatusType
+            const plan = allPlans.find((p) => p.id === subscription.planId);
+            const status = subscription.status as SubscriptionStatusType;
 
             if (!plan) {
-              throw new Error("Plan not found")
+              throw new Error("Plan not found");
             }
 
             return (
@@ -66,7 +66,7 @@ export async function Subscriptions() {
                     <h2
                       className={cn(
                         "text-surface-900 text-lg",
-                        !isValidSubscription(status) && "text-inherit"
+                        !isValidSubscription(status) && "text-inherit",
                       )}
                     >
                       {plan.productName} ({plan.name})
@@ -105,17 +105,17 @@ export async function Subscriptions() {
                   />
                 </div>
               </Section.Item>
-            )
-          }
+            );
+          },
         )}
       </Section>
-    )
+    );
   } catch (error) {
-    console.error("Error fetching subscription data:", error)
+    console.error("Error fetching subscription data:", error);
     return (
       <p className="not-prose mb-2">
         Unable to load subscription information. Please try again later.
       </p>
-    )
+    );
   }
 }

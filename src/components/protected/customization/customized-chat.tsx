@@ -1,42 +1,43 @@
-"use client"
+"use client";
 
-import React, { useRef, useState } from "react"
-import { redirect, usePathname } from "next/navigation"
-import { getAppCustomization } from "@/actions/customization/customization-action"
-import { useAppStore } from "@/store/useAppStore"
-import { PiUserCircleFill } from "react-icons/pi"
-import { RiChatSmile3Fill, RiSendPlane2Fill } from "react-icons/ri"
-import { useShallow } from "zustand/react/shallow"
+import React, { useRef, useState } from "react";
+import { redirect, usePathname } from "next/navigation";
+import { getAppCustomization } from "@/actions/customization/customization-action";
+import { useAppStore } from "@/store/useAppStore";
+import { PiUserCircleFill } from "react-icons/pi";
+import { RiChatSmile3Fill, RiSendPlane2Fill } from "react-icons/ri";
+import { useShallow } from "zustand/react/shallow";
 
-import { TextArea } from "@/components/ui/textarea"
-import { dummyChatArray } from "@/store/constant"
-import Image from "next/image"
+import { TextArea } from "@/components/ui/textarea";
+import { dummyChatArray } from "@/store/constant";
+import Image from "next/image";
+import { fetchAppCustomization } from "@/app/services/apps/app-custom-service";
 
 // Move this check outside the component
 const getAppId = (pathname: string | null) => {
-  const id = pathname?.split("/")[2]
+  const id = pathname?.split("/")[2];
   if (!id) {
-    redirect("apps/studio")
+    redirect("apps/studio");
   }
-  return id
-}
+  return id;
+};
 
 const CustomizedChat = () => {
-  const [isChatVisible, setIsChatVisible] = useState<boolean>(true)
+  const [isChatVisible, setIsChatVisible] = useState<boolean>(true);
 
-  const pathname = usePathname()
-  const appId = React.useMemo(() => getAppId(pathname), [pathname])
+  const pathname = usePathname();
+  const appId = React.useMemo(() => getAppId(pathname), [pathname]);
 
   const toggleChatVisibility = () => {
-    setIsChatVisible(!isChatVisible)
-  }
+    setIsChatVisible(!isChatVisible);
+  };
 
   const { appCustomization, setCustomization } = useAppStore(
     useShallow((state) => ({
       appCustomization: state.appCustomization,
       setCustomization: state.setCustomization,
-    }))
-  )
+    })),
+  );
 
   const {
     botLogo,
@@ -49,31 +50,31 @@ const CustomizedChat = () => {
     botFontSize,
     botFontWeight,
     botFontFamily,
-  } = appCustomization
+  } = appCustomization;
 
   const fetchCustomization = React.useCallback(async () => {
     try {
-      const CustomizedData = await getAppCustomization(appId)
+      const CustomizedData = await fetchAppCustomization(appId);
       setCustomization({
         ...CustomizedData,
-      })
+      });
     } catch (error) {
-      console.error("Error fetching customization:", error)
+      console.error("Error fetching customization:", error);
     }
-  }, [appId, setCustomization])
+  }, [appId, setCustomization]);
 
   React.useEffect(() => {
-    fetchCustomization()
-  }, [fetchCustomization])
+    fetchCustomization();
+  }, [fetchCustomization]);
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleInput = () => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"
-      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  }
+  };
 
   const renderIcon = () => {
     if (botLogo) {
@@ -89,15 +90,15 @@ const CustomizedChat = () => {
         <div className="flex h-6 w-6 items-center justify-center rounded-full object-cover text-xl">
           {botLogo}
         </div>
-      )
+      );
     } else {
       return (
         <div className="flex h-6 w-6 items-center justify-center rounded-full bg-[#116be1] object-cover">
           <RiChatSmile3Fill className="text-white" />
         </div>
-      )
+      );
     }
-  }
+  };
 
   return (
     <>
@@ -113,11 +114,13 @@ const CustomizedChat = () => {
             style={{ backgroundColor: bgColor }}
           >
             {/* Keep the header part */}
-            <div className="sticky top-0 flex w-full flex-col justify-center shadow-md"
-              style={{ backgroundColor: aiChatColor }}>
+            <div
+              className="sticky top-0 flex w-full flex-col justify-center shadow-md"
+              style={{ backgroundColor: aiChatColor }}
+            >
               <div
                 className="flex w-full items-center rounded-b-[8px] p-3"
-              // style={{ backgroundColor: aiChatColor }}
+                // style={{ backgroundColor: aiChatColor }}
               >
                 {renderIcon()}
                 {botName && (
@@ -130,57 +133,59 @@ const CustomizedChat = () => {
 
             {/* Replace the chat messages section */}
             <div className="flex flex-1 flex-col gap-2 p-2">
-              {dummyChatArray.map((message: { role: string, text: string }, index) => (
-                <div key={index} className="flex w-full items-start">
-                  {message.role === "system" ? (
-                    <>
-                      <div className="mr-2 flex-shrink-0">
-                      {renderIcon()}
-                      </div>
-                      <div
-                        className="mb-4 max-w-[80%] rounded-2xl p-2"
-                        style={{ backgroundColor: aiChatColor }}
-                      >
-                        <p
-                          style={{
-                            color: botTextColor,
-                            fontSize: botFontSize,
-                            fontWeight: botFontWeight,
-                            fontFamily: botFontFamily,
-                          }}
-                        >
-                          {message.text}
-                        </p>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <div className="ml-auto flex max-w-[80%] items-start justify-end gap-2">
+              {dummyChatArray.map(
+                (message: { role: string; text: string }, index) => (
+                  <div key={index} className="flex w-full items-start">
+                    {message.role === "system" ? (
+                      <>
+                        <div className="mr-2 flex-shrink-0">{renderIcon()}</div>
                         <div
-                          className="mb-4 rounded-[8px] p-2"
-                          style={{
-                            backgroundColor: userChatColor,
-                            color: userTextColor,
-                          }}
+                          className="mb-4 max-w-[80%] rounded-2xl p-2"
+                          style={{ backgroundColor: aiChatColor }}
                         >
-                          <p className="text-sm">{message.text}</p>
+                          <p
+                            style={{
+                              color: botTextColor,
+                              fontSize: botFontSize,
+                              fontWeight: botFontWeight,
+                              fontFamily: botFontFamily,
+                            }}
+                          >
+                            {message.text}
+                          </p>
                         </div>
-                        <div className=" mt-1 flex-shrink-0">
-                          <PiUserCircleFill className="h-6 w-6 rounded-full bg-white text-sm font-semibold text-gray-400" />
+                      </>
+                    ) : (
+                      <>
+                        <div className="ml-auto flex max-w-[80%] items-start justify-end gap-2">
+                          <div
+                            className="mb-4 rounded-[8px] p-2"
+                            style={{
+                              backgroundColor: userChatColor,
+                              color: userTextColor,
+                            }}
+                          >
+                            <p className="text-sm">{message.text}</p>
+                          </div>
+                          <div className="mt-1 flex-shrink-0">
+                            <PiUserCircleFill className="h-6 w-6 rounded-full bg-white text-sm font-semibold text-gray-400" />
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              ))}
+                      </>
+                    )}
+                  </div>
+                ),
+              )}
             </div>
 
             {/* Keep the input section */}
-            <div className="sticky bottom-0 mt-2 flex w-full flex-col justify-center rounded-t-lg"
-              style={{ backgroundColor: bgColor }}>
+            <div
+              className="sticky bottom-0 mt-2 flex w-full flex-col justify-center rounded-t-lg"
+              style={{ backgroundColor: bgColor }}
+            >
               <div
                 className="flex w-full items-center rounded-[8px] p-1 px-4"
-              // style={{ backgroundColor: aiChatColor }}
+                // style={{ backgroundColor: aiChatColor }}
               >
                 <div className="relative flex-1">
                   <TextArea
@@ -190,13 +195,15 @@ const CustomizedChat = () => {
                     ref={textareaRef}
                     onInput={handleInput}
                   ></TextArea>
-                    <div className="absolute bottom-4 right-2 cursor-pointer rounded-lg bg-blue-700 p-2"
+                  <div
+                    className="absolute bottom-4 right-2 cursor-pointer rounded-lg bg-blue-700 p-2"
                     style={{ backgroundColor: userChatColor }}
-                    >
-                    <RiSendPlane2Fill className="h-5 w-5"
+                  >
+                    <RiSendPlane2Fill
+                      className="h-5 w-5"
                       style={{ color: userTextColor }}
                     />
-                    </div>
+                  </div>
                 </div>
               </div>
               <div className="mt-2 flex w-full justify-center rounded-t-lg border bg-gray-100 p-1 text-black">
@@ -213,7 +220,7 @@ const CustomizedChat = () => {
         <RiChatSmile3Fill className="h-8 w-8 text-white" />
       </div>
     </>
-  )
-}
+  );
+};
 
-export default CustomizedChat
+export default CustomizedChat;

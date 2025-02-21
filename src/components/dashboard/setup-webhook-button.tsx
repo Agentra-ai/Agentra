@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { setupWebhook } from "@/actions/subscription-action"
-import { Button, Loading } from "@lemonsqueezy/wedges"
-import { CheckIcon, WebhookIcon } from "lucide-react"
-import { toast } from "sonner"
+import { useState } from "react";
+import { setupWebhook } from "@/actions/subscription-action";
+import { Button, Loading } from "@lemonsqueezy/wedges";
+import { CheckIcon, WebhookIcon } from "lucide-react";
+import { toast } from "sonner";
 
 export function SetupWebhookButton({
   disabled = false,
 }: {
-  disabled?: boolean
+  disabled?: boolean;
 }) {
-  const [loading, setLoading] = useState(false)
-  const [activated, setActivated] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [activated, setActivated] = useState(false);
 
   const beforeElement = loading ? (
     <Loading size="sm" className="size-4" />
   ) : (
     <WebhookIcon className="size-4" />
-  )
+  );
 
   return (
     <Button
@@ -31,24 +31,24 @@ export function SetupWebhookButton({
         )
       }
       onClick={async () => {
-        setLoading(true)
+        setLoading(true);
         try {
-          await setupWebhook()
-          toast.success("Webhook set up successfully.")
+          await setupWebhook();
+          toast.success("Webhook set up successfully.");
         } catch (error) {
           // eslint-disable-next-line no-console -- allow
-          console.error(error)
+          console.error(error);
           toast("Error setting up a webhook.", {
             description:
               "Please check the server console for more information.",
-          })
+          });
         } finally {
-          setActivated(true)
-          setLoading(false)
+          setActivated(true);
+          setLoading(false);
         }
       }}
     >
       Setup Webhook
     </Button>
-  )
+  );
 }
