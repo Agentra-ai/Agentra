@@ -16,8 +16,8 @@
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
-    "@auth/core": "^0.28.2",
-    "@auth/drizzle-adapter": "^0.8.2",
+    "@auth/core": "^0.37.4",
+    "@auth/drizzle-adapter": "^1.7.4",
     "@aws-sdk/client-s3": "^3.740.0",
     "@aws-sdk/s3-request-presigner": "^3.740.0",
     "@dqbd/tiktoken": "^1.0.18",
@@ -34,7 +34,6 @@
     "@lemonsqueezy/wedges": "^1.4.0",
     "@lucia-auth/adapter-drizzle": "^1.0.7",
     "@neondatabase/serverless": "^0.9.4",
-    "@nextui-org/react": "^2.3.5",
     "@node-rs/argon2": "^1.8.1",
     "@node-rs/bcrypt": "^1.10.2",
     "@paralleldrive/cuid2": "^2.2.2",
@@ -70,8 +69,8 @@
     "langchain": "0.3.6",
     "lucia": "^3.1.1",
     "lucide-react": "^0.408.0",
-    "next": "14.2.5",
-    "next-auth": "5.0.0-beta.19",
+    "next": "^14.2.10",
+    "next-auth": "^5.0.0-beta.25",
     "next-s3-upload": "^0.3.4",
     "next-safe-action": "^6.2.0",
     "next-themes": "^0.2.1",
@@ -80,7 +79,7 @@
     "openai-edge": "1.2.2",
     "oslo": "^1.2.0",
     "pdf-parse": "1.1.1",
-    "pdfjs-dist": "2.5.207",
+    "pdfjs-dist": "^4.10.38",
     "postgres": "^3.4.4",
     "qrcode.react": "^3.1.0",
     "react": "^18",
@@ -112,13 +111,13 @@
     "@types/react-dom": "^18",
     "@typescript-eslint/eslint-plugin": "^8.23.0",
     "@typescript-eslint/parser": "^8.23.0",
-    "drizzle-kit": "^0.21.2",
+    "drizzle-kit": "^0.21.4",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.5",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "typescript": "^5.4.4"
   }
 }

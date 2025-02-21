@@ -17,8 +17,6 @@ export const GET = auth(async (req) => {
       fileKeys: doc.fileKeys ? JSON.parse(doc.fileKeys) : null,
     }));
 
-    console.log("docs log in API", stringifiedDocuments);
-
     return NextResponse.json({
       data: stringifiedDocuments,
     });
