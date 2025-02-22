@@ -17,9 +17,9 @@ export const siteConfig = {
   links,
   url: "https://floxify.ai",
   // ogImage: links.openGraphImage,
-  author: "pjborowiecki",
-  hostingRegion: "fra1",
-  keywords: ["AI", "Agents", "Workflows"],
+  author: "divyesh",
+  hostingRegion: "asia",
+  keywords: ["AI", "Agents", "Workflows", "Integrations", "Automation", "Artificial Intelligence", "Business Processes", "GenAI"],
   // navItems: [
   //   {
   //     title: "About",
